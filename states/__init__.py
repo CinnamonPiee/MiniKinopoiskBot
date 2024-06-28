@@ -5,4 +5,4 @@ from . import registration
 from . import random_film_serial
 from . import main_menu
 from . import low_coast_film_or_serial
-from . import hight_coast_film_or_serial
+from . import height_coast_film_or_serial
