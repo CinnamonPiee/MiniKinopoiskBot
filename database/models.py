@@ -21,9 +21,10 @@ class SearchFilm(Base):
     name: Mapped[str] = mapped_column(String(60), nullable=False)
     janr: Mapped[str] = mapped_column(String(60), nullable=False)
     year: Mapped[int] = mapped_column(nullable=False)
-    coast: Mapped[float] = mapped_column()
+    box_office: Mapped[float] = mapped_column()
     country: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(Text)
+    rating: Mapped[float] = mapped_column(nullable=False)
 
 
 class History(Base):

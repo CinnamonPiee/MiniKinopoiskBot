@@ -6,4 +6,5 @@ class CustomSearching(StatesGroup):
     year = State()
     coast = State()
     country = State()
-    count = State()
+    box_office = State()
+    rating = State()
