@@ -11,7 +11,9 @@ idna==3.7
 magic-filter==1.0.12
 multidict==6.0.5
 pydantic==2.7.4
+pydantic-settings==2.3.4
 pydantic_core==2.18.4
+python-dotenv==1.0.1
 SQLAlchemy==2.0.31
 typing_extensions==4.12.2
 yarl==1.9.4
