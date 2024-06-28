@@ -29,4 +29,4 @@ async def find_film_serial_name(message: Message, state: FSMContext):
 
 @router.message(FindFilmSerial.name)
 async def find_film_serial_name_none(message: Message):
-    await message.answer(text="Please write correct film name!")
+    await message.answer(text="Sorry, I don`t understand. Please write correct film name!")
