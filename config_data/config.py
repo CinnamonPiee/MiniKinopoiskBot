@@ -8,3 +8,4 @@ else:
     load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+KINOPOISK_DEV_TOKEN = os.getenv("KINOPOISK_DEV_TOKEN")

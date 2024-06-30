@@ -1,4 +1,5 @@
 from aiogram import Router, F
+import json
 
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
@@ -6,6 +7,7 @@ from aiogram.fsm.context import FSMContext
 from states.find_film_serial import FindFilmSerial
 from states.main_menu import MainMenu
 from keyboards.reply.choose_criteries_kb import choose_criteries_kb
+from api.movie_search import movie_search
 
 router = Router(name=__name__)
 
@@ -21,10 +23,8 @@ async def find_film_serial_name_none(message: Message, state: FSMContext):
 
 @router.message(FindFilmSerial.name, F.text)
 async def find_film_serial_name(message: Message, state: FSMContext):
-    if True:
-        pass  # Если данный фильм найден, то вывести его пользователю
-        # Если данного фильма не нашлось, то попросить ввести корректное название или попробовать
-        # ввести другое название фильма
+    data = movie_search(str(F.text))
+    await message.answer(text=f"Name: {data}")
 
 
 @router.message(FindFilmSerial.name)
