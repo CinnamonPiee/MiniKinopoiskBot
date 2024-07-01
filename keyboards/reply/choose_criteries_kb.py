@@ -2,12 +2,12 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
 def choose_criteries_kb():
-    button1 = KeyboardButton(text="Find film / serial")
-    button2 = KeyboardButton(text="Random film / serial")
-    button3 = KeyboardButton(text="Low coast film / serial")
-    button4 = KeyboardButton(text="Height coast film / serial")
-    button5 = KeyboardButton(text="Custom searching")
-    button6 = KeyboardButton(text="Back")
+    button1 = KeyboardButton(text="Найти фильм / сериал")
+    button2 = KeyboardButton(text="Рандомный фильм/ сериал")
+    button3 = KeyboardButton(text="Малобюджетный фильм / сериал")
+    button4 = KeyboardButton(text="Высоко бюджетный фильм / сериал")
+    button5 = KeyboardButton(text="Кастомный поиск")
+    button6 = KeyboardButton(text="Назад")
 
     keyboard = ReplyKeyboardMarkup(
         keyboard=[[button1], [button2],

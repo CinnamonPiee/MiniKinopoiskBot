@@ -2,12 +2,12 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
 def main_kb():
-    button1 = KeyboardButton(text="Films / Serials")
-    button2 = KeyboardButton(text="History of search")
-    button3 = KeyboardButton(text="Support ⚙️")
-    button4 = KeyboardButton(text="Help ❓")
-    button5 = KeyboardButton(text="About Bot ❗️")
-    button6 = KeyboardButton(text="Feedback 📧")
+    button1 = KeyboardButton(text="Фильмы / Сериалы")
+    button2 = KeyboardButton(text="История поиска")
+    button3 = KeyboardButton(text="Поддержка ⚙️")
+    button4 = KeyboardButton(text="Помощь ❓")
+    button5 = KeyboardButton(text="О боте ❗️")
+    button6 = KeyboardButton(text="Обратная связь 📧")
 
     keyboard = ReplyKeyboardMarkup(
         keyboard=[[button1],

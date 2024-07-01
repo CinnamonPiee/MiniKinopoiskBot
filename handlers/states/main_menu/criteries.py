@@ -23,47 +23,47 @@ from keyboards.reply import (
 router = Router(name=__name__)
 
 
-@router.message(F.text == "Films / Serials", default_state)
+@router.message(F.text == "Фильмы / Сериалы", default_state)
 async def main_choose_start(message: Message, state: FSMContext):
     await state.set_state(main_menu.MainMenu.criteries)
     await message.answer(
-        text="Choose please what you want to find: ",
+        text="Пожалуйста, выберите что вы хотите найти: ",
         reply_markup=choose_criteries_kb.choose_criteries_kb(),
     )
 
 
-@router.message(main_menu.MainMenu.criteries, F.text == "Find film / serial")
+@router.message(main_menu.MainMenu.criteries, F.text == "Найти фильм / сериал")
 async def main_choose_find_film_serial(message: Message, state: FSMContext):
     await state.set_state(find_film_serial.FindFilmSerial.name)
     await message.answer(
-        text="Please write film name: ",
+        text="Пожалуйста, введите название фильма: ",
         reply_markup=back_kb.back_kb())
 
 
-@router.message(main_menu.MainMenu.criteries, F.text == "Random film / serial")
+@router.message(main_menu.MainMenu.criteries, F.text == "Рандомный фильм/ сериал")
 async def main_choose_random_film_serial(message: Message, state: FSMContext):
     await state.set_state(random_film_serial.RandomFilmSerial.criteries_yes_or_no)
 
 
-@router.message(main_menu.MainMenu.criteries, F.text == "Low coast film / serial")
+@router.message(main_menu.MainMenu.criteries, F.text == "Малобюджетный фильм / сериал")
 async def main_choose_low_coast_film_serial(message: Message, state: FSMContext):
     await state.set_state(low_coast_film_or_serial.LowCoastFilmSerial.criteries_yes_or_no)
 
 
-@router.message(main_menu.MainMenu.criteries, F.text == "Height coast film / serial")
+@router.message(main_menu.MainMenu.criteries, F.text == "Высоко бюджетный фильм / сериал")
 async def main_choose_height_coast_film_serial(message: Message, state: FSMContext):
     await state.set_state(height_coast_film_or_serial.HeightCoastFilmSerial.criteries_yes_or_no)
 
 
-@router.message(main_menu.MainMenu.criteries, F.text == "Custom searching")
+@router.message(main_menu.MainMenu.criteries, F.text == "Кастомный поиск")
 async def main_choose_custom_searching(message: Message, state: FSMContext):
     await state.set_state(custom_searching.CustomSearching.janr)
 
 
-@router.message(main_menu.MainMenu.criteries, F.text == "Back")
+@router.message(main_menu.MainMenu.criteries, F.text == "Назад")
 async def main_choose_back(message: Message, state: FSMContext):
     await message.answer(
-        text="Maybe later...",
+        text="Может быть в другой раз...",
         reply_markup=main_kb.main_kb(),
     )
     await state.clear()
@@ -72,5 +72,5 @@ async def main_choose_back(message: Message, state: FSMContext):
 @router.message(main_menu.MainMenu.criteries)
 async def main_choose_none(message: Message):
     await message.answer(
-        text="Sorry, I don`t understand, please choose what you want to find!",
+        text="Простите, я не понимаю. Выберите пожалуйста что вы хотите найти!",
         reply_markup=choose_criteries_kb.choose_criteries_kb())

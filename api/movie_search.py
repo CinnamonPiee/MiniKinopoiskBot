@@ -1,6 +1,5 @@
 import requests
 from config_data.config import KINOPOISK_DEV_TOKEN
-import json
 
 
 def movie_search(film_name):
@@ -10,12 +9,10 @@ def movie_search(film_name):
         "accept": "application/json",
         "X-API-KEY": KINOPOISK_DEV_TOKEN
     }
+    try:
+        response = requests.get(f"{url + film_name}", headers=headers)
+        data = response.json()["docs"][0]
+        return data
 
-    response = requests.get(f"{url + film_name}", headers=headers)
-
-    data = response.json()["docs"][0]["name"]
-
-    return data
-
-
-print(movie_search("avatar"))
+    except IndexError:
+        return "Ничего не найдено, пожалуйста попробуйте еще раз!"
