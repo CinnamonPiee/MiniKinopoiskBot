@@ -5,6 +5,7 @@ from aiogram.types import Message
 
 from keyboards.reply.back_kb import back_kb
 from states.registration import Registration
+from utils.name_validation import name_validation
 
 
 router = Router(name=__name__)
@@ -16,7 +17,7 @@ async def registration_name_handler_back(message: Message, state: FSMContext):
     await state.clear()
 
 
-@router.message(Registration.name, F.text)
+@router.message(Registration.name, F.text.cast(name_validation).as_("name"))
 async def registration_name_handler(message: Message, state: FSMContext):
     await state.set_state(Registration.email)
     await state.update_data(name=message.text)

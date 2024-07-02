@@ -30,6 +30,7 @@ async def find_film_serial_name(message: Message, state: FSMContext):
         await message.answer(
             text=data,
             reply_markup=back_kb(),
+            parse_mode=None,
         )
 
     elif isinstance(data, dict):

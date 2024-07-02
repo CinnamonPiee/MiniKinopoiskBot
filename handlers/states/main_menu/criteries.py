@@ -37,7 +37,9 @@ async def main_choose_find_film_serial(message: Message, state: FSMContext):
     await state.set_state(find_film_serial.FindFilmSerial.name)
     await message.answer(
         text="Пожалуйста, введите название фильма: ",
-        reply_markup=back_kb.back_kb())
+        reply_markup=back_kb.back_kb(),
+        parse_mode=None,
+        )
 
 
 @router.message(main_menu.MainMenu.criteries, F.text == "Рандомный фильм/ сериал")
