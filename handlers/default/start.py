@@ -15,7 +15,7 @@ router = Router(name=__name__)
 
 @router.message(CommandStart())
 async def start_command(message: Message, state: FSMContext):
-    if check_user_by_telegram_id(int(message.from_user.id)):
+    if await check_user_by_telegram_id(int(message.from_user.id)):
         await message.answer(
             text=f"Привет, {message.from_user.first_name}!",
             reply_markup=main_kb(),

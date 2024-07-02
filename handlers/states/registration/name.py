@@ -32,3 +32,4 @@ async def registration_name_handler_none(message: Message):
         text="Простите, я не понимаю. Напишите пожалуйста ваше имя!",
         reply_markup=back_kb(),
         )
+

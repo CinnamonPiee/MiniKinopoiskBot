@@ -1,7 +1,7 @@
 import logging
 import asyncio
 
-from config_data.config import BOT_TOKEN
+from config_data.config import settings
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from handlers import router as main_router
@@ -9,7 +9,7 @@ from handlers import router as main_router
 
 async def main():
     bot = Bot(
-        token=BOT_TOKEN,
+        token=settings.bot_token,
         default=DefaultBotProperties(parse_mode="HTML"),
     )
 

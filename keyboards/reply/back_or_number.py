@@ -1,11 +1,14 @@
-from aiogram.utils.keyboard import ReplyKeyboardBuilder, KeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
-def back_or_number():
-    builder = ReplyKeyboardBuilder()
-    builder.row(
-        KeyboardButton(text="Поделиться номером телефона", request_contact=True),
-        KeyboardButton(text="Назад")
+def back_or_number_kb():
+    button2 = KeyboardButton(text="Поделиться номером", request_contact=True)
+    button1 = KeyboardButton(text="Назад")
+
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[button1], [button2]],
+        resize_keyboard=True,
+        one_time_keyboard=True,
     )
 
-    return builder
+    return keyboard

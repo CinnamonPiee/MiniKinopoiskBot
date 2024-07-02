@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
 from keyboards.reply.back_kb import back_kb
-from keyboards.reply.back_or_number import back_or_number
+from keyboards.reply.back_or_number import back_or_number_kb
 from states.registration import Registration
 
 
@@ -26,7 +26,7 @@ async def registration_email_handler(message: Message, state: FSMContext):
     await state.set_state(Registration.phone_number)
     await message.answer(
         text="Напишите пожалуйста ваш номер телефона: ",
-        reply_markup=back_or_number(),
+        reply_markup=back_or_number_kb(),
         )
 
 

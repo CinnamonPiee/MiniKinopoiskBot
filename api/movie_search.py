@@ -1,5 +1,5 @@
 import requests
-from config_data.config import KINOPOISK_DEV_TOKEN
+from config_data.config import settings
 
 
 def movie_search(film_name):
@@ -7,7 +7,7 @@ def movie_search(film_name):
 
     headers = {
         "accept": "application/json",
-        "X-API-KEY": KINOPOISK_DEV_TOKEN
+        "X-API-KEY": settings.kinopoisk_dev_token
     }
     try:
         response = requests.get(f"{url + film_name}", headers=headers)
