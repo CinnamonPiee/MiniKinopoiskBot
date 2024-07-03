@@ -1,5 +1,6 @@
 import requests
 from config_data.config import settings
+from pprint import pprint
 
 
 def movie_search(film_name):
@@ -16,3 +17,5 @@ def movie_search(film_name):
 
     except IndexError:
         return "Ничего не найдено, пожалуйста попробуйте еще раз!"
+
+
