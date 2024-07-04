@@ -1,6 +1,5 @@
 import requests
 from config_data.config import settings
-from pprint import pprint
 
 
 def movie_search(film_name):
@@ -10,6 +9,7 @@ def movie_search(film_name):
         "accept": "application/json",
         "X-API-KEY": settings.kinopoisk_dev_token
     }
+
     try:
         response = requests.get(f"{url + film_name}", headers=headers)
         data = response.json()["docs"][0]

@@ -3,7 +3,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 def choose_criteries_kb():
     button1 = KeyboardButton(text="Найти фильм / сериал")
-    button2 = KeyboardButton(text="Рандомный фильм/ сериал")
+    button2 = KeyboardButton(text="Рандомный фильм / сериал")
     button3 = KeyboardButton(text="Малобюджетный фильм / сериал")
     button4 = KeyboardButton(text="Высоко бюджетный фильм / сериал")
     button5 = KeyboardButton(text="Кастомный поиск")

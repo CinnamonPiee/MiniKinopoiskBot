@@ -1,6 +1,6 @@
-import os
 from dotenv import load_dotenv, find_dotenv
 from pydantic_settings import BaseSettings
+
 
 if not find_dotenv():
     exit("Environment variables are not loaded because the file is missing .env")
@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     db_name: str
     bot_token: str
     kinopoisk_dev_token: str
+    admin_id: int
 
     @property
     def DATABASE_URL_asyncpg(self):

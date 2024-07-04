@@ -1,10 +1,8 @@
 from aiogram import Router, F
-
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
-
 from keyboards.reply.back_kb import back_kb
-from keyboards.reply.back_or_number import back_or_number_kb
+from keyboards.reply.back_or_number_kb import back_or_number_kb
 from states.registration import Registration
 from utils.email_validation import email_validation
 

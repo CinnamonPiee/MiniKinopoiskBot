@@ -1,16 +1,16 @@
 from aiogram import Router, F
-
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.utils import markdown
-
 from states.find_film_serial import FindFilmSerial
 from states.main_menu import MainMenu
 from keyboards.reply.choose_criteries_kb import choose_criteries_kb
 from keyboards.reply.main_kb import main_kb
 from keyboards.reply.back_kb import back_kb
 from api.movie_search import movie_search
-from database.orm import add_film
+from database.orm.film import add_film, film_exists
+from database.orm.serial import add_serial, serial_exists
+
 
 router = Router(name=__name__)
 
@@ -61,18 +61,20 @@ async def find_film_serial_name(message: Message, state: FSMContext):
                 reply_markup=main_kb(),
                 )
 
-            await add_film(
-                user_id=message.from_user.id,
-                name=name,
-                janr=genres,
-                year=int(year),
-                box_office=0.0,
-                country=countries,
-                description=description,
-                rating=rating
-                )
-
-            await state.clear()
+            if await film_exists(name):
+                await state.clear()
+            else:
+                await add_film(
+                    telegram_id=message.from_user.id,
+                    name=name,
+                    janr=genres,
+                    year=int(year),
+                    box_office=0.0,
+                    country=countries,
+                    description=description,
+                    rating=rating
+                    )
+                await state.clear()
 
         elif data["type"] == "tv-series":
             url = data["poster"]["previewUrl"]
@@ -96,8 +98,23 @@ async def find_film_serial_name(message: Message, state: FSMContext):
                         f"Страна: {countries}\n"
                         f"Возрастной рейтинг: {age_rating}\n"
                         f"Описание: {description}",
-                reply_markup=main_kb())
-            await state.clear()
+                reply_markup=main_kb(),
+                )
+
+            if await serial_exists(name):
+                await state.clear()
+            else:
+                await add_serial(
+                    telegram_id=message.from_user.id,
+                    name=name,
+                    janr=genres,
+                    release_year=release_years,
+                    series_length=series_length,
+                    country=countries,
+                    description=description,
+                    rating=rating
+                )
+                await state.clear()
 
 
 @router.message(FindFilmSerial.name)

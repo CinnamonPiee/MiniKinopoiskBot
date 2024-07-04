@@ -1,5 +1,5 @@
-from database.databases import Base
 from datetime import datetime
+from database.databases import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, text, String, BigInteger, Text, DateTime
 
@@ -72,8 +72,8 @@ class HistoryFilm(Base):
     __table_args__ = {"extend_existing": True}
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    film_id: Mapped[int] = mapped_column(ForeignKey("search_film.id"))
+    user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users.id"))
+    film_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("search_film.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False,
                                                  server_default=text("TIMEZONE('utc', now())"))
 
@@ -86,8 +86,8 @@ class HistorySerial(Base):
     __table_args__ = {"extend_existing": True}
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    serial_id: Mapped[int] = mapped_column(ForeignKey("search_serial.id"))
+    user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users.id"))
+    serial_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("search_serial.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False,
                                                  server_default=text("TIMEZONE('utc', now())"))
 
