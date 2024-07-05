@@ -59,3 +59,18 @@ async def add_serial(
 
         session.add(new_history)
         await session.commit()
+
+
+async def update_search_history(user_id: int, serial_id: int):
+    async with async_session_factory() as session:
+        result = await session.execute(
+            select(HistorySerial).where(
+                HistorySerial.user_id == user_id,
+                HistorySerial.serial_id == serial_id
+            )
+        )
+        existing_history = result.scalars().first()
+
+        if existing_history:
+            existing_history.created_at = datetime.utcnow()
+            await session.commit()

@@ -10,6 +10,8 @@ from keyboards.reply.back_kb import back_kb
 from api.movie_search import movie_search
 from database.orm.film import add_film, film_exists
 from database.orm.serial import add_serial, serial_exists
+from utils.valid_user_and_film_id_in_history import valid_user_and_film_id_in_history
+from utils.valid_user_and_serial_id_in_history import valid_user_and_serial_id_in_history
 
 
 router = Router(name=__name__)
@@ -62,7 +64,9 @@ async def find_film_serial_name(message: Message, state: FSMContext):
                 )
 
             if await film_exists(name):
+                await valid_user_and_film_id_in_history(name, telegram_id=message.from_user.id)
                 await state.clear()
+
             else:
                 await add_film(
                     telegram_id=message.from_user.id,
@@ -102,7 +106,9 @@ async def find_film_serial_name(message: Message, state: FSMContext):
                 )
 
             if await serial_exists(name):
+                await valid_user_and_serial_id_in_history(name, telegram_id=message.from_user.id)
                 await state.clear()
+
             else:
                 await add_serial(
                     telegram_id=message.from_user.id,

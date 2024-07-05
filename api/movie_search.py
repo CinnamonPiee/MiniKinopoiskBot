@@ -17,5 +17,11 @@ def movie_search(film_name):
 
     except IndexError:
         return "Ничего не найдено, пожалуйста попробуйте еще раз!"
+    except KeyError:
+        return "Сервер временно не доступен, попробуйте позже!"
+
+
+print(movie_search("avatar"))
+
 
 

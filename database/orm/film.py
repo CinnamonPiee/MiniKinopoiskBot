@@ -59,3 +59,18 @@ async def add_film(
 
         session.add(new_history)
         await session.commit()
+
+
+async def update_search_history(user_id: int, film_id: int):
+    async with async_session_factory() as session:
+        result = await session.execute(
+            select(HistoryFilm).where(
+                HistoryFilm.user_id == user_id,
+                HistoryFilm.film_id == film_id
+            )
+        )
+        existing_history = result.scalars().first()
+
+        if existing_history:
+            existing_history.created_at = datetime.utcnow()
+            await session.commit()
