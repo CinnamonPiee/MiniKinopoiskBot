@@ -1,7 +1,8 @@
 from datetime import datetime
 from database.databases import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey, text, String, BigInteger, Text, DateTime
+from sqlalchemy import ForeignKey, text, String, BigInteger, Text, DateTime, URL
+from sqlalchemy_utils import URLType
 
 
 class Users(Base):
@@ -34,12 +35,14 @@ class SearchFilm(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(60), nullable=False)
-    janr: Mapped[str] = mapped_column(String(60), nullable=False)
-    year: Mapped[int] = mapped_column(nullable=False)
-    box_office: Mapped[float] = mapped_column()
-    country: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(Text)
-    rating: Mapped[float] = mapped_column(nullable=False)
+    janr: Mapped[str] = mapped_column(String(60), nullable=True)
+    year: Mapped[int] = mapped_column(nullable=True)
+    country: Mapped[str] = mapped_column(nullable=True)
+    movie_length: Mapped[int] = mapped_column(nullable=True)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
+    rating: Mapped[float] = mapped_column(nullable=True)
+    age_rating: Mapped[int] = mapped_column(nullable=True)
+    picture: Mapped[str] = mapped_column(URLType, nullable=True)
 
     history: Mapped[list["HistoryFilm"]] = relationship(
         "HistoryFilm",
@@ -54,12 +57,14 @@ class SearchSerial(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(60), nullable=False)
-    janr: Mapped[str] = mapped_column(String(60), nullable=False)
-    release_year: Mapped[str] = mapped_column(String(60), nullable=False)
-    series_length: Mapped[str] = mapped_column(String(10), nullable=False)
-    country: Mapped[str] = mapped_column(nullable=False)
-    description: Mapped[str] = mapped_column(Text)
-    rating: Mapped[float] = mapped_column(nullable=False)
+    janr: Mapped[str] = mapped_column(String(60), nullable=True)
+    rating: Mapped[float] = mapped_column(nullable=True)
+    release_year: Mapped[str] = mapped_column(String(60), nullable=True)
+    series_length: Mapped[str] = mapped_column(String(10), nullable=True)
+    country: Mapped[str] = mapped_column(nullable=True)
+    age_rating: Mapped[int] = mapped_column(nullable=True)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
+    picture: Mapped[str] = mapped_column(URLType, nullable=True)
 
     history: Mapped[list["HistorySerial"]] = relationship(
         "HistorySerial",

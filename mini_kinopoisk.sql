@@ -1,49 +1,48 @@
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     name VARCHAR(60) NOT NULL,
     email VARCHAR(60) NOT NULL UNIQUE,
     phone_number VARCHAR(15) NOT NULL UNIQUE,
     telegram_id BIGINT NOT NULL UNIQUE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()) NOT NULL
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT TIMEZONE('utc', now())
 );
 
-CREATE TABLE search_film (
+CREATE TABLE IF NOT EXISTS search_film (
     id SERIAL PRIMARY KEY,
     name VARCHAR(60) NOT NULL,
-    janr VARCHAR(60) NOT NULL,
-    year INTEGER NOT NULL,
-    box_office FLOAT,
-    country VARCHAR NOT NULL,
+    janr VARCHAR(60),
+    year INTEGER,
+    country VARCHAR(60),
+    movie_length INTEGER,
     description TEXT,
-    rating FLOAT NOT NULL
+    rating FLOAT,
+    age_rating INTEGER,
+    picture VARCHAR
 );
 
-CREATE TABLE search_serial (
+CREATE TABLE IF NOT EXISTS search_serial (
     id SERIAL PRIMARY KEY,
     name VARCHAR(60) NOT NULL,
-    janr VARCHAR(60) NOT NULL,
-    release_year VARCHAR(60) NOT NULL,
-    series_length VARCHAR(10) NOT NULL,
-    country VARCHAR NOT NULL,
+    janr VARCHAR(60),
+    rating FLOAT,
+    release_year VARCHAR(60),
+    series_length VARCHAR(10),
+    country VARCHAR(60),
+    age_rating INTEGER,
     description TEXT,
-    rating FLOAT NOT NULL
+    picture VARCHAR
 );
 
-CREATE TABLE history_search_film (
+CREATE TABLE IF NOT EXISTS history_search_film (
     id SERIAL PRIMARY KEY,
-    user_id BIGINT NOT NULL,
-    film_id BIGINT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (film_id) REFERENCES search_film(id) ON DELETE CASCADE
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    film_id BIGINT NOT NULL REFERENCES search_film(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT TIMEZONE('utc', now())
 );
 
-CREATE TABLE history_search_serial (
+CREATE TABLE IF NOT EXISTS history_search_serial (
     id SERIAL PRIMARY KEY,
-    user_id BIGINT NOT NULL,
-    serial_id BIGINT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (serial_id) REFERENCES search_serial(id) ON DELETE CASCADE
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    serial_id BIGINT NOT NULL REFERENCES search_serial(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT TIMEZONE('utc', now())
 );
-

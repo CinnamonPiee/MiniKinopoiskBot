@@ -25,11 +25,13 @@ async def add_serial(
         telegram_id: int,
         name: str,
         janr: str,
+        rating: float,
         release_year: str,
         series_length: str,
         country: str,
+        age_rating: int,
         description: str,
-        rating: float
+        picture: str
         ):
 
     async with async_session_factory() as session:
@@ -40,11 +42,13 @@ async def add_serial(
         new_serial = SearchSerial(
             name=name,
             janr=janr,
+            rating=rating,
             release_year=release_year,
             series_length=series_length,
             country=country,
+            age_rating=age_rating,
             description=description,
-            rating=rating
+            picture=picture
         )
 
         session.add(new_serial)
@@ -74,3 +78,15 @@ async def update_search_history(user_id: int, serial_id: int):
         if existing_history:
             existing_history.created_at = datetime.utcnow()
             await session.commit()
+
+
+async def add_search_history(user_id: int, serial_id: int):
+    async with async_session_factory() as session:
+        new_history = HistorySerial(
+            user_id=user_id,
+            film_id=serial_id,
+            created_at=datetime.utcnow()
+        )
+
+        session.add(new_history)
+        await session.commit()

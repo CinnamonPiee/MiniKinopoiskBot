@@ -26,10 +26,12 @@ async def add_film(
         name: str,
         janr: str,
         year: int,
-        box_office: float,
         country: str,
+        movie_length: int,
         description: str,
         rating: float,
+        age_rating: int,
+        picture: str
         ):
 
     async with async_session_factory() as session:
@@ -41,10 +43,12 @@ async def add_film(
             name=name,
             janr=janr,
             year=year,
-            box_office=box_office,
             country=country,
+            movie_length=movie_length,
             description=description,
-            rating=rating
+            rating=rating,
+            age_rating=age_rating,
+            picture=picture
         )
 
         session.add(new_film)
@@ -74,3 +78,15 @@ async def update_search_history(user_id: int, film_id: int):
         if existing_history:
             existing_history.created_at = datetime.utcnow()
             await session.commit()
+
+
+async def add_search_history(user_id: int, film_id: int):
+    async with async_session_factory() as session:
+        new_history = HistoryFilm(
+            user_id=user_id,
+            film_id=film_id,
+            created_at=datetime.utcnow()
+        )
+
+        session.add(new_history)
+        await session.commit()

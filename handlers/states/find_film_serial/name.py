@@ -73,11 +73,14 @@ async def find_film_serial_name(message: Message, state: FSMContext):
                     name=name,
                     janr=genres,
                     year=int(year),
-                    box_office=0.0,
                     country=countries,
+                    movie_length=int(data["movieLength"]),
                     description=description,
-                    rating=rating
+                    rating=rating,
+                    age_rating=age_rating,
+                    picture=url
                     )
+
                 await state.clear()
 
         elif data["type"] == "tv-series":
@@ -114,12 +117,15 @@ async def find_film_serial_name(message: Message, state: FSMContext):
                     telegram_id=message.from_user.id,
                     name=name,
                     janr=genres,
+                    rating=rating,
                     release_year=release_years,
                     series_length=series_length,
                     country=countries,
+                    age_rating=age_rating,
                     description=description,
-                    rating=rating
+                    picture=url
                 )
+
                 await state.clear()
 
 

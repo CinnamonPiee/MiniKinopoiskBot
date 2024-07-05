@@ -21,7 +21,8 @@ def movie_search(film_name):
         return "Сервер временно не доступен, попробуйте позже!"
 
 
-print(movie_search("avatar"))
+# print(movie_search("avatar"))
+# print(movie_search("see"))
 
 
 
