@@ -63,3 +63,21 @@ async def delete_user(user_id: int):
         )
 
         await session.commit()
+
+
+async def email_exists(email: str) -> bool:
+    async with async_session_factory() as session:
+        result = await session.execute(
+            select(Users).where(Users.email == email)
+        )
+        user = result.scalars().first()
+        return user is not None
+
+
+async def phone_number_exists(phone_number: str) -> bool:
+    async with async_session_factory() as session:
+        result = await session.execute(
+            select(Users).where(Users.phone_number == phone_number)
+        )
+        user = result.scalars().first()
+        return user is not None

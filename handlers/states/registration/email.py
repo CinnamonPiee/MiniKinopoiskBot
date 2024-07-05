@@ -5,6 +5,7 @@ from keyboards.reply.back_kb import back_kb
 from keyboards.reply.back_or_number_kb import back_or_number_kb
 from states.registration import Registration
 from utils.email_validation import email_validation
+from database.orm.user import email_exists
 
 
 router = Router(name=__name__)
@@ -21,6 +22,15 @@ async def registration_email_handler_back(message: Message, state: FSMContext):
 
 @router.message(Registration.email, F.text.cast(email_validation).as_("email"))
 async def registration_email_handler(message: Message, state: FSMContext):
+    email = message.text
+
+    if await email_exists(email):
+        await message.answer(
+            text="Этот email уже зарегистрирован. Пожалуйста, используйте другой email.",
+            reply_markup=back_kb(),
+            parse_mode=None,
+            )
+
     await state.update_data(email=message.text)
     await state.set_state(Registration.phone_number)
     await message.answer(
