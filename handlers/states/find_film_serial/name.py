@@ -49,18 +49,34 @@ async def find_film_serial_name(message: Message, state: FSMContext):
             age_rating = data["ageRating"]
             description = data["description"]
 
-            await message.bot.send_photo(
-                chat_id=message.chat.id,
-                photo=url,
-                caption=f"{markdown.hbold(name)}\n"
-                        f"Жанры: {genres}\n"
-                        f"Рейтинг: {rating}\n"
-                        f"Год: {year}\n"
-                        f"Продолжительность фильма: {movie_length}\n"
-                        f"Страна: {countries}\n"
-                        f"Возрастной рейтинг: {age_rating}\n"
-                        f"Описание: {description}",
-                reply_markup=main_kb(),
+            try:
+                await message.bot.send_photo(
+                    chat_id=message.chat.id,
+                    photo=url,
+                    caption=f"{markdown.hbold(name)}\n"
+                            f"Жанры: {genres}\n"
+                            f"Рейтинг: {rating}\n"
+                            f"Год: {year}\n"
+                            f"Продолжительность фильма: {movie_length}\n"
+                            f"Страна: {countries}\n"
+                            f"Возрастной рейтинг: {age_rating}\n"
+                            f"Описание: {description}",
+                    reply_markup=main_kb(),
+                    )
+            except:
+                url = "https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg"
+                await message.bot.send_photo(
+                    chat_id=message.chat.id,
+                    photo=url,
+                    caption=f"{markdown.hbold(name)}\n"
+                            f"Жанры: {genres}\n"
+                            f"Рейтинг: {rating}\n"
+                            f"Год: {year}\n"
+                            f"Продолжительность фильма: {movie_length}\n"
+                            f"Страна: {countries}\n"
+                            f"Возрастной рейтинг: {age_rating}\n"
+                            f"Описание: {description}",
+                    reply_markup=main_kb(),
                 )
 
             if await film_exists(name):
@@ -94,18 +110,34 @@ async def find_film_serial_name(message: Message, state: FSMContext):
             age_rating = data["ageRating"]
             description = data["description"]
 
-            await message.bot.send_photo(
-                chat_id=message.chat.id,
-                photo=url,
-                caption=f"{markdown.hbold(name)}\n"
-                        f"Жанры: {genres}\n"
-                        f"Рейтинг: {rating}\n"
-                        f"Релиз: {release_years}\n"
-                        f"Продолжительность серии: {series_length}\n"
-                        f"Страна: {countries}\n"
-                        f"Возрастной рейтинг: {age_rating}\n"
-                        f"Описание: {description}",
-                reply_markup=main_kb(),
+            try:
+                await message.bot.send_photo(
+                    chat_id=message.chat.id,
+                    photo=url,
+                    caption=f"{markdown.hbold(name)}\n"
+                            f"Жанры: {genres}\n"
+                            f"Рейтинг: {rating}\n"
+                            f"Релиз: {release_years}\n"
+                            f"Продолжительность серии: {series_length}\n"
+                            f"Страна: {countries}\n"
+                            f"Возрастной рейтинг: {age_rating}\n"
+                            f"Описание: {description}",
+                    reply_markup=main_kb(),
+                    )
+            except:
+                url = "https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg"
+                await message.bot.send_photo(
+                    chat_id=message.chat.id,
+                    photo=url,
+                    caption=f"{markdown.hbold(name)}\n"
+                            f"Жанры: {genres}\n"
+                            f"Рейтинг: {rating}\n"
+                            f"Релиз: {release_years}\n"
+                            f"Продолжительность серии: {series_length}\n"
+                            f"Страна: {countries}\n"
+                            f"Возрастной рейтинг: {age_rating}\n"
+                            f"Описание: {description}",
+                    reply_markup=main_kb(),
                 )
 
             if await serial_exists(name):

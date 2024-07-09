@@ -6,15 +6,14 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from handlers import router as main_router
 
-
-async def main():
-    bot = Bot(
+dp = Dispatcher()
+bot = Bot(
         token=settings.bot_token,
         default=DefaultBotProperties(parse_mode="HTML"),
     )
 
-    dp = Dispatcher()
 
+async def main():
     logging.basicConfig(level=logging.INFO)
 
     dp.include_routers(main_router)
