@@ -14,7 +14,7 @@ async def second_date_back(message: Message, state: FSMContext):
     await state.set_state(HistoryOfSearch.choose_film_serial_all)
     await message.answer(
         text="Пожалуйста, введите начальную дату поиска (в формате ГГГГ-ММ-ДД) "
-        "или нажмите на кнопку <Пропустить> внизу чтобы просмотреть всю историю поиска.",
+        "или нажмите на кнопку 'Пропустить' внизу чтобы просмотреть всю историю поиска.",
         reply_markup=back_or_skip_kb(),
     )
 

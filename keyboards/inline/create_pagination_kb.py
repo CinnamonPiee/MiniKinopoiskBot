@@ -1,28 +1,16 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
+PER_PAGE = 1
 
-PER_PAGE = 5
 
-
-def create_pagination_kb(history, current_page, total_count):
+def create_pagination_kb(page, total_count):
     buttons = []
+    if page > 0:
+        buttons.append(InlineKeyboardButton(text="⬅️ Назад", callback_data=f"page_{page - 1}"))
+    if (page + 1) * PER_PAGE < total_count:
+        buttons.append(InlineKeyboardButton(text="➡️ Вперед", callback_data=f"page_{page + 1}"))
 
-    for record in history:
-        buttons.append(
-            [InlineKeyboardButton(text=f"{record.film.name}", callback_data=f"film_{record.film.id}")]
-        )
+    # Создаем InlineKeyboardMarkup с параметром inline_keyboard
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[buttons])
 
-    total_pages = (total_count + PER_PAGE - 1) // PER_PAGE
-
-    navigation_buttons = []
-    if current_page > 1:
-        navigation_buttons.append(InlineKeyboardButton(text="⬅️", callback_data=f"page_{current_page - 1}"))
-
-    navigation_buttons.append(InlineKeyboardButton(text=f"{current_page}/{total_pages}", callback_data="noop"))
-
-    if current_page < total_pages:
-        navigation_buttons.append(InlineKeyboardButton(text="➡️", callback_data=f"page_{current_page + 1}"))
-
-    buttons.append(navigation_buttons)
-
-    return InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard

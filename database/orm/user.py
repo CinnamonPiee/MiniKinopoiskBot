@@ -4,7 +4,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 
 from database.databases import async_session_factory
-from database.models import Users, HistoryFilm
+from database.models import Users, HistoryFilm, SearchFilm
 from sqlalchemy import func
 
 
@@ -27,7 +27,7 @@ async def check_user_by_telegram_id(telegram_id: int):
         query = select(Users).where(Users.telegram_id == telegram_id)
         result = await session.execute(query)
         user = result.scalars().first()
-        return user.id is not None
+        return int(user.id)
 
 
 async def add_user(name: str,
@@ -87,21 +87,27 @@ async def phone_number_exists(phone_number: str) -> bool:
 
 
 async def get_user_film_history(user_id: int, page: int, per_page: int):
-    async with async_session_factory() as session:
-        offset = (page - 1) * per_page
-        query = (select(HistoryFilm)
-                 .options(joinedload(HistoryFilm.film))
-                 .filter(HistoryFilm.user_id == user_id)
-                 .order_by(HistoryFilm.created_at.desc())
-                 .offset(offset)
-                 .limit(per_page))
+    async with (async_session_factory() as session):
+        query = select(
+            HistoryFilm,
+            SearchFilm
+        ).options(
+            joinedload(HistoryFilm.film)
+        ).join(
+            SearchFilm, HistoryFilm.film_id == SearchFilm.id
+        ).where(
+            HistoryFilm.user_id == user_id
+        ).order_by(
+            HistoryFilm.created_at.desc()
+        ).limit(
+            per_page
+        ).offset(
+            page * per_page
+        )
 
         result = await session.execute(query)
         history = result.scalars().all()
-
-        # Получение общего количества записей
-        count_query = select(func.count(HistoryFilm.id)).filter(HistoryFilm.user_id == user_id)
-        count_result = await session.execute(count_query)
-        total_count = count_result.scalar_one()
+        total_count = await session.scalar(
+            select(func.count()).select_from(HistoryFilm).where(HistoryFilm.user_id == user_id))
 
         return history, total_count
