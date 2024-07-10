@@ -15,14 +15,15 @@ async def get_users():
         return users
 
 
-async def get_user_by_id(user_id: int):
+async def check_user_by_telegram_id(telegram_id: int):
     async with async_session_factory() as session:
-        result = await session.execute(select(Users).where(Users.id == user_id))
+        query = select(Users).where(Users.telegram_id == telegram_id)
+        result = await session.execute(query)
         user = result.scalars().first()
         return user
 
 
-async def check_user_by_telegram_id(telegram_id: int):
+async def check_user_id_by_telegram_id(telegram_id: int):
     async with async_session_factory() as session:
         query = select(Users).where(Users.telegram_id == telegram_id)
         result = await session.execute(query)

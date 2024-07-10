@@ -7,7 +7,7 @@ from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 from keyboards.reply.main_kb import main_kb
 from keyboards.reply.back_kb import back_kb
 from utils.date_valid import date_valid
-from database.orm.user import check_user_by_telegram_id, get_user_film_history
+from database.orm.user import check_user_id_by_telegram_id, get_user_film_history
 from keyboards.inline.create_pagination_kb import create_pagination_kb
 
 
@@ -27,7 +27,7 @@ async def first_date_back(message: Message, state: FSMContext):
 @router.message(HistoryOfSearch.first_date, F.text == "Пропустить")
 async def first_date_skip(message: Message, state: FSMContext):
     telegram_id = message.from_user.id
-    user_id = await check_user_by_telegram_id(int(telegram_id))
+    user_id = await check_user_id_by_telegram_id(int(telegram_id))
     if user_id:
         page = 0
         history, total_count = await get_user_film_history(user_id, page, PER_PAGE)
@@ -48,9 +48,20 @@ async def first_date_skip(message: Message, state: FSMContext):
                 reply_markup=keyboards,
             )
         else:
-            await message.bot.send_message(message.chat.id, text="История поиска пуста.")
+            await message.bot.send_message(
+                message.chat.id,
+                text="История поиска пуста.",
+                reply_markup=main_kb(),
+            )
+            await state.clear()
+
     else:
-        await message.bot.send_message(message.chat.id, text="Пользователь не найден.")
+        await message.bot.send_message(
+            message.chat.id,
+            text="Пользователь не найден.",
+            reply_markup=main_kb(),
+        )
+        await state.clear()
     await state.clear()
 
 

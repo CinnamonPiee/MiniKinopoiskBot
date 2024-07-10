@@ -18,7 +18,6 @@ async def main():
 
     dp.include_routers(main_router)
 
-    # Зарегистрируйте обработчик
     dp.callback_query.register(change_page_callback_handler)
 
     await dp.start_polling(bot)
