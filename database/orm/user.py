@@ -4,7 +4,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 
 from database.databases import async_session_factory
-from database.models import Users, HistoryFilm, SearchFilm
+from database.models import Users, HistoryFilm, SearchFilm, HistorySerial, SearchSerial
 from sqlalchemy import func
 
 
@@ -110,5 +110,32 @@ async def get_user_film_history(user_id: int, page: int, per_page: int):
         history = result.scalars().all()
         total_count = await session.scalar(
             select(func.count()).select_from(HistoryFilm).where(HistoryFilm.user_id == user_id))
+
+        return history, total_count
+
+
+async def get_user_serial_history(user_id: int, page: int, per_page: int):
+    async with (async_session_factory() as session):
+        query = select(
+            HistorySerial,
+            SearchSerial
+        ).options(
+            joinedload(HistorySerial.serial)
+        ).join(
+            SearchSerial, HistorySerial.serial_id == SearchSerial.id
+        ).where(
+            HistorySerial.user_id == user_id
+        ).order_by(
+            HistorySerial.created_at.desc()
+        ).limit(
+            per_page
+        ).offset(
+            page * per_page
+        )
+
+        result = await session.execute(query)
+        history = result.scalars().all()
+        total_count = await session.scalar(
+            select(func.count()).select_from(HistorySerial).where(HistorySerial.user_id == user_id))
 
         return history, total_count

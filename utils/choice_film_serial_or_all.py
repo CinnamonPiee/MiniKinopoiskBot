@@ -1,0 +1,3 @@
+
+class ChoiceFilmSerialOrAll:
+    choice: str = ""
