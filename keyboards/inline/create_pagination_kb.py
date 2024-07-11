@@ -10,7 +10,6 @@ def create_pagination_kb(page, total_count):
     if page > 0:
         buttons.append(InlineKeyboardButton(text="⬅️ Назад", callback_data=f"page_{page - 1}"))
 
-    # Используем None для callback_data, чтобы кнопка не отправляла события
     inactive_text = f"{page + 1}/{(total_count + PER_PAGE - 1) // PER_PAGE}"
     buttons.append(InlineKeyboardButton(text=inactive_text, callback_data="inactive"))
 
