@@ -36,7 +36,7 @@ async def main_choose_start(message: Message, state: FSMContext):
 async def main_choose_find_film_serial(message: Message, state: FSMContext):
     await state.set_state(find_film_serial.FindFilmSerial.name)
     await message.answer(
-        text="Пожалуйста, введите название фильма: ",
+        text="Пожалуйста, введите название фильма или сериала: ",
         reply_markup=back_kb.back_kb(),
         parse_mode=None,
         )

@@ -1,7 +1,7 @@
 from datetime import datetime
 from database.databases import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey, text, String, BigInteger, Text, DateTime, URL
+from sqlalchemy import ForeignKey, text, String, BigInteger, Text, DateTime
 from sqlalchemy_utils import URLType
 
 

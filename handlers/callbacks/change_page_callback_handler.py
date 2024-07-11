@@ -4,7 +4,6 @@ from keyboards.inline.create_pagination_kb import create_pagination_kb
 from keyboards.reply.main_kb import main_kb
 from utils.choice_film_serial_or_all import ChoiceFilmSerialOrAll
 
-
 PER_PAGE = 1
 dp = Dispatcher()
 
@@ -21,10 +20,11 @@ async def change_page_callback_handler(callback_query: types.CallbackQuery):
         if user_id:
             history, total_count = await get_user_film_history(user_id, page, PER_PAGE)
             if history:
-                print(f"-------{history[0].film}")
                 film = history[0].film
                 keyboards = create_pagination_kb(page, total_count)
                 if callback_query.data == 'main_menu':
+                    await callback_query.message.bot.delete_message(chat_id=callback_query.message.chat.id,
+                                                                    message_id=callback_query.message.message_id)
                     await callback_query.message.answer(
                         text="Вы вернулись в главное меню.",
                         reply_markup=main_kb(),
@@ -47,11 +47,13 @@ async def change_page_callback_handler(callback_query: types.CallbackQuery):
 
     elif ChoiceFilmSerialOrAll.choice == "Сериалы":
         if user_id:
-            history, total_count = await get_user_film_history(user_id, page, PER_PAGE)
+            history, total_count = await get_user_serial_history(user_id, page, PER_PAGE)
             if history:
                 serial = history[0].serial
                 keyboards = create_pagination_kb(page, total_count)
                 if callback_query.data == 'main_menu':
+                    await callback_query.message.bot.delete_message(chat_id=callback_query.message.chat.id,
+                                                                    message_id=callback_query.message.message_id)
                     await callback_query.message.answer(
                         text="Вы вернулись в главное меню.",
                         reply_markup=main_kb(),
