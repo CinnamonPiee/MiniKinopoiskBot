@@ -73,3 +73,8 @@ async def change_page_callback_handler(callback_query: types.CallbackQuery):
                         ),
                         reply_markup=keyboards
                     )
+
+
+@dp.callback_query(lambda c: c.data == "noop")
+async def noop_callback_handler(callback_query: types.CallbackQuery):
+    await callback_query.answer()
