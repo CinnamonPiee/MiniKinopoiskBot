@@ -139,3 +139,51 @@ async def get_user_serial_history(user_id: int, page: int, per_page: int):
             select(func.count()).select_from(HistorySerial).where(HistorySerial.user_id == user_id))
 
         return history, total_count
+
+
+async def get_user_film_serial_history(user_id: int, page: int, per_page: int):
+    async with async_session_factory() as session:
+        # Get film history
+        film_query = select(
+            HistoryFilm
+        ).options(
+            joinedload(HistoryFilm.film)
+        ).where(
+            HistoryFilm.user_id == user_id
+        ).order_by(
+            HistoryFilm.created_at.desc()
+        )
+
+        film_result = await session.execute(film_query)
+        film_history = film_result.scalars().all()
+
+        # Get serial history
+        serial_query = select(
+            HistorySerial
+        ).options(
+            joinedload(HistorySerial.serial)
+        ).where(
+            HistorySerial.user_id == user_id
+        ).order_by(
+            HistorySerial.created_at.desc()
+        )
+
+        serial_result = await session.execute(serial_query)
+        serial_history = serial_result.scalars().all()
+
+        # Combine both histories
+        combined_history = sorted(
+            film_history + serial_history,
+            key=lambda x: x.created_at,
+            reverse=True
+        )
+
+        # Paginate combined history
+        start_index = page * per_page
+        end_index = start_index + per_page
+        paginated_history = combined_history[start_index:end_index]
+
+        # Get total count for pagination
+        total_count = len(combined_history)
+
+        return paginated_history, total_count
