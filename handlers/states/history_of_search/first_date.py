@@ -2,20 +2,23 @@ from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from states.history_of_search import HistoryOfSearch
-from keyboards.reply.history_search_kb import history_search_kb
-from keyboards.reply.back_or_skip_kb import back_or_skip_kb
-from keyboards.reply.main_kb import main_kb
-from keyboards.reply.back_kb import back_kb
-from keyboards.reply.back_or_today_kb import back_or_today_kb
-from utils.date_valid import date_valid
+from keyboards.reply import (
+    history_search_kb,
+    back_or_today_kb,
+    main_kb,
+    back_or_skip_kb
+    )
+from keyboards.inline.create_pagination_kb import create_pagination_kb
 from database.orm.user import (
     check_user_id_by_telegram_id,
-    get_user_film_history,
-    get_user_serial_history,
-    get_user_film_serial_history)
-from keyboards.inline.create_pagination_kb import create_pagination_kb
-from utils.choice_film_serial_or_all import ChoiceFilmSerialOrAll
+    get_user_film_serial_history
+    )
+from database.orm.film import get_user_film_history
+from database.orm.serial import get_user_serial_history
 from database.models import HistoryFilm, HistorySerial
+from utils.choice_film_serial_or_all import ChoiceFilmSerialOrAll
+from utils.date_valid import date_valid
+
 
 router = Router(name=__name__)
 PER_PAGE = 1
@@ -26,7 +29,7 @@ async def first_date_back(message: Message, state: FSMContext):
     await state.set_state(HistoryOfSearch.choose_film_serial_all)
     await message.answer(
         text="Пожалуйста, выберите что вы хотите найти: ",
-        reply_markup=history_search_kb(),
+        reply_markup=history_search_kb.history_search_kb(),
     )
 
 
@@ -62,7 +65,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                 await message.bot.send_message(
                     message.chat.id,
                     text="История поиска пуста.",
-                    reply_markup=main_kb(),
+                    reply_markup=main_kb.main_kb(),
                 )
                 await state.clear()
         await state.clear()
@@ -92,12 +95,11 @@ async def first_date_skip(message: Message, state: FSMContext):
                 await message.bot.send_message(
                     message.chat.id,
                     text="История поиска пуста.",
-                    reply_markup=main_kb(),
+                    reply_markup=main_kb.main_kb(),
                 )
                 await state.clear()
         await state.clear()
 
-    # на проверке
     elif choise_film_serial["choice"] == "Фильмы и сериалы":
         ChoiceFilmSerialOrAll.choice = "Фильмы и сериалы"
         if user_id:
@@ -141,7 +143,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                 await message.bot.send_message(
                     message.chat.id,
                     text="История поиска пуста.",
-                    reply_markup=main_kb(),
+                    reply_markup=main_kb.main_kb(),
                 )
                 await state.clear()
         await state.clear()
@@ -154,7 +156,7 @@ async def first_date(message: Message, state: FSMContext):
     await message.answer(
         text="Пожалуйста, введите конечную дату поиска (в формате ГГГГ-ММ-ДД)"
              " или нажмите на кнопку внизу для выбора сегодняшней даты.",
-        reply_markup=back_or_today_kb(),
+        reply_markup=back_or_today_kb.back_or_today_kb(),
     )
 
 
@@ -163,5 +165,5 @@ async def first_date_skip_none(message: Message):
     await message.answer(
         text="Простите, я вас не понимаю. Пожалуйста, введите начальную дату поиска (в формате ГГГГ-ММ-ДД) "
              "или нажмите на кнопку 'Пропустить' внизу чтобы просмотреть всю историю поиска.",
-        reply_markup=back_or_skip_kb(),
+        reply_markup=back_or_skip_kb.back_or_skip_kb(),
     )

@@ -1,13 +1,14 @@
 from aiogram import types, Dispatcher
 from database.orm.user import (
     check_user_id_by_telegram_id,
-    get_user_film_history,
-    get_user_serial_history,
-    get_user_film_serial_history)
+    get_user_film_serial_history,
+    get_user_film_serial_history_per_date)
 from keyboards.inline.create_pagination_kb import create_pagination_kb
 from keyboards.reply.main_kb import main_kb
 from utils.choice_film_serial_or_all import ChoiceFilmSerialOrAll
 from database.models import HistorySerial, HistoryFilm
+from database.orm.film import get_user_film_history_per_date, get_user_film_history
+from database.orm.serial import get_user_serial_history_per_date, get_user_serial_history
 
 PER_PAGE = 1
 dp = Dispatcher()
@@ -22,19 +23,52 @@ async def change_page_callback_handler(callback_query: types.CallbackQuery):
     user_id = await check_user_id_by_telegram_id(int(telegram_id))
 
     if ChoiceFilmSerialOrAll.choice == "Фильмы":
-        if user_id:
-            history, total_count = await get_user_film_history(user_id, page, PER_PAGE)
-            await display_history(callback_query, history, total_count, page)
+        if ChoiceFilmSerialOrAll.first_date != "":
+            if user_id:
+                history, total_count = await get_user_film_history_per_date(
+                    user_id,
+                    page,
+                    PER_PAGE,
+                    str(ChoiceFilmSerialOrAll.first_date),
+                    str(ChoiceFilmSerialOrAll.second_date)
+                )
+                await display_history(callback_query, history, total_count, page)
+        else:
+            if user_id:
+                history, total_count = await get_user_film_history(user_id, page, PER_PAGE)
+                await display_history(callback_query, history, total_count, page)
 
     elif ChoiceFilmSerialOrAll.choice == "Сериалы":
-        if user_id:
-            history, total_count = await get_user_serial_history(user_id, page, PER_PAGE)
-            await display_history(callback_query, history, total_count, page)
+        if ChoiceFilmSerialOrAll.first_date != "":
+            if user_id:
+                history, total_count = await get_user_serial_history_per_date(
+                    user_id,
+                    page,
+                    PER_PAGE,
+                    str(ChoiceFilmSerialOrAll.first_date),
+                    str(ChoiceFilmSerialOrAll.second_date)
+                )
+                await display_history(callback_query, history, total_count, page)
+        else:
+            if user_id:
+                history, total_count = await get_user_serial_history(user_id, page, PER_PAGE)
+                await display_history(callback_query, history, total_count, page)
 
     elif ChoiceFilmSerialOrAll.choice == "Фильмы и сериалы":
-        if user_id:
-            history, total_count = await get_user_film_serial_history(user_id, page, PER_PAGE)
-            await display_history(callback_query, history, total_count, page)
+        if ChoiceFilmSerialOrAll.first_date != "":
+            if user_id:
+                history, total_count = await get_user_film_serial_history_per_date(
+                    user_id,
+                    page,
+                    PER_PAGE,
+                    str(ChoiceFilmSerialOrAll.first_date),
+                    str(ChoiceFilmSerialOrAll.second_date)
+                )
+                await display_history(callback_query, history, total_count, page)
+        else:
+            if user_id:
+                history, total_count = await get_user_film_serial_history(user_id, page, PER_PAGE)
+                await display_history(callback_query, history, total_count, page)
 
 
 async def display_history(callback_query, history, total_count, page):

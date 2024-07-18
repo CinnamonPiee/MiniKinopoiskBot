@@ -2,10 +2,9 @@ from datetime import datetime
 from sqlalchemy import update, delete
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
-
 from database.databases import async_session_factory
-from database.models import Users, HistoryFilm, SearchFilm, HistorySerial, SearchSerial
-from sqlalchemy import func
+from database.models import Users, HistoryFilm, HistorySerial
+from datetime import timedelta
 
 
 async def get_users():
@@ -87,63 +86,8 @@ async def phone_number_exists(phone_number: str) -> bool:
         return user is not None
 
 
-async def get_user_film_history(user_id: int, page: int, per_page: int):
-    async with (async_session_factory() as session):
-        query = select(
-            HistoryFilm,
-            SearchFilm
-        ).options(
-            joinedload(HistoryFilm.film)
-        ).join(
-            SearchFilm, HistoryFilm.film_id == SearchFilm.id
-        ).where(
-            HistoryFilm.user_id == user_id
-        ).order_by(
-            HistoryFilm.created_at.desc()
-        ).limit(
-            per_page
-        ).offset(
-            page * per_page
-        )
-
-        result = await session.execute(query)
-        history = result.scalars().all()
-        total_count = await session.scalar(
-            select(func.count()).select_from(HistoryFilm).where(HistoryFilm.user_id == user_id))
-
-        return history, total_count
-
-
-async def get_user_serial_history(user_id: int, page: int, per_page: int):
-    async with (async_session_factory() as session):
-        query = select(
-            HistorySerial,
-            SearchSerial
-        ).options(
-            joinedload(HistorySerial.serial)
-        ).join(
-            SearchSerial, HistorySerial.serial_id == SearchSerial.id
-        ).where(
-            HistorySerial.user_id == user_id
-        ).order_by(
-            HistorySerial.created_at.desc()
-        ).limit(
-            per_page
-        ).offset(
-            page * per_page
-        )
-
-        result = await session.execute(query)
-        history = result.scalars().all()
-        total_count = await session.scalar(
-            select(func.count()).select_from(HistorySerial).where(HistorySerial.user_id == user_id))
-
-        return history, total_count
-
-
 async def get_user_film_serial_history(user_id: int, page: int, per_page: int):
     async with async_session_factory() as session:
-        # Get film history
         film_query = select(
             HistoryFilm
         ).options(
@@ -157,7 +101,6 @@ async def get_user_film_serial_history(user_id: int, page: int, per_page: int):
         film_result = await session.execute(film_query)
         film_history = film_result.scalars().all()
 
-        # Get serial history
         serial_query = select(
             HistorySerial
         ).options(
@@ -171,19 +114,66 @@ async def get_user_film_serial_history(user_id: int, page: int, per_page: int):
         serial_result = await session.execute(serial_query)
         serial_history = serial_result.scalars().all()
 
-        # Combine both histories
         combined_history = sorted(
             film_history + serial_history,
             key=lambda x: x.created_at,
             reverse=True
         )
 
-        # Paginate combined history
         start_index = page * per_page
         end_index = start_index + per_page
         paginated_history = combined_history[start_index:end_index]
 
-        # Get total count for pagination
+        total_count = len(combined_history)
+
+        return paginated_history, total_count
+
+
+async def get_user_film_serial_history_per_date(user_id: int, page: int, per_page: int, start_date: str, end_date: str):
+    async with async_session_factory() as session:
+        start_date_dt = datetime.strptime(start_date, '%Y-%m-%d')
+        end_date_dt = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
+
+        film_query = select(
+            HistoryFilm
+        ).options(
+            joinedload(HistoryFilm.film)
+        ).where(
+            HistoryFilm.user_id == user_id,
+            HistoryFilm.created_at >= start_date_dt,
+            HistoryFilm.created_at < end_date_dt
+        ).order_by(
+            HistoryFilm.created_at.desc()
+        )
+
+        film_result = await session.execute(film_query)
+        film_history = film_result.scalars().all()
+
+        serial_query = select(
+            HistorySerial
+        ).options(
+            joinedload(HistorySerial.serial)
+        ).where(
+            HistorySerial.user_id == user_id,
+            HistorySerial.created_at >= start_date_dt,
+            HistorySerial.created_at < end_date_dt
+        ).order_by(
+            HistorySerial.created_at.desc()
+        )
+
+        serial_result = await session.execute(serial_query)
+        serial_history = serial_result.scalars().all()
+
+        combined_history = sorted(
+            film_history + serial_history,
+            key=lambda x: x.created_at,
+            reverse=True
+        )
+
+        start_index = page * per_page
+        end_index = start_index + per_page
+        paginated_history = combined_history[start_index:end_index]
+
         total_count = len(combined_history)
 
         return paginated_history, total_count

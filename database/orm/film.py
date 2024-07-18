@@ -2,6 +2,9 @@ from datetime import datetime
 from sqlalchemy.future import select
 from database.databases import async_session_factory
 from database.models import SearchFilm, HistoryFilm, Users
+from sqlalchemy import func
+from sqlalchemy.orm import joinedload
+from datetime import timedelta
 
 
 async def get_films():
@@ -90,3 +93,66 @@ async def add_search_history(user_id: int, film_id: int):
 
         session.add(new_history)
         await session.commit()
+
+
+async def get_user_film_history(user_id: int, page: int, per_page: int):
+    async with (async_session_factory() as session):
+        query = select(
+            HistoryFilm,
+            SearchFilm
+        ).options(
+            joinedload(HistoryFilm.film)
+        ).join(
+            SearchFilm, HistoryFilm.film_id == SearchFilm.id
+        ).where(
+            HistoryFilm.user_id == user_id
+        ).order_by(
+            HistoryFilm.created_at.desc()
+        ).limit(
+            per_page
+        ).offset(
+            page * per_page
+        )
+
+        result = await session.execute(query)
+        history = result.scalars().all()
+        total_count = await session.scalar(
+            select(func.count()).select_from(HistoryFilm).where(HistoryFilm.user_id == user_id))
+
+        return history, total_count
+
+
+async def get_user_film_history_per_date(user_id: int, page: int, per_page: int, first_date: str, second_date: str):
+    async with async_session_factory() as session:
+        start_date_dt = datetime.strptime(first_date, '%Y-%m-%d')
+        end_date_dt = datetime.strptime(second_date, '%Y-%m-%d') + timedelta(days=1)
+
+        query = select(
+            HistoryFilm,
+            SearchFilm
+        ).options(
+            joinedload(HistoryFilm.film)
+        ).join(
+            SearchFilm, HistoryFilm.film_id == SearchFilm.id
+        ).where(
+            HistoryFilm.user_id == user_id,
+            HistoryFilm.created_at >= start_date_dt,
+            HistoryFilm.created_at < end_date_dt
+        ).order_by(
+            HistoryFilm.created_at.desc()
+        ).limit(
+            per_page
+        ).offset(
+            page * per_page
+        )
+
+        result = await session.execute(query)
+        history = result.scalars().all()
+        total_count = await session.scalar(
+            select(func.count()).select_from(HistoryFilm).where(
+                HistoryFilm.user_id == user_id,
+                HistoryFilm.created_at >= start_date_dt,
+                HistoryFilm.created_at < end_date_dt
+            ))
+
+        return history, total_count
