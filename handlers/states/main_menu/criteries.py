@@ -17,7 +17,7 @@ from keyboards.reply import (
     main_kb,
     choose_criteries_kb,
     back_kb,
-    choose_random_film_serial_kb
+    history_search_kb
 )
 
 
@@ -45,10 +45,10 @@ async def main_choose_find_film_serial(message: Message, state: FSMContext):
 
 @router.message(main_menu.MainMenu.criteries, F.text == "Рандомный фильм/ сериал")
 async def main_choose_random_film_serial(message: Message, state: FSMContext):
-    await state.set_state(random_film_serial.RandomFilmSerial.type)
+    await state.set_state(random_film_serial.RandomFilmSerial.type_choice)
     await message.answer(
         text="Пожалуйста, выберите что вы хотите получить рандомно: ",
-        reply_markup=choose_random_film_serial_kb.choose_random_film_serial_kb(),
+        reply_markup=history_search_kb.history_search_kb(),
         parse_mode=None,
     )
 

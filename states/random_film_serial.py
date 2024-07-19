@@ -2,7 +2,8 @@ from aiogram.fsm.state import StatesGroup, State
 
 
 class RandomFilmSerial(StatesGroup):
-    type = State()
+    type_choice = State()
+    count = State()
     criteries_yes_or_no = State()
     year = State()
     rating = State()
