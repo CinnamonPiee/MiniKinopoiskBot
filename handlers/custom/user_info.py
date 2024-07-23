@@ -1,7 +1,5 @@
 from aiogram import Router, F
 from aiogram.types import Message
-from config_data.config import settings
-from utils.truncate_tables import truncate_tables
 
 
 router = Router(name=__name__)

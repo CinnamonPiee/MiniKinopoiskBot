@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy.future import select
 from database.databases import async_session_factory
-from database.models import SearchSerial, Users, HistorySerial
+from database.models import SearchSerial, User, HistorySerial
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 from datetime import timedelta
@@ -38,7 +38,7 @@ async def add_serial(
         ):
 
     async with async_session_factory() as session:
-        user = await session.execute(select(Users).filter_by(telegram_id=telegram_id))
+        user = await session.execute(select(User).filter_by(telegram_id=telegram_id))
         user = user.scalar_one_or_none()
         user_id = user.id
 

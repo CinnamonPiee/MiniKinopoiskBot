@@ -1,6 +1,5 @@
 import requests
 from config_data.config import settings
-import pprint
 from typing import Optional
 
 
@@ -58,6 +57,3 @@ def random_movie_search(
 
     except KeyError:
         return "Сервер временно не доступен, попробуйте позже!"
-
-
-pprint.pprint(random_movie_search(janr=["ужасы", "боевик"]))

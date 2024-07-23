@@ -32,4 +32,4 @@ async def random_film_serial_rating_skip(message: Message, state: FSMContext):
     )
 
 
-@router.message(RandomFilmSerial.rating, F.)
+# @router.message(RandomFilmSerial.rating, F.)

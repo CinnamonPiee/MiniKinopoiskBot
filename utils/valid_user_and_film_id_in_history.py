@@ -1,4 +1,4 @@
-from database.models import SearchFilm, Users, HistoryFilm
+from database.models import SearchFilm, User, HistoryFilm
 from database.orm.film import update_search_history, add_search_history
 from database.databases import async_session_factory
 from sqlalchemy.future import select
@@ -10,7 +10,7 @@ async def valid_user_and_film_id_in_history(name, telegram_id):
         existing_film = result.scalars().first()
 
         if existing_film:
-            user_result = await session.execute(select(Users).where(Users.telegram_id == telegram_id))
+            user_result = await session.execute(select(User).where(User.telegram_id == telegram_id))
             user = user_result.scalars().first()
 
             if user:

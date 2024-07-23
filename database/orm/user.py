@@ -3,20 +3,20 @@ from sqlalchemy import update, delete
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 from database.databases import async_session_factory
-from database.models import Users, HistoryFilm, HistorySerial
+from database.models import User, HistoryFilm, HistorySerial
 from datetime import timedelta
 
 
 async def get_users():
     async with async_session_factory() as session:
-        result = await session.execute(select(Users))
+        result = await session.execute(select(User))
         users = result.scalars().all()
         return users
 
 
 async def check_user_by_telegram_id(telegram_id: int):
     async with async_session_factory() as session:
-        query = select(Users).where(Users.telegram_id == telegram_id)
+        query = select(User).where(User.telegram_id == telegram_id)
         result = await session.execute(query)
         user = result.scalars().first()
         return user
@@ -24,7 +24,7 @@ async def check_user_by_telegram_id(telegram_id: int):
 
 async def check_user_id_by_telegram_id(telegram_id: int):
     async with async_session_factory() as session:
-        query = select(Users).where(Users.telegram_id == telegram_id)
+        query = select(User).where(User.telegram_id == telegram_id)
         result = await session.execute(query)
         user = result.scalars().first()
         return int(user.id)
@@ -38,7 +38,7 @@ async def add_user(name: str,
 
     async with async_session_factory() as session:
 
-        new_user = Users(
+        new_user = User(
             name=name,
             email=email,
             phone_number=phone_number,
@@ -53,7 +53,7 @@ async def add_user(name: str,
 async def update_user(user_id: int, **kwargs):
     async with async_session_factory() as session:
         await session.execute(
-            update(Users).where(Users.id == user_id).values(**kwargs)
+            update(User).where(User.id == user_id).values(**kwargs)
         )
 
         await session.commit()
@@ -62,7 +62,7 @@ async def update_user(user_id: int, **kwargs):
 async def delete_user(user_id: int):
     async with async_session_factory() as session:
         await session.execute(
-            delete(Users).where(Users.id == user_id)
+            delete(User).where(User.id == user_id)
         )
 
         await session.commit()
@@ -71,7 +71,7 @@ async def delete_user(user_id: int):
 async def email_exists(email: str) -> bool:
     async with async_session_factory() as session:
         result = await session.execute(
-            select(Users).where(Users.email == email)
+            select(User).where(User.email == email)
         )
         user = result.scalars().first()
         return user is not None
@@ -80,7 +80,7 @@ async def email_exists(email: str) -> bool:
 async def phone_number_exists(phone_number: str) -> bool:
     async with async_session_factory() as session:
         result = await session.execute(
-            select(Users).where(Users.phone_number == phone_number)
+            select(User).where(User.phone_number == phone_number)
         )
         user = result.scalars().first()
         return user is not None
