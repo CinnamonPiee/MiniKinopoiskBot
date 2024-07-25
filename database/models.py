@@ -1,7 +1,7 @@
 from datetime import datetime
 from database.databases import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey, text, String, BigInteger, Text, DateTime
+from sqlalchemy import ForeignKey, text, String, BigInteger, Text, DateTime, Boolean
 from sqlalchemy_utils import URLType
 
 
@@ -10,11 +10,20 @@ class User(Base):
     __table_args__ = {"extend_existing": True}
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String(60), nullable=False)
-    email: Mapped[str] = mapped_column(String(60), nullable=False, unique=True)
-    phone_number: Mapped[str] = mapped_column(String(15), nullable=False, unique=True)
-    telegram_id: Mapped[int] = mapped_column(BigInteger, nullable=False, unique=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, server_default=text("TIMEZONE('utc', now())"))
+    password: Mapped[str] = mapped_column(String(128), nullable=False)
+    last_login: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=text("TIMEZONE('utc', now())"))
+    is_superuser: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    username: Mapped[str] = mapped_column(String(150), nullable=True)
+    first_name: Mapped[str] = mapped_column(String(150), nullable=True)
+    last_name: Mapped[str] = mapped_column(String(150), nullable=True)
+    email: Mapped[str] = mapped_column(String(254), nullable=True, unique=True)
+    is_staff: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    date_joined: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=text("TIMEZONE('utc', now())"))
+    telegram_id: Mapped[int] = mapped_column(BigInteger, nullable=True, unique=True)
+    phone_number: Mapped[str] = mapped_column(String, nullable=True, unique=True)
 
     history_film: Mapped[list["HistoryFilm"]] = relationship(
         "HistoryFilm",

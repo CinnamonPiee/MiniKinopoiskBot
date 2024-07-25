@@ -20,7 +20,7 @@ async def registration_phone_number_handler_back(message: Message, state: FSMCon
         reply_markup=back_kb(),
         )
 
-
+TODO # Переделать вариацию вывода если пользователь авторизовывается или регистрируется
 @router.message(Registration.phone_number, F.text.cast(phonenumber_validation).as_("phone_number"))
 async def registration_phone_number_handler(message: Message, state: FSMContext):
     phone_number = message.text
