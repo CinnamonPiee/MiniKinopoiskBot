@@ -5,3 +5,8 @@ from . import truncate_tables
 from . import valid_user_and_serial_id_in_history
 from . import valid_user_and_film_id_in_history
 from . import valid_num
+from . import choice_film_serial_or_all
+from . import date_valid
+from . import valid_choose_in_history
+from . import valid_password
+from . import valid_years

@@ -30,20 +30,28 @@ async def check_user_id_by_telegram_id(telegram_id: int):
         return int(user.id)
 
 
-async def add_user(name: str,
+async def add_user(password: str,
+                   username: str,
                    email: str,
-                   phone_number: str,
-                   telegram_id: int
+                   telegram_id=int,
+                   phone_number=str
                    ):
 
     async with async_session_factory() as session:
 
         new_user = User(
-            name=name,
+            password=password,
+            last_login=datetime.utcnow(),
+            is_superuser=False,
+            username=username,
+            first_name=None,
+            last_name=None,
             email=email,
-            phone_number=phone_number,
+            is_staff=False,
+            is_active=True,
+            date_joined=datetime.utcnow(),
             telegram_id=telegram_id,
-            created_at=datetime.utcnow()
+            phone_number=phone_number
         )
 
         session.add(new_user)

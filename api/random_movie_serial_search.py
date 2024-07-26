@@ -28,6 +28,7 @@ def random_movie_search(
         url = url + f"&movieLength={movie_length}"
     if series_length:
         url = url + f"seriesLength={series_length}"
+    TODO # Проверить данный код и решить проблему с добавлением больше одного жанра в поиск
     if janr:
         if len(janr) == 1:
             url = url + f"&genres.name={janr[0]}"
@@ -35,6 +36,7 @@ def random_movie_search(
             url = url + f"&genres.name={janr[0]}"
             for i in janr[1]:
                 url = url + f"&genres.name=+{i}"
+    TODO  # Проверить данный код и решить проблему с добавлением больше одного континента в поиск
     if country:
         if len(country) == 1:
             url = url + f"&countries.name={country}"

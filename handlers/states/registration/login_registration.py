@@ -20,8 +20,7 @@ async def registration_login_handler(message: Message, state: FSMContext):
     await state.set_state(login_registration=message.text)
     await state.set_state(Registration.email)
     await message.answer(
-        text="Напишите почту которую вы указывали при регистрации"
-             "в браузерной версии приложения: ",
+        text="Введите вашу поту: ",
         reply_markup=back_kb(),
     )
 
