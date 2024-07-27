@@ -32,5 +32,5 @@ async def random_film_serial_count(message: Message, state: FSMContext):
 @router.message(RandomFilmSerial.count)
 async def random_film_serial_count_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понял. Необходимо написать количество фильмов и сериалов которые вы хотите видеть!"
+        text="Простите, я вас не понял. Необходимо написать количество которое вы хотите видеть!"
     )

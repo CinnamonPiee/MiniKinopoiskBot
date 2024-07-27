@@ -10,3 +10,4 @@ from . import date_valid
 from . import valid_choose_in_history
 from . import valid_password
 from . import valid_years
+from . import valid_rating

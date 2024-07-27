@@ -6,6 +6,7 @@ from keyboards.reply.back_kb import back_kb
 from states.main_menu import MainMenu
 from aiogram.fsm.context import FSMContext
 from utils.valid_choose_in_history import valid_choose_in_history
+from keyboards.reply.choose_criteries_kb import choose_criteries_kb
 
 router = Router(name=__name__)
 
@@ -15,7 +16,7 @@ async def random_film_serial_type_choice_back(message: Message, state: FSMContex
     await state.set_state(MainMenu.criteries)
     await message.answer(
         text="Пожалуйста, выберите что вы хотите найти: ",
-        reply_markup=history_search_kb(),
+        reply_markup=choose_criteries_kb(),
     )
 
 
@@ -24,7 +25,7 @@ async def random_film_serial_type_choice(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.count)
     await state.update_data(type_choice=message.text)
     await message.answer(
-        text="Укажите количество рандомных фильмов и сериалов: ",
+        text="Укажите количество которое хотите получить: ",
         reply_markup=back_kb(),
     )
 

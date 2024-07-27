@@ -15,13 +15,15 @@ PER_PAGE = 1
 async def random_film_serial_criteries_yes_or_no_back(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.count)
     await message.answer(
-        text="Укажите количество рандомных фильмов и сериалов: ",
+        text="Укажите количество которое вы хотите получить: ",
         reply_markup=back_kb(),
     )
 
 
 @router.message(RandomFilmSerial.criteries_yes_or_no, F.text == "Нет")
 async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMContext):
+    TODO # Настроить вывод рандомных фильмов или сериалов без критериев. Необходимо 
+    # сделать пагинацию на странице из рандомных фильмов или сериалов
     ...
     await state.clear()
 

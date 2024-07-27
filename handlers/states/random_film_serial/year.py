@@ -46,7 +46,7 @@ async def random_film_serial_year(message: Message, state: FSMContext):
 @router.message(RandomFilmSerial.year)
 async def random_film_serial_year_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понял. Необходимо что бы вы написали рейтинг который хотите включить в рандомный поиск",
+        text="Простите, я вас не понял. Необходимо что бы вы написали год который хотите включить в рандомный поиск",
         reply_markup=back_or_skip_kb(),
     )
     
