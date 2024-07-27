@@ -4,7 +4,7 @@ from aiogram.types import Message
 from keyboards.reply.back_kb import back_kb
 from keyboards.reply.generation_password_back_kb import generation_password_back_kb
 from states.registration import Registration
-from utils.valid_password import valid_password
+from utils.validations import Validations
 
 
 router = Router(name=__name__)
@@ -27,7 +27,7 @@ async def registration_password_back(message: Message, state: FSMContext):
         )
 
 
-@router.message(Registration.password, F.text.cast(valid_password).as_("password"))
+@router.message(Registration.password, F.text.cast(Validations.valid_password).as_("password"))
 async def registration_password(message: Message, state: FSMContext):
     data = state.get_data()
     if data["login_registration"] == "Вход":

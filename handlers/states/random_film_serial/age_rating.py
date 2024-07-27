@@ -3,7 +3,7 @@ from states.random_film_serial import RandomFilmSerial
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
-from utils.valid_age_rating import valid_age_rating
+from utils.validations import Validations
 
 
 router = Router(name=__name__)
@@ -54,7 +54,7 @@ async def random_film_serial_age_rating_skip(message: Message, state: FSMContext
         )
 
 
-@router.message(RandomFilmSerial.age_rating, F.text.cast(valid_age_rating).as_("age_rating"))
+@router.message(RandomFilmSerial.age_rating, F.text.cast(Validations.valid_age_rating).as_("age_rating"))
 async def random_film_serial_age_rating(message: Message, state: FSMContext):
     data = state.get_data()
     if data["type_choice"] == "Сериалы":
@@ -91,5 +91,6 @@ async def random_film_serial_age_rating(message: Message, state: FSMContext):
 @router.message(RandomFilmSerial.age_rating)
 async def random_film_serial_age_rating_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понял. Необходимо что бы вы написали возрастной рейтинг который хотите включить в рандомный поиск"
+        text="Простите, я вас не понял. Необходимо что бы вы написали возрастной рейтинг который хотите включить в рандомный поиск",
+        reply_markup=back_or_skip_kb(),
     )

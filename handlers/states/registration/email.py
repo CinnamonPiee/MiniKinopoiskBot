@@ -4,7 +4,7 @@ from aiogram.types import Message
 from keyboards.reply.back_kb import back_kb
 from keyboards.reply.back_or_number_kb import back_or_number_kb
 from states.registration import Registration
-from utils.email_validation import email_validation
+from utils.validations import Validations
 from database.orm.user import email_exists
 from keyboards.reply.registration_kb import registration_kb
 from keyboards.reply.login_registration_kb import login_registration_kb
@@ -38,7 +38,7 @@ async def registration_email_handler_back(message: Message, state: FSMContext):
         )
 
 
-@router.message(Registration.email, F.text.cast(email_validation).as_("email"))
+@router.message(Registration.email, F.text.cast(Validations.email_validation).as_("email"))
 async def registration_email_handler(message: Message, state: FSMContext):
     data = state.get_data()
     if data["login_registration"] == "Вход":

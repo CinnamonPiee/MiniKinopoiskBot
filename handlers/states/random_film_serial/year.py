@@ -4,7 +4,7 @@ from aiogram.types import Message
 from keyboards.reply.yes_no_back import yes_no_back
 from aiogram.fsm.context import FSMContext
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
-from utils.valid_years import valid_years
+from utils.validations import Validations
 
 
 router = Router(name=__name__)
@@ -31,7 +31,7 @@ async def random_film_serial_year_skip(message: Message, state: FSMContext):
     )
 
 
-@router.message(RandomFilmSerial.year, F.text.cast(valid_years).as_("year"))
+@router.message(RandomFilmSerial.year, F.text.cast(Validations.valid_years).as_("year"))
 async def random_film_serial_year(message: Message, state: FSMContext):
     await state.update_data(year=message.text)
     await state.set_state(RandomFilmSerial.rating)

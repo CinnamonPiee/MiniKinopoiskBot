@@ -3,7 +3,7 @@ from states.random_film_serial import RandomFilmSerial
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
-from utils.valid_movie_length import valid_movie_length
+from utils.validations import Validations
 
 
 router = Router(name=__name__)
@@ -33,7 +33,7 @@ async def random_film_serial_movie_length_skip(message: Message, state: FSMConte
     )
 
 
-@router.message(RandomFilmSerial.movie_length, F.text.cast(valid_movie_length).as_("movie_length"))
+@router.message(RandomFilmSerial.movie_length, F.text.cast(Validations.valid_movie_length).as_("movie_length"))
 async def random_film_serial_movie_length(message: Message, state: FSMContext):
     await state.update_data(movie_length=message.text)
     await state.set_state(RandomFilmSerial.janr)
@@ -48,5 +48,6 @@ async def random_film_serial_movie_length(message: Message, state: FSMContext):
 @router.message(RandomFilmSerial.movie_length)
 async def random_film_serial_movie_length_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понял. Необходимо что бы вы написали продолжительность фильма который хотите включить в рандомный поиск"
+        text="Простите, я вас не понял. Необходимо что бы вы написали продолжительность фильма который хотите включить в рандомный поиск",
+        reply_markup=back_or_skip_kb(),
     )

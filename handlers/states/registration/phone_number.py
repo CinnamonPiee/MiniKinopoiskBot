@@ -5,7 +5,7 @@ from keyboards.reply.back_kb import back_kb
 from keyboards.reply.main_kb import main_kb
 from keyboards.reply.back_or_number_kb import back_or_number_kb
 from states.registration import Registration
-from utils.phonenumber_validation import phonenumber_validation
+from utils.validations import Validations
 from database.orm.user import add_user, phone_number_exists
 
 
@@ -21,7 +21,7 @@ async def registration_phone_number_handler_back(message: Message, state: FSMCon
         )
 
 
-@router.message(Registration.phone_number, F.text.cast(phonenumber_validation).as_("phone_number"))
+@router.message(Registration.phone_number, F.text.cast(Validations.phonenumber_validation).as_("phone_number"))
 async def registration_phone_number_handler(message: Message, state: FSMContext):
     if await phone_number_exists(message.text):
         await message.answer(

@@ -17,7 +17,7 @@ from database.orm.film import get_user_film_history
 from database.orm.serial import get_user_serial_history
 from database.models import HistoryFilm, HistorySerial
 from utils.choice_film_serial_or_all import ChoiceFilmSerialOrAll
-from utils.date_valid import date_valid
+from utils.validations import Validations
 
 
 router = Router(name=__name__)
@@ -149,7 +149,7 @@ async def first_date_skip(message: Message, state: FSMContext):
         await state.clear()
 
 
-@router.message(HistoryOfSearch.first_date, F.text.cast(date_valid).as_("first_date"))
+@router.message(HistoryOfSearch.first_date, F.text.cast(Validations.date_valid).as_("first_date"))
 async def first_date(message: Message, state: FSMContext):
     await state.set_state(HistoryOfSearch.second_date)
     await state.update_data(first_date=message.text)

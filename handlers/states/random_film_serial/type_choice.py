@@ -5,7 +5,7 @@ from keyboards.reply.history_search_kb import history_search_kb
 from keyboards.reply.back_kb import back_kb
 from states.main_menu import MainMenu
 from aiogram.fsm.context import FSMContext
-from utils.valid_choose_in_history import valid_choose_in_history
+from utils.validations import Validations
 from keyboards.reply.choose_criteries_kb import choose_criteries_kb
 
 router = Router(name=__name__)
@@ -20,7 +20,7 @@ async def random_film_serial_type_choice_back(message: Message, state: FSMContex
     )
 
 
-@router.message(RandomFilmSerial.type_choice, F.text.cast(valid_choose_in_history).as_("type_choice"))
+@router.message(RandomFilmSerial.type_choice, F.text.cast(Validations.valid_choose_in_history).as_("type_choice"))
 async def random_film_serial_type_choice(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.count)
     await state.update_data(type_choice=message.text)

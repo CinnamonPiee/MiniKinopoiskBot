@@ -4,7 +4,7 @@ from aiogram.types import Message
 from keyboards.reply.back_kb import back_kb
 from keyboards.reply.login_registration_kb import login_registration_kb
 from states.registration import Registration
-from utils.name_validation import name_validation
+from utils.validations import Validations
 from keyboards.reply.generation_password_back_kb import generation_password_back_kb
 
 
@@ -23,7 +23,7 @@ async def registration_name_handler_back(message: Message, state: FSMContext):
     )
 
 
-@router.message(Registration.name, F.text.cast(name_validation).as_("name"))
+@router.message(Registration.name, F.text.cast(Validations.name_validation).as_("name"))
 async def registration_name_handler(message: Message, state: FSMContext):
     await state.set_state(Registration.password)
     await state.update_data(name=message.text)

@@ -4,7 +4,8 @@ from aiogram.types import Message
 from keyboards.reply.history_search_kb import history_search_kb
 from keyboards.reply.yes_no_back import yes_no_back
 from aiogram.fsm.context import FSMContext
-from utils.valid_num import valid_num
+from utils.validations import Validations
+from keyboards.reply.back_kb import back_kb
 
 
 router = Router(name=__name__)
@@ -19,7 +20,7 @@ async def random_film_serial_count_back(message: Message, state: FSMContext):
     )
 
 
-@router.message(RandomFilmSerial.count, F.text.cast(valid_num).as_("count"))
+@router.message(RandomFilmSerial.count, F.text.cast(Validations.valid_num).as_("count"))
 async def random_film_serial_count(message: Message, state: FSMContext):
     await state.update_data(count=message.text)
     await state.set_state(RandomFilmSerial.criteries_yes_or_no)
@@ -32,5 +33,6 @@ async def random_film_serial_count(message: Message, state: FSMContext):
 @router.message(RandomFilmSerial.count)
 async def random_film_serial_count_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понял. Необходимо написать количество которое вы хотите видеть!"
+        text="Простите, я вас не понял. Необходимо написать количество которое вы хотите видеть!",
+        reply_markup=back_kb(),
     )

@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from states.history_of_search import HistoryOfSearch
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 from keyboards.reply.back_kb import back_kb
-from utils.date_valid import date_valid
+from utils.validations import Validations
 from database.orm.user import check_user_id_by_telegram_id, get_user_film_serial_history_per_date
 from utils.choice_film_serial_or_all import ChoiceFilmSerialOrAll
 from keyboards.inline.create_pagination_kb import create_pagination_kb
@@ -28,7 +28,7 @@ async def second_date_back(message: Message, state: FSMContext):
     )
 
 
-@router.message(HistoryOfSearch.second_date, F.text.cast(date_valid).as_("second_date"))
+@router.message(HistoryOfSearch.second_date, F.text.cast(Validations.date_valid).as_("second_date"))
 async def second_date(message: Message, state: FSMContext):
     await state.update_data(second_date=message.text)
     choise_film_serial = await state.get_data()
