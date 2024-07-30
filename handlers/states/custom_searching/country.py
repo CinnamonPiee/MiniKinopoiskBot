@@ -43,11 +43,11 @@ async def custom_searching_country_skip(message: Message, state: FSMContext):
         )
     elif data["type_choice"] == "Фильмы и сериалы":
         data = await state.update_data(country=None)
-        TODO # Доделать вывод на экран
+        # TODO # Доделать вывод на экран
     
 
-TODO  # Написать проверку на правильный ввод стран
-@router.message(CustomSearching.country, F.text.cast().as_("country"))
+# TODO  # Написать проверку на правильный ввод стран
+@router.message(CustomSearching.country, F.text.cast(...).as_("country"))
 async def custom_searching_country(message: Message, state: FSMContext):
     data = state.get_data()
     if data["type_choice"] == "Фильмы":
@@ -70,7 +70,7 @@ async def custom_searching_country(message: Message, state: FSMContext):
         )
     elif data["type_choice"] == "Фильмы и сериалы":
         data = await state.update_data(country=message.text)
-        TODO  # Доделать вывод на экран
+        # TODO  # Доделать вывод на экран
     
 
 

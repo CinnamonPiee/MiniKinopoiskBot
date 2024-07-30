@@ -32,7 +32,7 @@ async def registration_phone_number_handler(message: Message, state: FSMContext)
 
     data = await state.update_data(phone_number=message.text)
     await add_user(
-        TODO # Выполнить сохранение пароля в бд по типу сохранения как в django 
+        # TODO # Выполнить сохранение пароля в бд по типу сохранения как в django 
         password=data["password"],
         is_superuser=False,
         username=data["name"],
@@ -64,7 +64,7 @@ async def registration_phone_number_contact_handler(message: Message, state: FSM
 
         data = await state.update_data(phone_number=message.contact.phone_number)
         await add_user(
-            TODO # Выполнить сохранение пароля в бд по типу сохранения как в django
+            # TODO # Выполнить сохранение пароля в бд по типу сохранения как в django
             password=data["password"],
             is_superuser=False,
             username=data["name"],

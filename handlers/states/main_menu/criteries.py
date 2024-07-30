@@ -8,8 +8,6 @@ from states import (
     main_menu,
     find_film_serial,
     random_film_serial,
-    low_coast_film_or_serial,
-    height_coast_film_or_serial,
     custom_searching
 )
 
@@ -51,16 +49,6 @@ async def main_choose_random_film_serial(message: Message, state: FSMContext):
         reply_markup=history_search_kb.history_search_kb(),
         parse_mode=None,
     )
-
-
-@router.message(main_menu.MainMenu.criteries, F.text == "Малобюджетный фильм / сериал")
-async def main_choose_low_coast_film_serial(message: Message, state: FSMContext):
-    await state.set_state(low_coast_film_or_serial.LowCoastFilmSerial.criteries_yes_or_no)
-
-
-@router.message(main_menu.MainMenu.criteries, F.text == "Высоко бюджетный фильм / сериал")
-async def main_choose_height_coast_film_serial(message: Message, state: FSMContext):
-    await state.set_state(height_coast_film_or_serial.HeightCoastFilmSerial.criteries_yes_or_no)
 
 
 @router.message(main_menu.MainMenu.criteries, F.text == "Кастомный поиск")

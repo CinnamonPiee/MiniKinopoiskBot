@@ -24,7 +24,7 @@ async def custom_searching_series_length_back(message: Message, state: FSMContex
 async def custom_searching_series_length_skip(message: Message, state: FSMContext):
     data = await state.update_data(series_length=message.text)
 
-    TODO  # Написать вывод на экран
+    # TODO  # Написать вывод на экран
 
     await state.clear()
 
@@ -33,7 +33,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
 async def custom_searching_series_length(message: Message, state: FSMContext):
     data = await state.update_data(series_length=message.text)
 
-    TODO  # Написать вывод на экран
+    # TODO  # Написать вывод на экран
 
     await state.clear()
 

@@ -29,8 +29,8 @@ async def custom_searching_janr_skip(message: Message, state: FSMContext):
         reply_markup=back_or_skip_kb(),
     )
 
-TODO  # Написать проверку на правильный ввод стран
-@router.message(CustomSearching.janr, F.text.cast().as_("janr"))
+# TODO  # Написать проверку на правильный ввод стран
+@router.message(CustomSearching.janr, F.text.cast(...).as_("janr"))
 async def custom_searching_janr(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.year)
     await state.update_data(janr=message.text)

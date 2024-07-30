@@ -186,3 +186,6 @@ class Validations():
                 await session.execute(text("TRUNCATE TABLE history_search_film RESTART IDENTITY CASCADE"))
                 await session.execute(text("TRUNCATE TABLE history_search_serial RESTART IDENTITY CASCADE"))
             await session.commit()
+
+    async def valid_janr(janrs):
+        pass

@@ -22,15 +22,15 @@ async def random_film_serial_country_back(message: Message, state: FSMContext):
 @router.message(RandomFilmSerial.country, F.text == "Пропустить")
 async def random_film_serial_country_skip(message: Message, state: FSMContext):
     data = await state.update_data(country=None)
-    TODO # Добавить вывод пользователю
+    # TODO # Добавить вывод пользователю
 
     await state.clear()
 
-TODO # Написать проверку на правильный ввод стран
-@router.message(RandomFilmSerial.country, F.text.cast().as_("country"))
+# TODO # Написать проверку на правильный ввод стран
+@router.message(RandomFilmSerial.country, F.text.cast(...).as_("country"))
 async def random_film_serial_country(message: Message, state: FSMContext):
     data = await state.update_data(country=message.text)
-    TODO  # Добавить вывод пользователю
+    # TODO  # Добавить вывод пользователю
 
     await state.clear()
 

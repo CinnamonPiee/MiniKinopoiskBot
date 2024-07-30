@@ -6,10 +6,8 @@ from .custom_searching import router as custom_searching_router
 from .find_film_serial import router as find_film_serial_router
 from .history_of_search import router as history_of_search_router
 from .registration import router as registration_router
-from .low_box_office_film_or_serial import router as low_ox_office_film_or_serial_router
 from .random_film_serial import router as random_film_serial_router
 from .main_menu import router as main_menu_router
-from .height_box_office_film_or_serial import router as height_ox_office_film_or_serial_router
 
 router = Router(name=__name__)
 
@@ -17,7 +15,5 @@ router.include_router(custom_searching_router)
 router.include_router(find_film_serial_router)
 router.include_router(history_of_search_router)
 router.include_router(registration_router)
-router.include_router(low_ox_office_film_or_serial_router)
 router.include_router(random_film_serial_router)
 router.include_router(main_menu_router)
-router.include_router(height_ox_office_film_or_serial_router)

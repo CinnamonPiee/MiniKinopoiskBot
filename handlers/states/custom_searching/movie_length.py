@@ -24,7 +24,7 @@ async def custom_searching_movie_length_back(message: Message, state: FSMContext
 async def custom_searching_movie_length_skip(message: Message, state: FSMContext):
     data = await state.update_data(movie_length=None)
     
-    TODO # Написать вывод на экран
+    # TODO # Написать вывод на экран
 
     await state.clear()
 
@@ -33,7 +33,7 @@ async def custom_searching_movie_length_skip(message: Message, state: FSMContext
 async def custom_searching_movie_length(message: Message, state: FSMContext):
     data = await state.update_data(movie_length=message.text)
 
-    TODO  # Написать вывод на экран
+    # TODO  # Написать вывод на экран
 
     await state.clear()
 

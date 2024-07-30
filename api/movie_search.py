@@ -1,5 +1,6 @@
 import requests
-from config_data.config import settings
+import pprint
+# from config_data.config import settings
 
 
 def movie_search(film_name):
@@ -7,7 +8,8 @@ def movie_search(film_name):
 
     headers = {
         "accept": "application/json",
-        "X-API-KEY": settings.kinopoisk_dev_token
+        # "X-API-KEY": settings.kinopoisk_dev_token
+        "X-API-KEY": "2EGH4DD-GX247VQ-Q2XJFHB-X543Z6F"
     }
 
     try:
@@ -20,4 +22,5 @@ def movie_search(film_name):
     except KeyError:
         return "Сервер временно не доступен, попробуйте позже!"
     
-print(movie_search("avatar"))
+pprint.pprint(movie_search("avatar"))
+pprint.pprint(movie_search("see"))

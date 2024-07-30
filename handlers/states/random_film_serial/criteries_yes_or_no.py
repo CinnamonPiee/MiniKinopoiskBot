@@ -22,7 +22,7 @@ async def random_film_serial_criteries_yes_or_no_back(message: Message, state: F
 
 @router.message(RandomFilmSerial.criteries_yes_or_no, F.text == "Нет")
 async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMContext):
-    TODO # Настроить вывод рандомных фильмов или сериалов без критериев. Необходимо 
+    # TODO # Настроить вывод рандомных фильмов или сериалов без критериев. Необходимо 
     # сделать пагинацию на странице из рандомных фильмов или сериалов
     ...
     await state.clear()

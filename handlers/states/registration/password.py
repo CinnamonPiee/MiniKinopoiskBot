@@ -31,7 +31,7 @@ async def registration_password_back(message: Message, state: FSMContext):
 async def registration_password(message: Message, state: FSMContext):
     data = state.get_data()
     if data["login_registration"] == "Вход":
-        TODO # Доделать вариант если пользователь авторизовывается. Сделать проверку на 
+        # TODO # Доделать вариант если пользователь авторизовывается. Сделать проверку на 
         # правильно введенный пароль и если он правильный, то вывести приветсвенное окно и обновить
         # его карточку в бд с добавлением telegram_id
         pass
