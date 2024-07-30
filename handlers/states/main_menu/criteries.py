@@ -65,7 +65,12 @@ async def main_choose_height_coast_film_serial(message: Message, state: FSMConte
 
 @router.message(main_menu.MainMenu.criteries, F.text == "Кастомный поиск")
 async def main_choose_custom_searching(message: Message, state: FSMContext):
-    await state.set_state(custom_searching.CustomSearching.janr)
+    await state.set_state(custom_searching.CustomSearching.type_choice)
+    await message.answer(
+        text="Пожалуйста, выберите что вы хотите найти (фильм, сериал или все вместе): ",
+        reply_markup=history_search_kb.history_search_kb(),
+        parse_mode=None,
+    )
 
 
 @router.message(main_menu.MainMenu.criteries, F.text == "Назад")

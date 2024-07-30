@@ -1,4 +1,40 @@
-from aiogram import Router
+from aiogram import Router, F
+from states.custom_searching import CustomSearching
+from aiogram.types import Message
+from keyboards.reply.history_search_kb import history_search_kb
+from aiogram.fsm.context import FSMContext
+from utils.validations import Validations
+from keyboards.reply.back_kb import back_kb
+from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 
 
 router = Router(name=__name__)
+
+
+@router.message(CustomSearching.count, F.text == "Назад")
+async def custom_searching_count_back(message: Message, state: FSMContext):
+    await state.set_state(CustomSearching.type_choice)
+    await message.answer(
+        text="Пожалуйста, выберите что вы хотите получить рандомно: ",
+        reply_markup=history_search_kb(),
+    )
+
+
+@router.message(CustomSearching.count, F.text.cast(Validations.valid_num).as_("count"))
+async def custom_searching_count(message: Message, state: FSMContext):
+    await state.update_data(count=message.text)
+    await state.set_state(CustomSearching.janr)
+    await message.answer(
+        text="Напишите пожалуйста жанр(ы), если хотите несколько жанров, то напишите их через пробел, например(боевик, драма комедия)."
+             "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
+             "учитываться.",
+        reply_markup=back_or_skip_kb(),
+    )
+
+
+@router.message(CustomSearching.count)
+async def custom_searching_count_none(message: Message):
+    await message.answer(
+        text="Простите, я вас не понял. Необходимо написать количество которое вы хотите видеть!",
+        reply_markup=back_kb(),
+    )
