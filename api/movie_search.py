@@ -1,6 +1,11 @@
 import requests
 import pprint
-# from config_data.config import settings
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from config_data.config import settings
 
 
 def movie_search(film_name):
@@ -8,8 +13,7 @@ def movie_search(film_name):
 
     headers = {
         "accept": "application/json",
-        # "X-API-KEY": settings.kinopoisk_dev_token
-        "X-API-KEY": "2EGH4DD-GX247VQ-Q2XJFHB-X543Z6F"
+        "X-API-KEY": settings.kinopoisk_dev_token
     }
 
     try:
@@ -21,6 +25,3 @@ def movie_search(film_name):
         return "Ничего не найдено, пожалуйста попробуйте еще раз!"
     except KeyError:
         return "Сервер временно не доступен, попробуйте позже!"
-    
-pprint.pprint(movie_search("avatar"))
-pprint.pprint(movie_search("see"))

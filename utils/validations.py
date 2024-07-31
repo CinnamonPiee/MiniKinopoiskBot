@@ -12,8 +12,6 @@ from database.databases import async_session_factory
 from sqlalchemy.future import select
 
 
-
-
 class Validations():
     def valid_years(year: str):
         try:
@@ -30,7 +28,6 @@ class Validations():
             return None
         except:
             return None
-
 
     async def valid_user_and_serial_id_in_history(name, telegram_id):
         async with async_session_factory() as session:
@@ -51,7 +48,6 @@ class Validations():
                     else:
                         await add_search_history(user.id, existing_serial.id)
 
-
     async def valid_user_and_film_id_in_history(name, telegram_id):
         async with async_session_factory() as session:
             result = await session.execute(select(SearchFilm).where(SearchFilm.name == name))
@@ -71,7 +67,6 @@ class Validations():
                     else:
                         await add_search_history(user.id, existing_film.id)
 
-
     def valid_series_length(series_length: str):
         if 2 <= len(series_length) <= 3:
             if 10 <= int(series_length) <= 150:
@@ -81,7 +76,6 @@ class Validations():
             if (10 <= int(series_length.split("-")[0]) <= 150) and (10 <= int(series_length.split("-")[1]) <= 150) and (int(series_length.split("-")[0]) < int(series_length.split("-")[1])):
                 return series_length
             return None
-    
 
     def valid_rating(rating: str):
         if 1 <= len(rating) <= 3:
@@ -92,14 +86,12 @@ class Validations():
             if (1 <= float(rating.split("-")[0]) <= 10) and (1 <= float(rating.split("-")[1]) <= 10) and (float(rating.split("-")[0]) < float(rating.split("-")[1])):
                 return rating
             return None
-    
 
     def phonenumber_validation(phonenumber) -> str | bool:
         p = phonenumbers.parse(phonenumber, None)
         if phonenumbers.is_valid_number(p):
             return phonenumber
         return phonenumbers.is_valid_number(p)
-
 
     def valid_password(password: str):
         if len(password) >= 8:
@@ -111,18 +103,15 @@ class Validations():
             return None
         return None
 
-
     def valid_num(num: str):
         if num.isdigit():
             return int(num)
         return None
 
-
     def name_validation(name):
         if name.isalpha() and len(name) > 1:
             return name
         return None
-
 
     def valid_movie_length(movie_length: str):
         if 2 <= len(movie_length) <= 3:
@@ -134,7 +123,6 @@ class Validations():
                 return movie_length
             return None
 
-
     def email_validation(email):
         try:
             v = validate_email(email)
@@ -144,7 +132,6 @@ class Validations():
         except EmailNotValidError as e:
             print(str(e))
             return None
-
 
     def date_valid(date_string):
         date_pattern = re.compile(r'^\d{4}-\d{2}-\d{2}$')
@@ -159,12 +146,10 @@ class Validations():
 
         return date_string
 
-
     def valid_choose_in_history(choose: str):
         if choose in ["Фильмы и сериалы", "Сериалы", "Фильмы"]:
             return choose
         return None
-
 
     def valid_age_rating(age_rating: str):
         if len(age_rating) == 1:
@@ -176,7 +161,6 @@ class Validations():
                 return age_rating
             return None
 
-
     async def truncate_tables():
         async with async_session_factory() as session:
             async with session.begin():
@@ -187,5 +171,75 @@ class Validations():
                 await session.execute(text("TRUNCATE TABLE history_search_serial RESTART IDENTITY CASCADE"))
             await session.commit()
 
-    async def valid_janr(janrs):
-        pass
+    async def valid_janr(janrs: str | list):
+        genres = ['аниме', 'биография', 'боевик', 'вестерн', 'военный', 'детектив', 'детский', 
+                  'для взрослых', 'документальный', 'драма', 'игра', 'история', 'комедия', 
+                  'концерт', 'короткометражка', 'криминал', 'мелодрама', 'музыка', 'мультфильм', 
+                  'мюзикл', 'новости', 'приключения', 'реальное ТВ', 'семейный', 'спорт', 
+                  'ток-шоу', 'триллер', 'ужасы', 'фантастика', 'фильм-нуар', 'фэнтези', 'церемония']
+        
+        if type(janrs) == str:
+            if janrs in genres:
+                return janrs
+            return None
+        if type(janrs) == list:
+            for i in janrs:
+                if not i in genres:
+                    return None
+            return janrs
+
+    async def valid_country(country: str | list):
+        countries = ['Австралия', 'Австрия', 'Азербайджан', 'Албания', 'Алжир', 
+                     'Американские Виргинские острова', 'Американское Самоа', 'Ангола', 'Андорра', 
+                     'Антарктида', 'Антигуа и Барбуда', 'Антильские Острова', 'Аргентина', 
+                     'Армения', 'Аруба', 'Афганистан', 'Багамы', 'Бангладеш', 'Барбадос', 
+                     'Бахрейн', 'Беларусь', 'Белиз', 'Бельгия', 'Бенин', 'Берег Слоновой кости', 
+                     'Бермуды', 'Бирма', 'Болгария', 'Боливия', 'Босния', 'Босния и Герцеговина', 
+                     'Ботсвана', 'Бразилия', 'Бруней-Даруссалам', 'Буркина-Фасо', 'Бурунди', 
+                     'Бутан', 'Вануату', 'Ватикан', 'Великобритания', 'Венгрия', 'Венесуэла', 
+                     'Виргинские Острова', 'Внешние малые острова США', 'Вьетнам', 
+                     'Вьетнам Северный', 'Габон', 'Гаити', 'Гайана', 'Гамбия', 'Гана', 
+                     'Гваделупа', 'Гватемала', 'Гвинея', 'Гвинея-Бисау', 'Германия', 
+                     'Германия (ГДР)', 'Германия (ФРГ)', 'Гибралтар', 'Гондурас', 'Гонконг', 
+                     'Гренада', 'Гренландия', 'Греция', 'Грузия', 'Гуам', 'Дания', 'Джибути', 
+                     'Доминика', 'Доминикана', 'Египет', 'Заир', 'Замбия', 'Западная Сахара', 
+                     'Зимбабве', 'Израиль', 'Индия', 'Индонезия', 'Иордания', 'Ирак', 'Иран', 
+                     'Ирландия', 'Исландия', 'Испания', 'Италия', 'Йемен', 'Кабо-Верде', 
+                     'Казахстан', 'Каймановы острова', 'Камбоджа', 'Камерун', 'Канада', 'Катар', 
+                     'Кения', 'Кипр', 'Кирибати', 'Китай', 'Колумбия', 'Коморы', 'Конго', 
+                     'Конго (ДРК)', 'Корея', 'Корея Северная', 'Корея Южная', 'Косово', 
+                     'Коста-Рика', 'Кот-д’Ивуар', 'Куба', 'Кувейт', 'Кыргызстан', 'Лаос', 
+                     'Латвия', 'Лесото', 'Либерия', 'Ливан', 'Ливия', 'Литва', 'Лихтенштейн', 
+                     'Люксембург', 'Маврикий', 'Мавритания', 'Мадагаскар', 'Макао',
+                     'Македония', 'Малави', 'Малайзия', 'Мали', 'Мальдивы', 'Мальта', 'Марокко', 
+                     'Мартиника', 'Маршалловы острова', 'Мексика', 'Мозамбик', 'Молдова', 'Монако', 
+                     'Монголия', 'Монтсеррат', 'Мьянма', 'Намибия', 'Непал', 'Нигер', 'Нигерия', 
+                     'Нидерланды', 'Никарагуа', 'Новая Зеландия', 'Новая Каледония', 'Норвегия', 
+                     'ОАЭ', 'Оккупированная Палестинская территория', 'Оман', 'Остров Мэн', 
+                     'Острова Кука', 'Пакистан', 'Палау', 'Палестина', 'Панама', 
+                     'Папуа - Новая Гвинея', 'Парагвай', 'Перу', 'Польша', 'Португалия', 
+                     'Пуэрто Рико', 'Реюньон', 'Российская империя', 'Россия', 'Руанда', 'Румыния', 
+                     'СССР', 'США', 'Сальвадор', 'Самоа', 'Сан-Марино', 'Саудовская Аравия', 
+                     'Свазиленд', 'Северная Македония', 'Сейшельские острова', 'Сенегал', 
+                     'Сент-Винсент и Гренадины', 'Сент-Китс и Невис', 'Сент-Люсия ', 'Сербия', 
+                     'Сербия и Черногория', 'Сиам', 'Сингапур', 'Сирия', 'Словакия', 'Словения', 
+                     'Соломоновы Острова', 'Сомали', 'Судан', 'Суринам', 'Сьерра-Леоне', 
+                     'Таджикистан', 'Таиланд', 'Тайвань', 'Танзания', 'Тимор-Лесте', 'Того', 
+                     'Тонга', 'Тринидад и Тобаго', 'Тувалу', 'Тунис', 'Туркменистан', 'Турция', 
+                     'Уганда', 'Узбекистан', 'Украина', 'Уругвай', 'Фарерские острова', 
+                     'Федеративные Штаты Микронезии', 'Фиджи', 'Филиппины', 'Финляндия', 
+                     'Фолклендские острова', 'Франция', 'Французская Гвиана', 
+                     'Французская Полинезия', 'Хорватия', 'ЦАР', 'Чад', 'Черногория', 'Чехия', 
+                     'Чехословакия', 'Чили', 'Швейцария', 'Швеция', 'Шри-Ланка', 'Эквадор', 
+                     'Экваториальная Гвинея', 'Эритрея', 'Эстония', 'Эфиопия', 'ЮАР', 'Югославия', 
+                     'Югославия (ФР)', 'Ямайка', 'Япония']
+        
+        if type(country) == str:
+            if country in countries:
+                return country
+            return None
+        if type(country) == list:
+            for i in country:
+                if not i in countries:
+                    return None
+            return country

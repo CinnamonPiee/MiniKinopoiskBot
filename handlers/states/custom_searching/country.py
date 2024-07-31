@@ -3,6 +3,7 @@ from states.custom_searching import CustomSearching
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
+from utils.validations import Validations
 
 
 router = Router(name=__name__)
@@ -46,8 +47,7 @@ async def custom_searching_country_skip(message: Message, state: FSMContext):
         # TODO # Доделать вывод на экран
     
 
-# TODO  # Написать проверку на правильный ввод стран
-@router.message(CustomSearching.country, F.text.cast(...).as_("country"))
+@router.message(CustomSearching.country, F.text.cast(Validations.valid_country).as_("country"))
 async def custom_searching_country(message: Message, state: FSMContext):
     data = state.get_data()
     if data["type_choice"] == "Фильмы":

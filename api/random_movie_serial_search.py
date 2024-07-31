@@ -1,4 +1,10 @@
 import requests
+import sys
+import os
+import pprint
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from config_data.config import settings
 from typing import Optional
 
@@ -17,7 +23,7 @@ def random_movie_search(
     url = f"https://api.kinopoisk.dev/v1.4/movie/random?notNullFields=name"
 
     if type_choice:
-        url = url + f"&type={type}"
+        url = url + f"&type={type_choice}"
     if year:
         url = url + f"&year={year}"
     if rating:
@@ -28,22 +34,20 @@ def random_movie_search(
         url = url + f"&movieLength={movie_length}"
     if series_length:
         url = url + f"seriesLength={series_length}"
-    TODO # Проверить данный код и решить проблему с добавлением больше одного жанра в поиск
     if janr:
         if len(janr) == 1:
             url = url + f"&genres.name={janr[0]}"
         else:
-            url = url + f"&genres.name={janr[0]}"
-            for i in janr[1]:
-                url = url + f"&genres.name=+{i}"
-    TODO  # Проверить данный код и решить проблему с добавлением больше одного континента в поиск
+            url = url + f"&genres.name=%2B{janr[0]}"
+            for i in janr[1:]:
+                url = url + f"&genres.name=%2B{i}"
     if country:
         if len(country) == 1:
             url = url + f"&countries.name={country}"
         else:
-            url = url + f"&countries.name={country}"
-            for j in country:
-                url = url + f"&countries.name=+{j}"
+            url = url + f"&countries.name=%2B{country[0]}"
+            for j in country[1:]:
+                url = url + f"&countries.name=%2B{j}"
 
     headers = {
         "accept": "application/json",
