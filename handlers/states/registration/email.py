@@ -6,7 +6,6 @@ from keyboards.reply.back_or_number_kb import back_or_number_kb
 from states.registration import Registration
 from utils.validations import Validations
 from database.orm.user import email_exists
-from keyboards.reply.registration_kb import registration_kb
 from keyboards.reply.login_registration_kb import login_registration_kb
 from keyboards.reply.generation_password_back_kb import generation_password_back_kb
 
@@ -16,7 +15,7 @@ router = Router(name=__name__)
 
 @router.message(Registration.email, F.text == "Назад")
 async def registration_email_handler_back(message: Message, state: FSMContext):
-    data = state.get_data()
+    data = await state.get_data()
     if data["login_registration"] == "Вход":
         await state.set_state(Registration.login_registration)
         await message.answer(
@@ -40,10 +39,12 @@ async def registration_email_handler_back(message: Message, state: FSMContext):
 
 @router.message(Registration.email, F.text.cast(Validations.email_validation).as_("email"))
 async def registration_email_handler(message: Message, state: FSMContext):
-    data = state.get_data()
+    data = await state.get_data()
     if data["login_registration"] == "Вход":
-        if await email_exists(message.text):
+        # TODO # Неправильная проверка почты, необходимо исправить
+        if email_exists(message.text):
             await state.set_state(Registration.password)
+            await state.update_data(email=message.text)
             await message.answer(
                 text="Теперь введите пароль: ",
                 reply_markup=back_kb(),
@@ -57,11 +58,11 @@ async def registration_email_handler(message: Message, state: FSMContext):
             )
 
     elif data["login_registration"] == "Регистрация":
-        if await email_exists(message.text):
+        if email_exists(message.text):
             await message.answer(
                 text="Данная почта уже есть в базе данных, можете попробовать авторизоваться"
                      "или попробуйте ввести другую почту.",
-                reply_markup=registration_kb(),
+                reply_markup=back_kb(),
             )
         else:
             await state.update_data(email=message.text)

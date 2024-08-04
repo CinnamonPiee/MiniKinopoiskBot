@@ -23,7 +23,7 @@ async def registration_phone_number_handler_back(message: Message, state: FSMCon
 
 @router.message(Registration.phone_number, F.text.cast(Validations.phonenumber_validation).as_("phone_number"))
 async def registration_phone_number_handler(message: Message, state: FSMContext):
-    if await phone_number_exists(message.text):
+    if phone_number_exists(message.text):
         await message.answer(
             text="Этот номер телефона уже зарегистрирован. Пожалуйста, используйте другой номер телефона.",
             reply_markup=back_or_number_kb(),
@@ -55,7 +55,7 @@ async def registration_phone_number_handler(message: Message, state: FSMContext)
 @router.message(Registration.phone_number, F.contact)
 async def registration_phone_number_contact_handler(message: Message, state: FSMContext):
     if message.contact:
-        if await phone_number_exists(message.text):
+        if phone_number_exists(message.text):
             await message.answer(
                 text="Этот номер телефона уже зарегистрирован. Пожалуйста, используйте другой номер телефона.",
                 reply_markup=back_or_number_kb(),

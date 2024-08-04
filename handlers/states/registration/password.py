@@ -3,8 +3,11 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from keyboards.reply.back_kb import back_kb
 from keyboards.reply.generation_password_back_kb import generation_password_back_kb
+from keyboards.reply.main_kb import main_kb
 from states.registration import Registration
 from utils.validations import Validations
+from database.orm.user import verify_user_password, update_telegram_id_by_email
+
 
 
 router = Router(name=__name__)
@@ -12,7 +15,7 @@ router = Router(name=__name__)
 
 @router.message(Registration.password, F.text == "Назад")
 async def registration_password_back(message: Message, state: FSMContext):
-    data = state.get_data()
+    data = await state.get_data()
     if data["login_registration"] == "Вход":
         await state.set_state(Registration.email)
         await message.answer(
@@ -29,12 +32,21 @@ async def registration_password_back(message: Message, state: FSMContext):
 
 @router.message(Registration.password, F.text.cast(Validations.valid_password).as_("password"))
 async def registration_password(message: Message, state: FSMContext):
-    data = state.get_data()
+    data = await state.get_data()
     if data["login_registration"] == "Вход":
-        # TODO # Доделать вариант если пользователь авторизовывается. Сделать проверку на 
-        # правильно введенный пароль и если он правильный, то вывести приветсвенное окно и обновить
-        # его карточку в бд с добавлением telegram_id
-        pass
+        if verify_user_password(data["email"], message.text):
+            await update_telegram_id_by_email(data["email"], int(message.from_user.id))
+            await message.answer(
+                text=f"Добро пожаловать, {message.from_user.first_name}!",
+                reply_markup=main_kb(),
+            )
+            await state.clear()
+        else:
+            await message.answer(
+                text="Неверный пароль! Повторите попытку.",
+                reply_markup=back_kb(),
+            )
+
     elif data["login_registration"] == "Регистрация":
         await state.set_state(Registration.email)
         await state.update_data(password=message.text)

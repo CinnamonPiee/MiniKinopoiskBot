@@ -5,6 +5,7 @@ from sqlalchemy.orm import joinedload
 from database.databases import async_session_factory
 from database.models import User, HistoryFilm, HistorySerial
 from datetime import timedelta
+from api.check_create_password_api import check_password
 
 
 async def get_users():
@@ -76,13 +77,14 @@ async def delete_user(user_id: int):
         await session.commit()
 
 
+# TODO # Выводит неправильный результат
 async def email_exists(email: str) -> bool:
     async with async_session_factory() as session:
         result = await session.execute(
             select(User).where(User.email == email)
         )
         user = result.scalars().first()
-        return user is not None
+        return True if user else False
 
 
 async def phone_number_exists(phone_number: str) -> bool:
@@ -185,3 +187,22 @@ async def get_user_film_serial_history_per_date(user_id: int, page: int, per_pag
         total_count = len(combined_history)
 
         return paginated_history, total_count
+
+
+#
+async def verify_user_password(email: str, password: str) -> bool:
+    async with async_session_factory() as session:
+        stmt = select(User).filter(User.email == email)
+        result = session.execute(stmt).scalar_one()
+
+        return check_password(password, result.password)
+
+
+#
+async def update_telegram_id_by_email(email: str, telegram_id: int):
+    async with async_session_factory() as session:
+        stmt = update(User).where(User.email == email).values(
+            telegram_id=telegram_id)
+        await session.execute(stmt)
+
+        await session.commit()

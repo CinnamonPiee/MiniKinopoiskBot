@@ -1,5 +1,4 @@
 import requests
-import pprint
 import sys
 import os
 
