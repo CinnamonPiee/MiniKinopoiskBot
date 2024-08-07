@@ -95,11 +95,12 @@ class Validations():
 
     def valid_password(password: str):
         if len(password) >= 8:
-            if password.isalnum():
-                second_str = password
-                if not second_str.lower() == password:
-                    return password
-                return None
+            for i in password:
+                if i.isdigit():
+                    second_str = password
+                    if not second_str.lower() == password:
+                        return password
+                    return None
             return None
         return None
 
@@ -164,11 +165,9 @@ class Validations():
     async def truncate_tables():
         async with async_session_factory() as session:
             async with session.begin():
-                await session.execute(text("TRUNCATE TABLE users RESTART IDENTITY CASCADE"))
-                await session.execute(text("TRUNCATE TABLE search_film RESTART IDENTITY CASCADE"))
-                await session.execute(text("TRUNCATE TABLE search_serial RESTART IDENTITY CASCADE"))
-                await session.execute(text("TRUNCATE TABLE history_search_film RESTART IDENTITY CASCADE"))
-                await session.execute(text("TRUNCATE TABLE history_search_serial RESTART IDENTITY CASCADE"))
+                await session.execute(text("TRUNCATE TABLE users_user RESTART IDENTITY CASCADE"))
+                await session.execute(text("TRUNCATE TABLE films_serials_searchfilm RESTART IDENTITY CASCADE"))
+                await session.execute(text("TRUNCATE TABLE films_serials_searchserial RESTART IDENTITY CASCADE"))
             await session.commit()
 
     async def valid_janr(janrs: str | list):

@@ -33,7 +33,7 @@ async def registration_email_handler_back(message: Message, state: FSMContext):
             "3. Имеет хотя бы одну заглавную букву и одну цифру"
             "Вы так же можете сгенерировать безопасный пароль нажав "
             "на кнопку 'Сгенерировать пароль' ниже.",
-            reply_markup=generation_password_back_kb(),
+            reply_markup=back_kb(),
         )
 
 
@@ -41,8 +41,7 @@ async def registration_email_handler_back(message: Message, state: FSMContext):
 async def registration_email_handler(message: Message, state: FSMContext):
     data = await state.get_data()
     if data["login_registration"] == "Вход":
-        # TODO # Неправильная проверка почты, необходимо исправить
-        if email_exists(message.text):
+        if await email_exists(message.text):
             await state.set_state(Registration.password)
             await state.update_data(email=message.text)
             await message.answer(
@@ -58,7 +57,7 @@ async def registration_email_handler(message: Message, state: FSMContext):
             )
 
     elif data["login_registration"] == "Регистрация":
-        if email_exists(message.text):
+        if await email_exists(message.text):
             await message.answer(
                 text="Данная почта уже есть в базе данных, можете попробовать авторизоваться"
                      "или попробуйте ввести другую почту.",

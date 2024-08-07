@@ -27,7 +27,7 @@ async def registration_login_handler(message: Message, state: FSMContext):
 @router.message(Registration.login_registration, F.text == "Регистрация")
 async def registration_registration_handler(message: Message, state: FSMContext):
     await state.update_data(login_registration=message.text)
-    await state.set_data(Registration.name)
+    await state.set_state(Registration.name)
     await message.answer(
         text="Напишите пожалуйста ваш Никнейм: ",
         reply_markup=back_kb(),

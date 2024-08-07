@@ -34,7 +34,7 @@ async def registration_name_handler(message: Message, state: FSMContext):
              "3. Имеет хотя бы одну заглавную букву и одну цифру"
              "Вы так же можете сгенерировать безопасный пароль нажав "
              "на кнопку 'Сгенерировать пароль' ниже.",
-        reply_markup=generation_password_back_kb(),
+        reply_markup=back_kb(),
         )
 
 

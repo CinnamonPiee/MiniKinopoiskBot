@@ -5,7 +5,7 @@ from sqlalchemy.orm import joinedload
 from database.databases import async_session_factory
 from database.models import User, HistoryFilm, HistorySerial
 from datetime import timedelta
-from api.check_create_password_api import check_password
+from api.check_create_password_api import check_password, encrypt_password
 
 
 async def get_users():
@@ -39,9 +39,9 @@ async def add_user(password: str,
                    ):
 
     async with async_session_factory() as session:
-
+        hashed_password = encrypt_password(password)
         new_user = User(
-            password=password,
+            password=hashed_password,
             last_login=datetime.utcnow(),
             is_superuser=False,
             username=username,
@@ -68,23 +68,13 @@ async def update_user(user_id: int, **kwargs):
         await session.commit()
 
 
-async def delete_user(user_id: int):
-    async with async_session_factory() as session:
-        await session.execute(
-            delete(User).where(User.id == user_id)
-        )
-
-        await session.commit()
-
-
-# TODO # Выводит неправильный результат
 async def email_exists(email: str) -> bool:
     async with async_session_factory() as session:
         result = await session.execute(
             select(User).where(User.email == email)
         )
         user = result.scalars().first()
-        return True if user else False
+        return user is not None
 
 
 async def phone_number_exists(phone_number: str) -> bool:
@@ -189,16 +179,18 @@ async def get_user_film_serial_history_per_date(user_id: int, page: int, per_pag
         return paginated_history, total_count
 
 
-#
 async def verify_user_password(email: str, password: str) -> bool:
     async with async_session_factory() as session:
-        stmt = select(User).filter(User.email == email)
-        result = session.execute(stmt).scalar_one()
+        stmt = select(User).where(User.email == email)
+        result = await session.execute(stmt)
+        user = result.scalars().first()
 
-        return check_password(password, result.password)
+        if user is None:
+            return False
+
+        return check_password(user.password, password)
 
 
-#
 async def update_telegram_id_by_email(email: str, telegram_id: int):
     async with async_session_factory() as session:
         stmt = update(User).where(User.email == email).values(

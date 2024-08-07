@@ -2,7 +2,6 @@ from aiogram import Router, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from keyboards.reply.back_kb import back_kb
-from keyboards.reply.generation_password_back_kb import generation_password_back_kb
 from keyboards.reply.main_kb import main_kb
 from states.registration import Registration
 from utils.validations import Validations
@@ -23,7 +22,7 @@ async def registration_password_back(message: Message, state: FSMContext):
             reply_markup=back_kb(),
         )
     elif data["login_registration"] == "Регистрация":
-        await state.get_state(Registration.name)
+        await state.set_state(Registration.name)
         await message.answer(
             text="Напишите пожалуйста ваш Никнейм: ",
             reply_markup=back_kb(),
@@ -34,7 +33,7 @@ async def registration_password_back(message: Message, state: FSMContext):
 async def registration_password(message: Message, state: FSMContext):
     data = await state.get_data()
     if data["login_registration"] == "Вход":
-        if verify_user_password(data["email"], message.text):
+        if await verify_user_password(data["email"], message.text):
             await update_telegram_id_by_email(data["email"], int(message.from_user.id))
             await message.answer(
                 text=f"Добро пожаловать, {message.from_user.first_name}!",
@@ -65,5 +64,5 @@ async def registration_password_none(message: Message):
              "3. Имеет хотя бы одну заглавную букву и одну цифру"
              "Вы так же можете сгенерировать безопасный пароль нажав "
              "на кнопку 'Сгенерировать пароль' ниже.",
-        reply_markup=generation_password_back_kb(),
+        reply_markup=back_kb(),
     )

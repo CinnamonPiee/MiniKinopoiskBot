@@ -15,7 +15,7 @@ def encrypt_password(password: str) -> str:
         raise Exception(f"Error encrypting password: {response.text}")
 
 
-def check_password(password: str, hashed_password: str) -> bool:
+def check_password(hashed_password: str, password: str) -> bool:
     url = "http://127.0.0.1:8000/check/"
     payload = {"password": password, "hashed_password": hashed_password}
     headers = {"Content-Type": "application/json"}
