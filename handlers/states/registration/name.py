@@ -5,7 +5,6 @@ from keyboards.reply.back_kb import back_kb
 from keyboards.reply.login_registration_kb import login_registration_kb
 from states.registration import Registration
 from utils.validations import Validations
-from keyboards.reply.generation_password_back_kb import generation_password_back_kb
 
 
 router = Router(name=__name__)

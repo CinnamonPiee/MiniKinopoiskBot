@@ -11,6 +11,7 @@ from api.movie_search import movie_search
 from database.orm.film import add_film, film_exists
 from database.orm.serial import add_serial, serial_exists
 from utils.validations import Validations
+from aiogram.types import FSInputFile
 
 
 router = Router(name=__name__)
@@ -37,45 +38,59 @@ async def find_film_serial_name(message: Message, state: FSMContext):
 
     elif isinstance(data, dict):
         if data["type"] == "movie":
-            url = data["poster"]["previewUrl"]
-            name = data["name"]
-            genres = ', '.join([i["name"] for i in data["genres"]])
-            rating = data["rating"]["imdb"]
-            year = data["year"]
-            movie_length = str(int(data["movieLength"]) // 60) + ":" + str(
-                int(data["movieLength"]) % 60)
-            countries = ', '.join([i["name"] for i in data["countries"]])
-            age_rating = data["ageRating"]
-            description = data["description"]
+            if data["poster"]["previewUrl"] is not None and Validations.get_valid_url(data["poster"]["previewUrl"]):
+                url = data["poster"]["previewUrl"]
+            else:
+                url = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+            if data["name"] == None:
+                name = ""
+            else:
+                name = data["name"]
+            if data["genres"] == None:
+                genres = ""
+            else:
+                genres = ', '.join([i["name"] for i in data["genres"]])
+            if data["rating"]["imdb"] == None:
+                rating = ""
+            else:
+                rating = data["rating"]["imdb"]
+            if data["year"] == None:
+                year = 0
+            else:
+                year = data["year"]
+            if data["movieLength"] == None:
+                movie_length = 0
+            else:
+                movie_length = str(int(data["movieLength"]) // 60) + ":" + str(
+                    int(data["movieLength"]) % 60)
+            if data["countries"] == None:
+                countries = ""
+            else:
+                countries = ', '.join([i["name"] for i in data["countries"]])
+            if data["ageRating"] == None:
+                age_rating = 0
+            else:
+                age_rating = data["ageRating"]
+            if data["shortDescription"] == None or data["shortDescription"] == "":
+                if data["description"] == None:
+                    description = ""
+                else:
+                    description = data["description"]
+            else:
+                description = data["shortDescription"]
 
-            try:
-                await message.bot.send_photo(
-                    chat_id=message.chat.id,
-                    photo=url,
-                    caption=f"{markdown.hbold(name)}\n"
-                            f"Жанры: {genres}\n"
-                            f"Рейтинг: {rating}\n"
-                            f"Год: {year}\n"
-                            f"Продолжительность фильма: {movie_length}\n"
-                            f"Страна: {countries}\n"
-                            f"Возрастной рейтинг: {age_rating}\n"
-                            f"Описание: {description}",
-                    reply_markup=main_kb(),
-                    )
-            except:
-                url = "https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg"
-                await message.bot.send_photo(
-                    chat_id=message.chat.id,
-                    photo=url,
-                    caption=f"{markdown.hbold(name)}\n"
-                            f"Жанры: {genres}\n"
-                            f"Рейтинг: {rating}\n"
-                            f"Год: {year}\n"
-                            f"Продолжительность фильма: {movie_length}\n"
-                            f"Страна: {countries}\n"
-                            f"Возрастной рейтинг: {age_rating}\n"
-                            f"Описание: {description}",
-                    reply_markup=main_kb(),
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=f"{markdown.hbold(name)}\n"
+                        f"Жанры: {genres}\n"
+                        f"Рейтинг: {rating}\n"
+                        f"Год: {year}\n"
+                        f"Продолжительность фильма: {movie_length}\n"
+                        f"Страна: {countries}\n"
+                        f"Возрастной рейтинг: {age_rating}\n"
+                        f"Описание: {description}",
+                reply_markup=main_kb(),
                 )
 
             if await film_exists(name):
@@ -83,13 +98,17 @@ async def find_film_serial_name(message: Message, state: FSMContext):
                 await state.clear()
 
             else:
+                if data["movieLength"] == None:
+                    movie_length = 0
+                else:
+                    movie_length = int(data["movieLength"])
                 await add_film(
                     telegram_id=message.from_user.id,
                     name=name,
                     janr=genres,
                     year=int(year),
                     country=countries,
-                    movie_length=int(data["movieLength"]),
+                    movie_length=movie_length,
                     description=description,
                     rating=rating,
                     age_rating=age_rating,
@@ -99,44 +118,59 @@ async def find_film_serial_name(message: Message, state: FSMContext):
                 await state.clear()
 
         elif data["type"] == "tv-series":
-            url = data["poster"]["previewUrl"]
-            name = data["name"]
-            genres = ', '.join([i["name"] for i in data["genres"]])
-            rating = data["rating"]["imdb"]
-            release_years = str(data["releaseYears"][0]["start"]) + " - " + str(data["releaseYears"][0]["end"])
-            series_length = str(data["seriesLength"]) + " минут"
-            countries = ', '.join([i["name"] for i in data["countries"]])
-            age_rating = data["ageRating"]
-            description = data["description"]
+            if data["poster"]["previewUrl"] is not None and Validations.get_valid_url(data["poster"]["previewUrl"]):
+                url = data["poster"]["previewUrl"]
+            else:
+                url = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+            if data["name"] == None:
+                name = ""
+            else:
+                name = data["name"]
+            if data["genres"] == None:
+                genres = ""
+            else:
+                genres = ', '.join([i["name"] for i in data["genres"]])
+            if data["rating"]["imdb"] == None:
+                rating = ""
+            else:
+                rating = data["rating"]["imdb"]
+            if data["releaseYears"] == None:
+                release_years = ""
+            else:
+                release_years = str(
+                    data["releaseYears"][0]["start"]) + " - " + str(data["releaseYears"][0]["end"])
+            if data["seriesLength"] == None:
+                series_length = ""
+            else:
+                series_length = str(data["seriesLength"]) + " минут"
+            if data["countries"] == None:
+                countries = ""
+            else:
+                countries = ', '.join([i["name"] for i in data["countries"]])
+            if data["ageRating"] == None:
+                age_rating = 0
+            else:
+                age_rating = data["ageRating"]
+            if data["shortDescription"] == None or data["shortDescription"] == "":
+                if data["description"] == None:
+                    description = ""
+                else:
+                    description = data["description"]
+            else:
+                description = data["shortDescription"]
 
-            try:
-                await message.bot.send_photo(
-                    chat_id=message.chat.id,
-                    photo=url,
-                    caption=f"{markdown.hbold(name)}\n"
-                            f"Жанры: {genres}\n"
-                            f"Рейтинг: {rating}\n"
-                            f"Релиз: {release_years}\n"
-                            f"Продолжительность серии: {series_length}\n"
-                            f"Страна: {countries}\n"
-                            f"Возрастной рейтинг: {age_rating}\n"
-                            f"Описание: {description}",
-                    reply_markup=main_kb(),
-                    )
-            except:
-                url = "https://www.publicdomainpictures.net/pictures/280000/velka/not-found-image-15383864787lu.jpg"
-                await message.bot.send_photo(
-                    chat_id=message.chat.id,
-                    photo=url,
-                    caption=f"{markdown.hbold(name)}\n"
-                            f"Жанры: {genres}\n"
-                            f"Рейтинг: {rating}\n"
-                            f"Релиз: {release_years}\n"
-                            f"Продолжительность серии: {series_length}\n"
-                            f"Страна: {countries}\n"
-                            f"Возрастной рейтинг: {age_rating}\n"
-                            f"Описание: {description}",
-                    reply_markup=main_kb(),
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=f"{markdown.hbold(name)}\n"
+                        f"Жанры: {genres}\n"
+                        f"Рейтинг: {rating}\n"
+                        f"Релиз: {release_years}\n"
+                        f"Продолжительность серии: {series_length}\n"
+                        f"Страна: {countries}\n"
+                        f"Возрастной рейтинг: {age_rating}\n"
+                        f"Описание: {description}",
+                reply_markup=main_kb(),
                 )
 
             if await serial_exists(name):

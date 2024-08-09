@@ -12,7 +12,7 @@ def encrypt_password(password: str) -> str:
         hashed_password = response.json().get("hashed_password")
         return hashed_password
     else:
-        raise Exception(f"Error encrypting password: {response.text}")
+        return "Сервер временно не доступен, попробуйте позже!"
 
 
 def check_password(hashed_password: str, password: str) -> bool:
@@ -26,6 +26,6 @@ def check_password(hashed_password: str, password: str) -> bool:
         is_valid = response.json().get("is_valid")
         return is_valid
     else:
-        raise Exception(f"Error checking password: {response.text}")
+        return "Сервер временно не доступен, попробуйте позже!"
 
 

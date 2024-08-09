@@ -29,9 +29,10 @@ async def registration_phone_number_handler(message: Message, state: FSMContext)
             reply_markup=back_or_number_kb(),
             parse_mode=None,
             )
-
+        
     await state.update_data(phone_number=message.text)
     data = await state.get_data()
+
     await add_user(
         password=data["password"],
         username=data["name"],
@@ -39,7 +40,7 @@ async def registration_phone_number_handler(message: Message, state: FSMContext)
         telegram_id=int(message.from_user.id),
         phone_number=data["phone_number"],
         )
-
+    
     await message.answer(
         text="Спасибо за регистрацию в боте. Теперь вы можете пользоваться всем функционалом бота.",
         reply_markup=main_kb(),
@@ -61,6 +62,7 @@ async def registration_phone_number_contact_handler(message: Message, state: FSM
 
         await state.update_data(phone_number=str(message.contact.phone_number))
         data = await state.get_data()
+        
         await add_user(
             password=data["password"],
             username=data["name"],

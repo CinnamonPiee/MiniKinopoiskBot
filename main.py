@@ -5,7 +5,6 @@ from config_data.config import settings
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from handlers import router as main_router
-from handlers.callbacks.change_page_callback_handler import change_page_callback_handler
 
 
 async def main():
@@ -16,12 +15,11 @@ async def main():
     )
     logging.basicConfig(level=logging.INFO)
 
-    dp.include_routers(main_router)
+    # Регистрация основного маршрутизатора
+    dp.include_router(main_router)
 
-    dp.callback_query.register(change_page_callback_handler)
 
     await dp.start_polling(bot)
-
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -1,0 +1,2 @@
+class RandomFilmsSerialsAll():
+    data = None

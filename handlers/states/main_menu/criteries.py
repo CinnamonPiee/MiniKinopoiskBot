@@ -41,7 +41,7 @@ async def main_choose_find_film_serial(message: Message, state: FSMContext):
         )
 
 
-@router.message(main_menu.MainMenu.criteries, F.text == "Рандомный фильм/ сериал")
+@router.message(main_menu.MainMenu.criteries, F.text == "Рандомный фильм / сериал")
 async def main_choose_random_film_serial(message: Message, state: FSMContext):
     await state.set_state(random_film_serial.RandomFilmSerial.type_choice)
     await message.answer(

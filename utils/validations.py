@@ -10,6 +10,7 @@ from database.orm.serial import update_search_history, add_search_history
 from database.databases import async_session_factory
 
 from sqlalchemy.future import select
+from urllib.parse import urlparse
 
 
 class Validations():
@@ -242,3 +243,15 @@ class Validations():
                 if not i in countries:
                     return None
             return country
+
+    def get_valid_url(url):
+        try:
+            result = urlparse(url)
+            if all([result.scheme, result.netloc]):
+                return url
+            else:
+                return None
+        except :
+            return None
+        
+    

@@ -1,4 +1,4 @@
-from aiogram import types, Dispatcher
+from aiogram import types, Dispatcher, Router
 from database.orm.user import (
     check_user_id_by_telegram_id,
     get_user_film_serial_history,
@@ -7,14 +7,15 @@ from keyboards.inline.create_pagination_kb import create_pagination_kb
 from keyboards.reply.main_kb import main_kb
 from utils.choice_film_serial_or_all import ChoiceFilmSerialOrAll
 from database.models import HistorySerial, HistoryFilm
+from utils.random_films_serials_all import RandomFilmsSerialsAll
 from database.orm.film import get_user_film_history_per_date, get_user_film_history
 from database.orm.serial import get_user_serial_history_per_date, get_user_serial_history
 
 PER_PAGE = 1
-dp = Dispatcher()
+router = Router(name=__name__)
 
 
-@dp.callback_query(lambda c: c.data and (c.data.startswith('page_') or c.data == 'main_menu'))
+@router.callback_query(lambda c: c.data and (c.data.startswith('page_') or c.data == 'main_menu'))
 async def change_page_callback_handler(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
@@ -112,7 +113,7 @@ async def display_history(callback_query, history, total_count, page):
         else:
             await callback_query.message.edit_media(
                 media=types.InputMediaPhoto(
-                    media=photo,
+                    media=str(photo),
                     caption=caption,
                 ),
                 reply_markup=keyboards
@@ -124,6 +125,6 @@ async def display_history(callback_query, history, total_count, page):
         )
 
 
-@dp.callback_query(lambda c: c.data == "noop")
+@router.callback_query(lambda c: c.data == "noop")
 async def noop_callback_handler(callback_query: types.CallbackQuery):
     await callback_query.answer()

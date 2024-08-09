@@ -9,7 +9,6 @@ from config_data.config import settings
 
 def movie_search(film_name):
     url = "https://api.kinopoisk.dev/v1.4/movie/search?page=1&limit=1&query="
-
     headers = {
         "accept": "application/json",
         "X-API-KEY": settings.kinopoisk_dev_token
