@@ -35,6 +35,7 @@ async def random_film_serial_movie_length_skip(message: Message, state: FSMConte
 
 @router.message(RandomFilmSerial.movie_length, F.text.cast(Validations.valid_movie_length).as_("movie_length"))
 async def random_film_serial_movie_length(message: Message, state: FSMContext):
+    await state.update_data(series_length=None)
     await state.update_data(movie_length=message.text)
     await state.set_state(RandomFilmSerial.janr)
     await message.answer(

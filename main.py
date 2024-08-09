@@ -18,7 +18,6 @@ async def main():
     # Регистрация основного маршрутизатора
     dp.include_router(main_router)
 
-
     await dp.start_polling(bot)
 
 if __name__ == "__main__":

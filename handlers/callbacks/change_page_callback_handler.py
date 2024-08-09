@@ -1,37 +1,49 @@
-from aiogram import types, Dispatcher, Router
+from aiogram import types, Router
+from aiogram.fsm.context import FSMContext
 from database.orm.user import (
     check_user_id_by_telegram_id,
     get_user_film_serial_history,
     get_user_film_serial_history_per_date)
 from keyboards.inline.create_pagination_kb import create_pagination_kb
 from keyboards.reply.main_kb import main_kb
-from utils.choice_film_serial_or_all import ChoiceFilmSerialOrAll
 from database.models import HistorySerial, HistoryFilm
-from utils.random_films_serials_all import RandomFilmsSerialsAll
 from database.orm.film import get_user_film_history_per_date, get_user_film_history
 from database.orm.serial import get_user_serial_history_per_date, get_user_serial_history
+from utils.validations import Validations
+from aiogram.types import FSInputFile
 
 PER_PAGE = 1
 router = Router(name=__name__)
 
 
 @router.callback_query(lambda c: c.data and (c.data.startswith('page_') or c.data == 'main_menu'))
-async def change_page_callback_handler(callback_query: types.CallbackQuery):
+async def change_page_callback_handler(callback_query: types.CallbackQuery, state: FSMContext):
     await callback_query.answer()
+
+    data = await state.get_data()
 
     page = int(callback_query.data.split('_')[1]) if callback_query.data.startswith('page_') else 0
     telegram_id = callback_query.from_user.id
     user_id = await check_user_id_by_telegram_id(int(telegram_id))
 
-    if ChoiceFilmSerialOrAll.choice == "Фильмы":
-        if ChoiceFilmSerialOrAll.first_date != "":
+    if callback_query.data == 'main_menu':
+        await callback_query.message.bot.delete_message(chat_id=callback_query.message.chat.id,
+                                                        message_id=callback_query.message.message_id)
+        await callback_query.message.answer(
+            text="Вы вернулись в главное меню.",
+            reply_markup=main_kb(),
+        )
+        await state.clear()
+
+    if data["choice"] == "movie":
+        if data["first_date"]:
             if user_id:
                 history, total_count = await get_user_film_history_per_date(
                     user_id,
                     page,
                     PER_PAGE,
-                    str(ChoiceFilmSerialOrAll.first_date),
-                    str(ChoiceFilmSerialOrAll.second_date)
+                    str(data["first_date"]),
+                    str(data["second_date"])
                 )
                 await display_history(callback_query, history, total_count, page)
         else:
@@ -39,15 +51,15 @@ async def change_page_callback_handler(callback_query: types.CallbackQuery):
                 history, total_count = await get_user_film_history(user_id, page, PER_PAGE)
                 await display_history(callback_query, history, total_count, page)
 
-    elif ChoiceFilmSerialOrAll.choice == "Сериалы":
-        if ChoiceFilmSerialOrAll.first_date != "":
+    elif data["choice"] == "tv-series":
+        if data["first_date"]:
             if user_id:
                 history, total_count = await get_user_serial_history_per_date(
                     user_id,
                     page,
                     PER_PAGE,
-                    str(ChoiceFilmSerialOrAll.first_date),
-                    str(ChoiceFilmSerialOrAll.second_date)
+                    str(data["first_date"]),
+                    str(data["second_date"])
                 )
                 await display_history(callback_query, history, total_count, page)
         else:
@@ -55,15 +67,15 @@ async def change_page_callback_handler(callback_query: types.CallbackQuery):
                 history, total_count = await get_user_serial_history(user_id, page, PER_PAGE)
                 await display_history(callback_query, history, total_count, page)
 
-    elif ChoiceFilmSerialOrAll.choice == "Фильмы и сериалы":
-        if ChoiceFilmSerialOrAll.first_date != "":
+    elif data["choice"] == None:
+        if data["first_date"]:
             if user_id:
                 history, total_count = await get_user_film_serial_history_per_date(
                     user_id,
                     page,
                     PER_PAGE,
-                    str(ChoiceFilmSerialOrAll.first_date),
-                    str(ChoiceFilmSerialOrAll.second_date)
+                    str(data["first_date"]),
+                    str(data["second_date"])
                 )
                 await display_history(callback_query, history, total_count, page)
         else:
@@ -87,7 +99,12 @@ async def display_history(callback_query, history, total_count, page):
                 f"Возрастной рейтинг: {film.age_rating}\n"
                 f"Описание: {film.description}"
             )
-            photo = film.picture
+            if film.picture is not None and Validations.get_valid_url(film.picture):
+                photo = film.picture
+            else:
+                photo = FSInputFile(
+                    "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+
         elif isinstance(item, HistorySerial):
             serial = item.serial
             caption = (
@@ -100,24 +117,19 @@ async def display_history(callback_query, history, total_count, page):
                 f"Возрастной рейтинг: {serial.age_rating}\n"
                 f"Описание: {serial.description}"
             )
-            photo = serial.picture
+            if serial.picture is not None and Validations.get_valid_url(serial.picture):
+                photo = serial.picture
+            else:
+                photo = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
 
         keyboards = create_pagination_kb(page, total_count)
-        if callback_query.data == 'main_menu':
-            await callback_query.message.bot.delete_message(chat_id=callback_query.message.chat.id,
-                                                            message_id=callback_query.message.message_id)
-            await callback_query.message.answer(
-                text="Вы вернулись в главное меню.",
-                reply_markup=main_kb(),
-            )
-        else:
-            await callback_query.message.edit_media(
-                media=types.InputMediaPhoto(
-                    media=str(photo),
-                    caption=caption,
-                ),
-                reply_markup=keyboards
-            )
+        await callback_query.message.edit_media(
+            media=types.InputMediaPhoto(
+                media=photo,
+                caption=caption,
+            ),
+            reply_markup=keyboards
+        )
     else:
         await callback_query.message.answer(
             text="История поиска пуста.",

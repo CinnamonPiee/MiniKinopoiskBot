@@ -1,2 +1,2 @@
-from . import choice_film_serial_or_all
+from . import random_films_serials_all
 from . import validations

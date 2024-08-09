@@ -31,7 +31,13 @@ async def choose_film_serial_all_start_back(message: Message, state: FSMContext)
 
 @router.message(HistoryOfSearch.choose_film_serial_all, F.text.cast(Validations.valid_choose_in_history).as_("choice"))
 async def process_choose_film_serial_all(message: Message, state: FSMContext):
-    await state.update_data(choice=message.text)
+    if message.text == "Фильмы":
+        await state.update_data(choice="movie")
+    elif message.text == "Сериалы":
+        await state.update_data(choice="tv-series")
+    elif message.text == "Фильмы и сериалы":
+        await state.update_data(choice=None)
+        
     await state.set_state(HistoryOfSearch.first_date)
     await message.answer(
         text="Пожалуйста, введите начальную дату поиска (в формате ГГГГ-ММ-ДД) "
