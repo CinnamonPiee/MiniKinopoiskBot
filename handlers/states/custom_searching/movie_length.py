@@ -1,8 +1,12 @@
 from aiogram import Router, F
-from states.custom_searching import CustomSearching
+
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
+
+from states.custom_searching import CustomSearching
+
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
+
 from utils.validations import Validations
 
 
@@ -26,16 +30,12 @@ async def custom_searching_movie_length_skip(message: Message, state: FSMContext
     
     # TODO # Написать вывод на экран
 
-    await state.clear()
-
 
 @router.message(CustomSearching.movie_length, F.text.cast(Validations.valid_movie_length).as_("movie_length"))
 async def custom_searching_movie_length(message: Message, state: FSMContext):
     data = await state.update_data(movie_length=message.text)
 
     # TODO  # Написать вывод на экран
-
-    await state.clear()
 
 
 @router.message(CustomSearching.movie_length)

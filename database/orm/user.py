@@ -1,18 +1,15 @@
-from datetime import datetime
-from sqlalchemy import update, delete
+from sqlalchemy import update
+
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
+
 from database.databases import async_session_factory
 from database.models import User, HistoryFilm, HistorySerial
-from datetime import timedelta
+
 from api.check_create_password_api import check_password, encrypt_password
 
-
-async def get_users():
-    async with async_session_factory() as session:
-        result = await session.execute(select(User))
-        users = result.scalars().all()
-        return users
+from datetime import timedelta
+from datetime import datetime
 
 
 async def check_user_by_telegram_id(telegram_id: int):
@@ -31,15 +28,16 @@ async def check_user_id_by_telegram_id(telegram_id: int):
         return int(user.id)
 
 
-async def add_user(password: str,
-                   username: str,
-                   email: str,
-                   telegram_id=int,
-                   phone_number=str
-                   ):
-
+async def add_user(
+        password: str,
+        username: str,
+        email: str,
+        telegram_id=int,
+        phone_number=str
+    ):
     async with async_session_factory() as session:
         hashed_password = encrypt_password(password)
+
         new_user = User(
             password=hashed_password,
             last_login=datetime.utcnow(),
@@ -56,15 +54,6 @@ async def add_user(password: str,
         )
 
         session.add(new_user)
-        await session.commit()
-
-
-async def update_user(user_id: int, **kwargs):
-    async with async_session_factory() as session:
-        await session.execute(
-            update(User).where(User.id == user_id).values(**kwargs)
-        )
-
         await session.commit()
 
 
@@ -123,13 +112,18 @@ async def get_user_film_serial_history(user_id: int, page: int, per_page: int):
         start_index = page * per_page
         end_index = start_index + per_page
         paginated_history = combined_history[start_index:end_index]
-
         total_count = len(combined_history)
 
         return paginated_history, total_count
 
 
-async def get_user_film_serial_history_per_date(user_id: int, page: int, per_page: int, start_date: str, end_date: str):
+async def get_user_film_serial_history_per_date(
+        user_id: int, 
+        page: int, 
+        per_page: int, 
+        start_date: str, 
+        end_date: str
+    ):
     async with async_session_factory() as session:
         start_date_dt = datetime.strptime(start_date, '%Y-%m-%d')
         end_date_dt = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
@@ -173,7 +167,6 @@ async def get_user_film_serial_history_per_date(user_id: int, page: int, per_pag
         start_index = page * per_page
         end_index = start_index + per_page
         paginated_history = combined_history[start_index:end_index]
-
         total_count = len(combined_history)
 
         return paginated_history, total_count
@@ -193,8 +186,6 @@ async def verify_user_password(email: str, password: str) -> bool:
 
 async def update_telegram_id_by_email(email: str, telegram_id: int):
     async with async_session_factory() as session:
-        stmt = update(User).where(User.email == email).values(
-            telegram_id=telegram_id)
+        stmt = update(User).where(User.email == email).values(telegram_id=telegram_id)
         await session.execute(stmt)
-
         await session.commit()

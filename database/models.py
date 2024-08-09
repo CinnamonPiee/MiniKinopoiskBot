@@ -1,8 +1,11 @@
-from datetime import datetime
-from database.databases import Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, text, String, BigInteger, Text, DateTime, Boolean
 from sqlalchemy_utils import URLType
+
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from database.databases import Base
+
+from datetime import datetime
 
 
 class User(Base):
@@ -88,7 +91,8 @@ class HistoryFilm(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users_user.id"))
     film_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("films_serials_searchfilm.id"))
-    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, server_default=text("TIMEZONE('utc', now())"))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=text("TIMEZONE('utc', now())"))
 
     user: Mapped["User"] = relationship("User", back_populates="history_film")
     film: Mapped["SearchFilm"] = relationship("SearchFilm", back_populates="history")
@@ -101,7 +105,8 @@ class HistorySerial(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users_user.id"))
     serial_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("films_serials_searchserial.id"))
-    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, server_default=text("TIMEZONE('utc', now())"))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, nullable=False, server_default=text("TIMEZONE('utc', now())"))
 
     user: Mapped["User"] = relationship("User", back_populates="history_serial")
     serial: Mapped["SearchSerial"] = relationship("SearchSerial", back_populates="history")

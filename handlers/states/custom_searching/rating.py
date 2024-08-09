@@ -1,8 +1,12 @@
 from aiogram import Router, F
-from states.custom_searching import CustomSearching
+
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
+
+from states.custom_searching import CustomSearching
+
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
+
 from utils.validations import Validations
 
 

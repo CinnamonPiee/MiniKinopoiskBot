@@ -4,7 +4,7 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 from utils.validations import Validations
-from api.random_movie_serial_search import random_movie_search
+from api.random_history_movie_serial_search import random_history_movie_serial_search
 from keyboards.inline.create_random_pagination_kb import create_random_pagination_kb
 from aiogram.types import FSInputFile
 from database.orm.film import add_film, film_exists
@@ -32,7 +32,7 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
     data = await state.get_data()
     random_data = []
     for _ in range(int(data["count"])):
-        some_data = random_movie_search(
+        some_data = random_history_movie_serial_search(
             type_choice=data["type_choice"],
             year=data["year"],
             rating=data["rating"],
@@ -219,7 +219,7 @@ async def random_film_serial_country(message: Message, state: FSMContext):
     data = await state.get_data()
     random_data = []
     for _ in range(int(data["count"])):
-        some_data = random_movie_search(
+        some_data = random_history_movie_serial_search(
             type_choice=data["type_choice"],
             year=data["year"],
             rating=data["rating"],

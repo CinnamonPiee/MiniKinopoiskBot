@@ -1,12 +1,17 @@
 from aiogram import Router, F
-from states.custom_searching import CustomSearching
+
 from aiogram.types import Message
+from aiogram.fsm.context import FSMContext
+
+from states.custom_searching import CustomSearching
+from states.main_menu import MainMenu
+
 from keyboards.reply.history_search_kb import history_search_kb
 from keyboards.reply.back_kb import back_kb
-from states.main_menu import MainMenu
-from aiogram.fsm.context import FSMContext
-from utils.validations import Validations
 from keyboards.reply.choose_criteries_kb import choose_criteries_kb
+
+from utils.validations import Validations
+
 
 
 router = Router(name=__name__)

@@ -1,13 +1,16 @@
 from aiogram import Router, types
-from aiogram.fsm.context import FSMContext
-from database.orm.film import add_film, film_exists
-from utils.validations import Validations
+
+from aiogram.types import FSInputFile
 from aiogram.utils import markdown
+from aiogram.fsm.context import FSMContext
+
+from database.orm.film import add_film, film_exists
+from database.orm.serial import add_serial, serial_exists
+
 from keyboards.inline.create_random_pagination_kb import create_random_pagination_kb
 from keyboards.reply.main_kb import main_kb
-from database.orm.serial import add_serial, serial_exists
-from aiogram.types import FSInputFile
 
+from utils.validations import Validations
 
 
 router = Router(name=__name__)
@@ -21,19 +24,28 @@ async def change_random_page(callback_query: types.CallbackQuery, state: FSMCont
     total_count = len(random_data)
 
     if callback_query.data == 'rand_main_menu':
-        await callback_query.message.bot.delete_message(chat_id=callback_query.message.chat.id,
-                                                        message_id=callback_query.message.message_id)
+        await callback_query.message.bot.delete_message(
+            chat_id=callback_query.message.chat.id,
+            message_id=callback_query.message.message_id
+        )
         await callback_query.message.answer(
             text="Вы вернулись в главное меню.",
             reply_markup=main_kb(),
         )
         await state.clear()
+
     else:
         telegram_id = data["telegram_id"]
         await display_history(callback_query, random_data, total_count, page, telegram_id)
 
 
-async def display_history(callback_query: types.CallbackQuery, random_data: list, total_count: int, page: int, telegram_id: int):
+async def display_history(
+        callback_query: types.CallbackQuery, 
+        random_data: list, 
+        total_count: int, 
+        page: int, 
+        telegram_id: int
+    ):
     if not random_data:
         await callback_query.answer("Нет доступных данных.")
         return
@@ -45,7 +57,8 @@ async def display_history(callback_query: types.CallbackQuery, random_data: list
             url = item["poster"]["previewUrl"]
         else:
             url = FSInputFile(
-                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+            )
         if item["name"] == None:
             name = ""
         else:
@@ -91,6 +104,7 @@ async def display_history(callback_query: types.CallbackQuery, random_data: list
                 movie_length = 0
             else:
                 movie_length = int(item["movieLength"])
+
             await add_film(
                 telegram_id=telegram_id,
                 name=name,
@@ -122,6 +136,7 @@ async def display_history(callback_query: types.CallbackQuery, random_data: list
             ),
             reply_markup=keyboards,
         )
+
         await callback_query.answer()
 
     elif item["type"] == "tv-series":
@@ -129,7 +144,8 @@ async def display_history(callback_query: types.CallbackQuery, random_data: list
             url = item["poster"]["previewUrl"]
         else:
             url = FSInputFile(
-                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+            )
         if item["name"] == None:
             name = ""
         else:
@@ -168,7 +184,7 @@ async def display_history(callback_query: types.CallbackQuery, random_data: list
             description = item["shortDescription"]
 
         if await serial_exists(name):
-            await Validations.valid_user_and_serial_id_in_history(name, telegram_id=telegram_id)
+            await Validations.valid_user_and_serial_id_in_history(name, telegram_id)
 
         else:
             await add_serial(

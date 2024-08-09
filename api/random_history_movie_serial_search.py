@@ -2,13 +2,15 @@ import requests
 import sys
 import os
 
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 
 from config_data.config import settings
 from typing import Optional
 
 
-def random_movie_search(
+def random_history_movie_serial_search(
         type_choice: Optional[str] = None,
         year: Optional[str] = None,
         rating: Optional[str] = None,
@@ -17,7 +19,7 @@ def random_movie_search(
         series_length: Optional[str] = None,
         janr: Optional[list] = None,
         country: Optional[list] = None
-):
+) -> dict:
 
     url = f"https://api.kinopoisk.dev/v1.4/movie/random?notNullFields=name"
 
@@ -59,6 +61,5 @@ def random_movie_search(
         if not data:
             return "Ничего не найдено, пожалуйста попробуйте еще раз!"
         return data
-
     except KeyError:
         return "Сервер временно не доступен, попробуйте позже!"

@@ -1,17 +1,22 @@
 from aiogram import Router, F
+
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
+from aiogram.types import FSInputFile
+
 from states.history_of_search import HistoryOfSearch
+
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 from keyboards.reply.back_kb import back_kb
-from utils.validations import Validations
-from database.orm.user import check_user_id_by_telegram_id, get_user_film_serial_history_per_date
 from keyboards.inline.create_history_pagination_kb import create_history_pagination_kb
 from keyboards.reply.main_kb import main_kb
+
+from utils.validations import Validations
+
+from database.orm.user import check_user_id_by_telegram_id, get_user_film_serial_history_per_date
 from database.models import HistoryFilm, HistorySerial
 from database.orm.film import get_user_film_history_per_date
 from database.orm.serial import get_user_serial_history_per_date
-from aiogram.types import FSInputFile
 
 
 router = Router(name=__name__)
@@ -32,7 +37,6 @@ async def second_date_back(message: Message, state: FSMContext):
 async def second_date(message: Message, state: FSMContext):
     await state.update_data(second_date=message.text)
     data = await state.get_data()
-
     telegram_id = message.from_user.id
     user_id = await check_user_id_by_telegram_id(int(telegram_id))
 
@@ -45,16 +49,19 @@ async def second_date(message: Message, state: FSMContext):
                 PER_PAGE,
                 str(data["first_date"]),
                 str(data["second_date"])
-                )
+            )
             if history:
                 film = history[0].film
 
                 if film.picture is not None and Validations.get_valid_url(film.picture):
                     photo = film.picture
                 else:
-                    photo = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                    photo = FSInputFile(
+                        "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                    )
 
                 keyboards = create_history_pagination_kb(page, total_count)
+
                 await message.bot.send_photo(
                     chat_id=message.chat.id,
                     photo=photo,
@@ -74,6 +81,7 @@ async def second_date(message: Message, state: FSMContext):
                     text="История поиска пуста.",
                     reply_markup=main_kb(),
                 )
+
                 await state.clear()
         await state.clear()
 
@@ -93,9 +101,12 @@ async def second_date(message: Message, state: FSMContext):
                 if serial.picture is not None and Validations.get_valid_url(serial.picture):
                     photo = serial.picture
                 else:
-                    photo = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                    photo = FSInputFile(
+                        "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                    )
 
                 keyboards = create_history_pagination_kb(page, total_count)
+
                 await message.bot.send_photo(
                     chat_id=message.chat.id,
                     photo=photo,
@@ -115,6 +126,7 @@ async def second_date(message: Message, state: FSMContext):
                     text="История поиска пуста.",
                     reply_markup=main_kb(),
                 )
+
                 await state.clear()
         await state.clear()
 
@@ -136,9 +148,12 @@ async def second_date(message: Message, state: FSMContext):
                         if film.picture is not None and Validations.get_valid_url(film.picture):
                             photo = film.picture
                         else:
-                            photo = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                            photo = FSInputFile(
+                                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                            )
                     
                         keyboards = create_history_pagination_kb(page, total_count)
+
                         await message.bot.send_photo(
                             chat_id=message.chat.id,
                             photo=photo,
@@ -152,15 +167,19 @@ async def second_date(message: Message, state: FSMContext):
                                     f"Описание: {film.description}",
                             reply_markup=keyboards,
                         )
+
                     elif isinstance(item, HistorySerial):
                         serial = item.serial
 
                         if serial.picture is not None and Validations.get_valid_url(serial.picture):
                             photo = serial.picture
                         else:
-                            photo = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                            photo = FSInputFile(
+                                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                            )
                     
                         keyboards = create_history_pagination_kb(page, total_count)
+
                         await message.bot.send_photo(
                             chat_id=message.chat.id,
                             photo=photo,
@@ -174,12 +193,14 @@ async def second_date(message: Message, state: FSMContext):
                                     f"Описание: {serial.description}",
                             reply_markup=keyboards
                         )
+
             else:
                 await message.bot.send_message(
                     message.chat.id,
                     text="История поиска пуста.",
                     reply_markup=main_kb(),
                 )
+                
                 await state.clear()
         await state.clear()
 

@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     admin_id: int
 
     @property
-    def DATABASE_URL_asyncpg(self):
+    def DATABASE_URL_asyncpg(self) -> str:
         # postgresql+asyncpg://postgres:postgres@localhost:5432/postgres
         return f"postgresql+asyncpg://{self.db_user}:{self.db_pass}@{self.db_host}:{self.db_port}/{self.db_name}"
 

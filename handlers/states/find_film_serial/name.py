@@ -1,17 +1,23 @@
 from aiogram import Router, F
+
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.utils import markdown
+from aiogram.types import FSInputFile
+
 from states.find_film_serial import FindFilmSerial
 from states.main_menu import MainMenu
+
 from keyboards.reply.choose_criteries_kb import choose_criteries_kb
 from keyboards.reply.main_kb import main_kb
 from keyboards.reply.back_kb import back_kb
-from api.movie_search import movie_search
+
 from database.orm.film import add_film, film_exists
 from database.orm.serial import add_serial, serial_exists
+
 from utils.validations import Validations
-from aiogram.types import FSInputFile
+
+from api.movie_serial_search import movie_serial_search
 
 
 router = Router(name=__name__)
@@ -28,7 +34,7 @@ async def find_film_serial_name_none(message: Message, state: FSMContext):
 
 @router.message(FindFilmSerial.name, F.text)
 async def find_film_serial_name(message: Message, state: FSMContext):
-    data = movie_search(message.text)
+    data = movie_serial_search(message.text)
     if isinstance(data, str):
         await message.answer(
             text=data,
@@ -91,11 +97,13 @@ async def find_film_serial_name(message: Message, state: FSMContext):
                         f"Возрастной рейтинг: {age_rating}\n"
                         f"Описание: {description}",
                 reply_markup=main_kb(),
-                )
+            )
 
             if await film_exists(name):
-                await Validations.valid_user_and_film_id_in_history(name, telegram_id=message.from_user.id)
-                await state.clear()
+                await Validations.valid_user_and_film_id_in_history(
+                    name, 
+                    telegram_id=message.from_user.id
+                )
 
             else:
                 if data["movieLength"] == None:
@@ -113,7 +121,7 @@ async def find_film_serial_name(message: Message, state: FSMContext):
                     rating=rating,
                     age_rating=age_rating,
                     picture=url
-                    )
+                )
 
                 await state.clear()
 
@@ -171,11 +179,13 @@ async def find_film_serial_name(message: Message, state: FSMContext):
                         f"Возрастной рейтинг: {age_rating}\n"
                         f"Описание: {description}",
                 reply_markup=main_kb(),
-                )
+            )
 
             if await serial_exists(name):
-                await Validations.valid_user_and_serial_id_in_history(name, telegram_id=message.from_user.id)
-                await state.clear()
+                await Validations.valid_user_and_serial_id_in_history(
+                    name, 
+                    telegram_id=message.from_user.id
+                )
 
             else:
                 await add_serial(

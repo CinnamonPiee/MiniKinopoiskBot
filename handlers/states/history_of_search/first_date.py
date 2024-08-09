@@ -1,23 +1,25 @@
 from aiogram import Router, F
+
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
+from aiogram.types import FSInputFile
+
 from states.history_of_search import HistoryOfSearch
+
 from keyboards.reply import (
     history_search_kb,
     back_or_today_kb,
     main_kb,
     back_or_skip_kb
-    )
+)
 from keyboards.inline.create_history_pagination_kb import create_history_pagination_kb
-from database.orm.user import (
-    check_user_id_by_telegram_id,
-    get_user_film_serial_history
-    )
+
+from database.orm.user import (check_user_id_by_telegram_id,get_user_film_serial_history)
 from database.orm.film import get_user_film_history
 from database.orm.serial import get_user_serial_history
 from database.models import HistoryFilm, HistorySerial
+
 from utils.validations import Validations
-from aiogram.types import FSInputFile
 
 
 router = Router(name=__name__)
@@ -38,7 +40,6 @@ async def first_date_skip(message: Message, state: FSMContext):
     await state.update_data(first_date=None)
     await state.update_data(second_date=None)
     data = await state.get_data()
-
     telegram_id = message.from_user.id
     user_id = await check_user_id_by_telegram_id(int(telegram_id))
 
@@ -52,9 +53,12 @@ async def first_date_skip(message: Message, state: FSMContext):
                 if film.picture is not None and Validations.get_valid_url(film.picture):
                     photo = film.picture
                 else:
-                    photo = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                    photo = FSInputFile(
+                        "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                    )
             
                 keyboards = create_history_pagination_kb(page, total_count)
+
                 await message.bot.send_photo(
                     chat_id=message.chat.id,
                     photo=photo,
@@ -74,6 +78,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                     text="История поиска пуста.",
                     reply_markup=main_kb.main_kb(),
                 )
+
                 await state.clear()
 
     elif data["choice"] == "tv-series":
@@ -87,9 +92,11 @@ async def first_date_skip(message: Message, state: FSMContext):
                     photo = serial.picture
                 else:
                     photo = FSInputFile(
-                        "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                        "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                    )
                     
                 keyboards = create_history_pagination_kb(page, total_count)
+
                 await message.bot.send_photo(
                     chat_id=message.chat.id,
                     photo=photo,
@@ -109,6 +116,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                     text="История поиска пуста.",
                     reply_markup=main_kb.main_kb(),
                 )
+
                 await state.clear()
 
     elif data["choice"] == None:
@@ -123,9 +131,12 @@ async def first_date_skip(message: Message, state: FSMContext):
                         if film.picture is not None and Validations.get_valid_url(film.picture):
                             photo = film.picture
                         else:
-                            photo = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                            photo = FSInputFile(
+                                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                            )
                     
                         keyboards = create_history_pagination_kb(page, total_count)
+
                         await message.bot.send_photo(
                             chat_id=message.chat.id,
                             photo=photo,
@@ -139,6 +150,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                                     f"Описание: {film.description}",
                             reply_markup=keyboards,
                         )
+
                     elif isinstance(item, HistorySerial):
                         serial = item.serial
 
@@ -146,9 +158,11 @@ async def first_date_skip(message: Message, state: FSMContext):
                             photo = serial.picture
                         else:
                             photo = FSInputFile(
-                                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                            )
                             
                         keyboards = create_history_pagination_kb(page, total_count)
+
                         await message.bot.send_photo(
                             chat_id=message.chat.id,
                             photo=photo,
@@ -168,6 +182,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                     text="История поиска пуста.",
                     reply_markup=main_kb.main_kb(),
                 )
+                
                 await state.clear()
 
 

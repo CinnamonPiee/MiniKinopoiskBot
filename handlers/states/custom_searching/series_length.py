@@ -1,8 +1,12 @@
 from aiogram import Router, F
-from states.custom_searching import CustomSearching
+
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
+
+from states.custom_searching import CustomSearching
+
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
+
 from utils.validations import Validations
 
 
@@ -26,16 +30,12 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
 
     # TODO  # Написать вывод на экран
 
-    await state.clear()
-
 
 @router.message(CustomSearching.series_length, F.text.cast(Validations.valid_series_length).as_("series_length"))
 async def custom_searching_series_length(message: Message, state: FSMContext):
     data = await state.update_data(series_length=message.text)
 
     # TODO  # Написать вывод на экран
-
-    await state.clear()
 
 
 @router.message(CustomSearching.series_length)

@@ -9,7 +9,7 @@ from database.orm.film import add_film, film_exists
 from database.orm.serial import add_serial, serial_exists
 from keyboards.inline.create_random_pagination_kb import create_random_pagination_kb
 from aiogram.fsm.context import FSMContext
-from api.random_movie_serial_search import random_movie_search
+from api.random_history_movie_serial_search import random_history_movie_serial_search
 from utils.validations import Validations
 from aiogram.types import FSInputFile
 
@@ -32,7 +32,7 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
     data = await state.get_data()
     random_data = []
     for _ in range(int(data["count"])):
-        some_data = random_movie_search(type_choice=data["type_choice"])
+        some_data = random_history_movie_serial_search(type_choice=data["type_choice"])
         if isinstance(some_data, dict):
             random_data.append(some_data)
         elif isinstance(some_data, str):

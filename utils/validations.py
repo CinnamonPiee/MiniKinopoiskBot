@@ -6,7 +6,8 @@ from datetime import datetime
 from email_validator import EmailNotValidError, validate_email
 
 from database.models import SearchSerial, HistorySerial, SearchFilm, User, HistoryFilm
-from database.orm.serial import update_search_history, add_search_history
+from database.orm.serial import update_serial_search_history, add_serial_search_history
+from database.orm.film import update_film_search_history, add_film_search_history
 from database.databases import async_session_factory
 
 from sqlalchemy.future import select
@@ -45,9 +46,9 @@ class Validations():
                     data = data.scalars().first()
 
                     if data:
-                        await update_search_history(user.id, existing_serial.id)
+                        await update_serial_search_history(user.id, existing_serial.id)
                     else:
-                        await add_search_history(user.id, existing_serial.id)
+                        await add_serial_search_history(user.id, existing_serial.id)
 
     async def valid_user_and_film_id_in_history(name, telegram_id):
         async with async_session_factory() as session:
@@ -64,9 +65,9 @@ class Validations():
                     data = data.scalars().first()
 
                     if data:
-                        await update_search_history(user.id, existing_film.id)
+                        await update_film_search_history(user.id, existing_film.id)
                     else:
-                        await add_search_history(user.id, existing_film.id)
+                        await add_film_search_history(user.id, existing_film.id)
 
     def valid_series_length(series_length: str):
         if 2 <= len(series_length) <= 3:
