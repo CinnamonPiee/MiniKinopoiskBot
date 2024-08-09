@@ -1,1 +1,1 @@
-from . import create_pagination_kb
+from . import create_history_pagination_kb

@@ -8,7 +8,7 @@ from keyboards.reply import (
     main_kb,
     back_or_skip_kb
     )
-from keyboards.inline.create_pagination_kb import create_pagination_kb
+from keyboards.inline.create_history_pagination_kb import create_history_pagination_kb
 from database.orm.user import (
     check_user_id_by_telegram_id,
     get_user_film_serial_history
@@ -54,7 +54,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                 else:
                     photo = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
             
-                keyboards = create_pagination_kb(page, total_count)
+                keyboards = create_history_pagination_kb(page, total_count)
                 await message.bot.send_photo(
                     chat_id=message.chat.id,
                     photo=photo,
@@ -89,7 +89,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                     photo = FSInputFile(
                         "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
                     
-                keyboards = create_pagination_kb(page, total_count)
+                keyboards = create_history_pagination_kb(page, total_count)
                 await message.bot.send_photo(
                     chat_id=message.chat.id,
                     photo=photo,
@@ -125,7 +125,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                         else:
                             photo = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
                     
-                        keyboards = create_pagination_kb(page, total_count)
+                        keyboards = create_history_pagination_kb(page, total_count)
                         await message.bot.send_photo(
                             chat_id=message.chat.id,
                             photo=photo,
@@ -148,7 +148,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                             photo = FSInputFile(
                                 "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
                             
-                        keyboards = create_pagination_kb(page, total_count)
+                        keyboards = create_history_pagination_kb(page, total_count)
                         await message.bot.send_photo(
                             chat_id=message.chat.id,
                             photo=photo,

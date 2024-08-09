@@ -3,7 +3,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 PER_PAGE = 1
 
 
-def create_pagination_kb(page, total_count):
+def create_history_pagination_kb(page, total_count):
     buttons = []
     main_menu_button = [InlineKeyboardButton(text="Главное меню", callback_data="main_menu")]
 

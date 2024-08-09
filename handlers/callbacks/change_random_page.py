@@ -14,7 +14,7 @@ router = Router(name=__name__)
 
 
 @router.callback_query(lambda c: c.data and c.data.startswith("rand_page_") or c.data == "rand_main_menu")
-async def change_random_page_callback_handler(callback_query: types.CallbackQuery, state: FSMContext):
+async def change_random_page(callback_query: types.CallbackQuery, state: FSMContext):
     page = int(callback_query.data.split("_")[2]) if "rand_page_" in callback_query.data else 0
     data = await state.get_data()
     random_data = data.get("random_data", [])
