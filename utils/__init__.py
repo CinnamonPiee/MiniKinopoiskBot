@@ -1,2 +1,3 @@
-from . import random_films_serials_all
+from . import truncate_tables
 from . import validations
+

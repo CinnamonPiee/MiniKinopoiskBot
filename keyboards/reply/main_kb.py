@@ -1,7 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
-def main_kb():
+def main_kb() -> ReplyKeyboardMarkup:
     button1 = KeyboardButton(text="Фильмы / Сериалы")
     button2 = KeyboardButton(text="История поиска")
     button3 = KeyboardButton(text="Поддержка ⚙️")
@@ -15,6 +15,7 @@ def main_kb():
                   [button3, button4],
                   [button5, button6]],
         resize_keyboard=True,
-        one_time_keyboard=True, )
+        one_time_keyboard=True, 
+    )
 
     return keyboard

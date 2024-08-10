@@ -1,7 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
-def registration_kb():
+def registration_kb() -> ReplyKeyboardMarkup:
     button1 = KeyboardButton(text="Регистрация")
 
     keyboard = ReplyKeyboardMarkup(

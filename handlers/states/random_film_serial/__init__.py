@@ -11,6 +11,7 @@ from .type_choice import router as type_choice_router
 from .movie_length import router as movie_length_router
 from .count import router as count_router
 from .age_rating import router as age_ration_router
+from .series_langth import router as series_length_router
 
 
 router = Router(name=__name__)
@@ -24,3 +25,4 @@ router.include_router(type_choice_router)
 router.include_router(movie_length_router)
 router.include_router(count_router)
 router.include_router(age_ration_router)
+router.include_router(series_length_router)

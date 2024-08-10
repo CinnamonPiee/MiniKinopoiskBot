@@ -1,7 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
-def history_search_kb():
+def history_search_kb() -> ReplyKeyboardMarkup:
     button1 = KeyboardButton(text="Фильмы и сериалы")
     button2 = KeyboardButton(text="Сериалы")
     button3 = KeyboardButton(text="Фильмы")
@@ -13,6 +13,6 @@ def history_search_kb():
                   [button4]],
         resize_keyboard=True,
         one_time_keyboard=True,
-        )
+    )
 
     return keyboard

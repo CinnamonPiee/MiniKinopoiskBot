@@ -11,7 +11,7 @@ from keyboards.reply.back_kb import back_kb
 from keyboards.inline.create_history_pagination_kb import create_history_pagination_kb
 from keyboards.reply.main_kb import main_kb
 
-from utils.validations import Validations
+from utils.validations import valid_date, valid_url
 
 from database.orm.user import check_user_id_by_telegram_id, get_user_film_serial_history_per_date
 from database.models import HistoryFilm, HistorySerial
@@ -33,7 +33,7 @@ async def second_date_back(message: Message, state: FSMContext):
     )
 
 
-@router.message(HistoryOfSearch.second_date, F.text.cast(Validations.date_valid).as_("second_date"))
+@router.message(HistoryOfSearch.second_date, F.text.cast(valid_date.valid_date).as_("second_date"))
 async def second_date(message: Message, state: FSMContext):
     await state.update_data(second_date=message.text)
     data = await state.get_data()
@@ -53,7 +53,7 @@ async def second_date(message: Message, state: FSMContext):
             if history:
                 film = history[0].film
 
-                if film.picture is not None and Validations.get_valid_url(film.picture):
+                if film.picture is not None and valid_url.valid_url(film.picture):
                     photo = film.picture
                 else:
                     photo = FSInputFile(
@@ -98,7 +98,7 @@ async def second_date(message: Message, state: FSMContext):
             if history:
                 serial = history[0].serial
 
-                if serial.picture is not None and Validations.get_valid_url(serial.picture):
+                if serial.picture is not None and valid_url.valid_url(serial.picture):
                     photo = serial.picture
                 else:
                     photo = FSInputFile(
@@ -145,7 +145,7 @@ async def second_date(message: Message, state: FSMContext):
                     if isinstance(item, HistoryFilm):
                         film = item.film
 
-                        if film.picture is not None and Validations.get_valid_url(film.picture):
+                        if film.picture is not None and valid_url.valid_url(film.picture):
                             photo = film.picture
                         else:
                             photo = FSInputFile(
@@ -171,7 +171,7 @@ async def second_date(message: Message, state: FSMContext):
                     elif isinstance(item, HistorySerial):
                         serial = item.serial
 
-                        if serial.picture is not None and Validations.get_valid_url(serial.picture):
+                        if serial.picture is not None and valid_url.valid_url(serial.picture):
                             photo = serial.picture
                         else:
                             photo = FSInputFile(

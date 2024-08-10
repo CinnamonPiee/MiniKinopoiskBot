@@ -14,7 +14,7 @@ from database.models import HistorySerial, HistoryFilm
 from keyboards.inline.create_history_pagination_kb import create_history_pagination_kb
 from keyboards.reply.main_kb import main_kb
 
-from utils.validations import Validations
+from utils.validations import valid_url
 
 
 PER_PAGE = 1
@@ -119,7 +119,7 @@ async def display_history(callback_query, history, total_count, page):
                 f"Описание: {film.description}"
             )
 
-            if film.picture is not None and Validations.get_valid_url(film.picture):
+            if film.picture is not None and valid_url.valid_url(film.picture):
                 photo = film.picture
             else:
                 photo = FSInputFile(
@@ -140,7 +140,7 @@ async def display_history(callback_query, history, total_count, page):
                 f"Описание: {serial.description}"
             )
 
-            if serial.picture is not None and Validations.get_valid_url(serial.picture):
+            if serial.picture is not None and valid_url.valid_url(serial.picture):
                 photo = serial.picture
             else:
                 photo = FSInputFile(

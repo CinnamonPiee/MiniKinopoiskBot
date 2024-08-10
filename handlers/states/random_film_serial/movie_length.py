@@ -1,9 +1,13 @@
 from aiogram import Router, F
-from states.random_film_serial import RandomFilmSerial
+
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
+
+from states.random_film_serial import RandomFilmSerial
+
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
-from utils.validations import Validations
+
+from utils.validations import valid_movie_length
 
 
 router = Router(name=__name__)
@@ -17,7 +21,7 @@ async def random_film_serial_movie_length_back(message: Message, state: FSMConte
              "12-18)."
              "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
              "учитываться.",
-             reply_markup=back_or_skip_kb(),
+        reply_markup=back_or_skip_kb(),
     )
 
 
@@ -33,7 +37,7 @@ async def random_film_serial_movie_length_skip(message: Message, state: FSMConte
     )
 
 
-@router.message(RandomFilmSerial.movie_length, F.text.cast(Validations.valid_movie_length).as_("movie_length"))
+@router.message(RandomFilmSerial.movie_length, F.text.cast(valid_movie_length.valid_movie_length).as_("movie_length"))
 async def random_film_serial_movie_length(message: Message, state: FSMContext):
     await state.update_data(series_length=None)
     await state.update_data(movie_length=message.text)

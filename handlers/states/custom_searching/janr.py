@@ -6,7 +6,7 @@ from aiogram.fsm.context import FSMContext
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 from keyboards.reply.back_kb import back_kb
 
-from utils.validations import Validations
+from utils.validations import valid_janr
 
 from states.custom_searching import CustomSearching
 
@@ -35,7 +35,7 @@ async def custom_searching_janr_skip(message: Message, state: FSMContext):
     )
 
 
-@router.message(CustomSearching.janr, F.text.cast(Validations.valid_janr).as_("janr"))
+@router.message(CustomSearching.janr, F.text.cast(valid_janr.valid_janr).as_("janr"))
 async def custom_searching_janr(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.year)
     await state.update_data(janr=message.text)

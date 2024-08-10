@@ -10,7 +10,7 @@ from keyboards.reply.history_search_kb import history_search_kb
 from keyboards.reply.back_kb import back_kb
 from keyboards.reply.choose_criteries_kb import choose_criteries_kb
 
-from utils.validations import Validations
+from utils.validations import valid_choose_in_type
 
 
 
@@ -26,7 +26,7 @@ async def custom_searching_type_choice_back(message: Message, state: FSMContext)
     )
 
 
-@router.message(CustomSearching.type_choice, F.text.cast(Validations.valid_choose_in_history).as_("type_choice"))
+@router.message(CustomSearching.type_choice, F.text.cast(valid_choose_in_type.valid_choose_in_type).as_("type_choice"))
 async def custom_searching_type_choice(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.count)
     await state.update_data(type_choice=message.text)

@@ -1,9 +1,13 @@
 from aiogram import Router, F
-from states.random_film_serial import RandomFilmSerial
+
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
+
+from states.random_film_serial import RandomFilmSerial
+
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
-from utils.validations import Validations
+
+from utils.validations import valid_series_length
 
 
 router = Router(name=__name__)
@@ -33,7 +37,7 @@ async def random_film_serial_series_length_skip(message: Message, state: FSMCont
     )
 
 
-@router.message(RandomFilmSerial.series_length, F.text.cast(Validations.valid_series_length).as_("series_length"))
+@router.message(RandomFilmSerial.series_length, F.text.cast(valid_series_length.valid_series_length).as_("series_length"))
 async def random_film_serial_series_length(message: Message, state: FSMContext):
     await state.update_data(movie_length=None)
     await state.update_data(series_length=message.text)

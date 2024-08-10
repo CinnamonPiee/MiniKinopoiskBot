@@ -10,7 +10,7 @@ from datetime import datetime
 from datetime import timedelta
 
 
-async def film_exists(name: str):
+async def film_exists(name: str) -> str | None:
     async with async_session_factory() as session:
         result = await session.execute(
             select(SearchFilm).where(SearchFilm.name == name)
@@ -30,7 +30,7 @@ async def add_film(
         rating: float,
         age_rating: int,
         picture: str
-        ):
+        ) -> None:
     async with async_session_factory() as session:
         user = await session.execute(
             select(User).filter_by(telegram_id=telegram_id)
@@ -65,7 +65,7 @@ async def add_film(
         await session.commit()
 
 
-async def update_film_search_history(user_id: int, film_id: int):
+async def update_film_search_history(user_id: int, film_id: int) -> None:
     async with async_session_factory() as session:
         result = await session.execute(
             select(HistoryFilm).where(
@@ -81,7 +81,7 @@ async def update_film_search_history(user_id: int, film_id: int):
             await session.commit()
 
 
-async def add_film_search_history(user_id: int, film_id: int):
+async def add_film_search_history(user_id: int, film_id: int) -> None:
     async with async_session_factory() as session:
         new_history = HistoryFilm(
             user_id=user_id,
@@ -93,7 +93,11 @@ async def add_film_search_history(user_id: int, film_id: int):
         await session.commit()
 
 
-async def get_user_film_history(user_id: int, page: int, per_page: int):
+async def get_user_film_history(
+    user_id: int, 
+    page: int, 
+    per_page: int
+) -> tuple[list[HistoryFilm], int]:
     async with (async_session_factory() as session):
         query = select(
             HistoryFilm,
@@ -123,12 +127,12 @@ async def get_user_film_history(user_id: int, page: int, per_page: int):
 
 
 async def get_user_film_history_per_date(
-        user_id: int, 
-        page: int, 
-        per_page: int, 
-        first_date: str, 
-        second_date: str
-    ):
+    user_id: int, 
+    page: int, 
+    per_page: int, 
+    first_date: str, 
+    second_date: str
+) -> tuple[list[HistoryFilm], int]:
     async with async_session_factory() as session:
         start_date_dt = datetime.strptime(first_date, '%Y-%m-%d')
         end_date_dt = datetime.strptime(second_date, '%Y-%m-%d') + timedelta(days=1)

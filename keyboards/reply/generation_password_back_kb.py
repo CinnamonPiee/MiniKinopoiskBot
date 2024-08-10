@@ -1,7 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
-def generation_password_back_kb():
+def generation_password_back_kb() -> ReplyKeyboardMarkup:
     button1 = KeyboardButton(text="Сгенерировать пароль")
     button2 = KeyboardButton(text="Назад")
 

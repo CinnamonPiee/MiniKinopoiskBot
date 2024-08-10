@@ -1,5 +1,7 @@
 from sqlalchemy import update
 
+from typing import Optional, Tuple, List
+
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
 
@@ -12,7 +14,7 @@ from datetime import timedelta
 from datetime import datetime
 
 
-async def check_user_by_telegram_id(telegram_id: int):
+async def check_user_by_telegram_id(telegram_id: int) -> Optional[User]:
     async with async_session_factory() as session:
         query = select(User).where(User.telegram_id == telegram_id)
         result = await session.execute(query)
@@ -20,7 +22,7 @@ async def check_user_by_telegram_id(telegram_id: int):
         return user
 
 
-async def check_user_id_by_telegram_id(telegram_id: int):
+async def check_user_id_by_telegram_id(telegram_id: int) -> int:
     async with async_session_factory() as session:
         query = select(User).where(User.telegram_id == telegram_id)
         result = await session.execute(query)
@@ -34,7 +36,7 @@ async def add_user(
         email: str,
         telegram_id=int,
         phone_number=str
-    ):
+    ) -> None:
     async with async_session_factory() as session:
         hashed_password = encrypt_password(password)
 
@@ -57,7 +59,7 @@ async def add_user(
         await session.commit()
 
 
-async def email_exists(email: str) -> bool:
+async def email_exists(email: str) -> str | None:
     async with async_session_factory() as session:
         result = await session.execute(
             select(User).where(User.email == email)
@@ -66,7 +68,7 @@ async def email_exists(email: str) -> bool:
         return user is not None
 
 
-async def phone_number_exists(phone_number: str) -> bool:
+async def phone_number_exists(phone_number: str) -> str | None:
     async with async_session_factory() as session:
         result = await session.execute(
             select(User).where(User.phone_number == phone_number)
@@ -75,7 +77,11 @@ async def phone_number_exists(phone_number: str) -> bool:
         return user is not None
 
 
-async def get_user_film_serial_history(user_id: int, page: int, per_page: int):
+async def get_user_film_serial_history(
+    user_id: int, 
+    page: int, 
+    per_page: int
+) -> Tuple[List[HistoryFilm | HistorySerial], int]:
     async with async_session_factory() as session:
         film_query = select(
             HistoryFilm
@@ -118,12 +124,12 @@ async def get_user_film_serial_history(user_id: int, page: int, per_page: int):
 
 
 async def get_user_film_serial_history_per_date(
-        user_id: int, 
-        page: int, 
-        per_page: int, 
-        start_date: str, 
-        end_date: str
-    ):
+    user_id: int, 
+    page: int, 
+    per_page: int, 
+    start_date: str, 
+    end_date: str
+) -> Tuple[List[HistoryFilm | HistorySerial], int]:
     async with async_session_factory() as session:
         start_date_dt = datetime.strptime(start_date, '%Y-%m-%d')
         end_date_dt = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
@@ -184,7 +190,7 @@ async def verify_user_password(email: str, password: str) -> bool:
         return check_password(user.password, password)
 
 
-async def update_telegram_id_by_email(email: str, telegram_id: int):
+async def update_telegram_id_by_email(email: str, telegram_id: int) -> None:
     async with async_session_factory() as session:
         stmt = update(User).where(User.email == email).values(telegram_id=telegram_id)
         await session.execute(stmt)

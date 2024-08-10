@@ -2,7 +2,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 import datetime
 
 
-def back_or_today_kb():
+def back_or_today_kb() -> ReplyKeyboardMarkup:
     button1 = KeyboardButton(text=f"{datetime.date.today()}")
     button2 = KeyboardButton(text="Назад")
 

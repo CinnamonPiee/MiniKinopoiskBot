@@ -38,7 +38,7 @@ async def main_choose_find_film_serial(message: Message, state: FSMContext):
         text="Пожалуйста, введите название фильма или сериала: ",
         reply_markup=back_kb.back_kb(),
         parse_mode=None,
-        )
+    )
 
 
 @router.message(main_menu.MainMenu.criteries, F.text == "Рандомный фильм / сериал")
@@ -67,6 +67,7 @@ async def main_choose_back(message: Message, state: FSMContext):
         text="Может быть в другой раз...",
         reply_markup=main_kb.main_kb(),
     )
+    
     await state.clear()
 
 

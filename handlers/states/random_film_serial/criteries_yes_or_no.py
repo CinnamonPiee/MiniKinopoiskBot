@@ -1,17 +1,28 @@
 from aiogram import Router, F
-from states.random_film_serial import RandomFilmSerial
+
 from aiogram.types import Message
 from aiogram.utils import markdown
+from aiogram.fsm.context import FSMContext
+from aiogram.types import FSInputFile
+
+from states.random_film_serial import RandomFilmSerial
+
 from keyboards.reply.back_kb import back_kb
 from keyboards.reply.yes_no_back import yes_no_back
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
+from keyboards.inline.create_random_pagination_kb import create_random_pagination_kb
+
 from database.orm.film import add_film, film_exists
 from database.orm.serial import add_serial, serial_exists
-from keyboards.inline.create_random_pagination_kb import create_random_pagination_kb
-from aiogram.fsm.context import FSMContext
+
 from api.random_history_movie_serial_search import random_history_movie_serial_search
-from utils.validations import Validations
-from aiogram.types import FSInputFile
+
+from utils.validations import (
+    valid_url,
+    valid_user_and_film_id_in_history,
+    valid_user_and_serial_id_in_history
+)
+
 
 
 router = Router(name=__name__)
@@ -31,6 +42,7 @@ async def random_film_serial_criteries_yes_or_no_back(message: Message, state: F
 async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMContext):
     data = await state.get_data()
     random_data = []
+
     for _ in range(int(data["count"])):
         some_data = random_history_movie_serial_search(type_choice=data["type_choice"])
         if isinstance(some_data, dict):
@@ -39,6 +51,7 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
             await message.answer(
                 text="Сервис временно не доступен, попробуйте позже!"
             )
+
             await state.clear()
             break
 
@@ -51,10 +64,12 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
     keyboards = create_random_pagination_kb(page, total_count)
 
     if item["type"] == "movie":
-        if item["poster"]["previewUrl"] is not None and Validations.get_valid_url(item["poster"]["previewUrl"]):
+        if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
             url = item["poster"]["previewUrl"]
         else:
-            url = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+            url = FSInputFile(
+                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+            )
         if item["name"] == None:
             name = ""
         else:
@@ -93,7 +108,10 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
             description = item["shortDescription"]
     
         if await film_exists(name):
-            await Validations.valid_user_and_film_id_in_history(name, telegram_id=message.from_user.id)
+            await valid_user_and_film_id_in_history.valid_user_and_film_id_in_history(
+                name, 
+                telegram_id=message.from_user.id
+            )
 
         else:
             await add_film(
@@ -126,11 +144,12 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
         )
 
     elif item["type"] == "tv-series":
-        if item["poster"]["previewUrl"] is not None and Validations.get_valid_url(item["poster"]["previewUrl"]):
+        if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
             url = item["poster"]["previewUrl"]
         else:
             url = FSInputFile(
-                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+            )
         if item["name"] == None:
             name = ""
         else:
@@ -169,7 +188,10 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
             description = item["shortDescription"]
 
         if await serial_exists(name):
-            await Validations.valid_user_and_serial_id_in_history(name, telegram_id=message.from_user.id)
+            await valid_user_and_serial_id_in_history.valid_user_and_serial_id_in_history(
+                name, 
+                telegram_id=message.from_user.id
+            )
 
         else:
             await add_serial(

@@ -7,7 +7,7 @@ from states.custom_searching import CustomSearching
 
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 
-from utils.validations import Validations
+from utils.validations import valid_years
 
 
 router = Router(name=__name__)
@@ -36,7 +36,7 @@ async def custom_searching_year_skip(message: Message, state: FSMContext):
     )
 
 
-@router.message(CustomSearching.year, F.text.cast(Validations.valid_years).as_("year"))
+@router.message(CustomSearching.year, F.text.cast(valid_years.valid_years).as_("year"))
 async def custom_searching_year(message: Message, state: FSMContext):
     await state.update_data(year=message.text)
     await state.set_state(CustomSearching.rating)

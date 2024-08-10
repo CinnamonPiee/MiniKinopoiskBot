@@ -10,7 +10,7 @@ from datetime import datetime
 from datetime import timedelta
 
 
-async def serial_exists(name: str):
+async def serial_exists(name: str) -> str | None:
     async with async_session_factory() as session:
         result = await session.execute(
             select(SearchSerial).where(SearchSerial.name == name)
@@ -30,7 +30,7 @@ async def add_serial(
         age_rating: int,
         description: str,
         picture: str
-        ):
+        ) -> None:
     async with async_session_factory() as session:
         user = await session.execute(select(User).filter_by(telegram_id=telegram_id))
         user = user.scalar_one_or_none()
@@ -62,7 +62,7 @@ async def add_serial(
         await session.commit()
 
 
-async def update_serial_search_history(user_id: int, serial_id: int):
+async def update_serial_search_history(user_id: int, serial_id: int) -> None:
     async with async_session_factory() as session:
         result = await session.execute(
             select(HistorySerial).where(
@@ -78,7 +78,7 @@ async def update_serial_search_history(user_id: int, serial_id: int):
             await session.commit()
 
 
-async def add_serial_search_history(user_id: int, serial_id: int):
+async def add_serial_search_history(user_id: int, serial_id: int) -> None:
     async with async_session_factory() as session:
         new_history = HistorySerial(
             user_id=user_id,
@@ -90,7 +90,11 @@ async def add_serial_search_history(user_id: int, serial_id: int):
         await session.commit()
 
 
-async def get_user_serial_history(user_id: int, page: int, per_page: int):
+async def get_user_serial_history(
+    user_id: int, 
+    page: int, 
+    per_page: int
+) -> tuple[list[HistorySerial], int]:
     async with (async_session_factory() as session):
         query = select(
             HistorySerial,
@@ -120,12 +124,12 @@ async def get_user_serial_history(user_id: int, page: int, per_page: int):
 
 
 async def get_user_serial_history_per_date(
-        user_id: int, 
-        page: int, 
-        per_page: int, 
-        first_date: str, 
-        second_date: str
-    ):
+    user_id: int, 
+    page: int, 
+    per_page: int, 
+    first_date: str, 
+    second_date: str
+) -> tuple[list[HistorySerial], int]:
     async with async_session_factory() as session:
         start_date_dt = datetime.strptime(first_date, '%Y-%m-%d')
         end_date_dt = datetime.strptime(second_date, '%Y-%m-%d') + timedelta(days=1)

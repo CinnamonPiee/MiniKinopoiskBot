@@ -1,15 +1,27 @@
 from aiogram import Router, F
-from states.random_film_serial import RandomFilmSerial
+
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
-from keyboards.reply.back_or_skip_kb import back_or_skip_kb
-from utils.validations import Validations
-from api.random_history_movie_serial_search import random_history_movie_serial_search
-from keyboards.inline.create_random_pagination_kb import create_random_pagination_kb
 from aiogram.types import FSInputFile
+from aiogram.utils import markdown
+
+from states.random_film_serial import RandomFilmSerial
+
+from keyboards.reply.back_or_skip_kb import back_or_skip_kb
+from keyboards.inline.create_random_pagination_kb import create_random_pagination_kb
+
+from utils.validations import (
+    valid_url,
+    valid_user_and_film_id_in_history,
+    valid_user_and_serial_id_in_history,
+    valid_country
+)
+
+from api.random_history_movie_serial_search import random_history_movie_serial_search
+
 from database.orm.film import add_film, film_exists
 from database.orm.serial import add_serial, serial_exists
-from aiogram.utils import markdown
+
 
 router = Router(name=__name__)
 
@@ -31,6 +43,7 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
 
     data = await state.get_data()
     random_data = []
+
     for _ in range(int(data["count"])):
         some_data = random_history_movie_serial_search(
             type_choice=data["type_choice"],
@@ -42,6 +55,7 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
             janr=data["janr"],
             country=data["country"]       
         )
+
         if isinstance(some_data, dict):
             random_data.append(some_data)
         elif isinstance(some_data, str):
@@ -60,11 +74,12 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
     keyboards = create_random_pagination_kb(page, total_count)
 
     if item["type"] == "movie":
-        if item["poster"]["previewUrl"] is not None and Validations.get_valid_url(item["poster"]["previewUrl"]):
+        if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
             url = item["poster"]["previewUrl"]
         else:
             url = FSInputFile(
-                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+            )
         if item["name"] == None:
             name = ""
         else:
@@ -103,7 +118,10 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
             description = item["shortDescription"]
 
         if await film_exists(name):
-            await Validations.valid_user_and_film_id_in_history(name, telegram_id=message.from_user.id)
+            await valid_user_and_film_id_in_history.valid_user_and_film_id_in_history(
+                name, 
+                telegram_id=message.from_user.id
+            )
 
         else:
             await add_film(
@@ -121,13 +139,13 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
             )
 
         caption = f"{markdown.hbold(name)}\n"\
-            f"Жанры: {genres}\n"\
-            f"Рейтинг: {rating}\n"\
-            f"Год: {year}\n"\
-            f"Продолжительность фильма: {movie_length}\n"\
-            f"Страна: {countries}\n"\
-            f"Возрастной рейтинг: {age_rating}\n"\
-            f"Описание: {description}"\
+                  f"Жанры: {genres}\n"\
+                  f"Рейтинг: {rating}\n"\
+                  f"Год: {year}\n"\
+                  f"Продолжительность фильма: {movie_length}\n"\
+                  f"Страна: {countries}\n"\
+                  f"Возрастной рейтинг: {age_rating}\n"\
+                  f"Описание: {description}"\
 
         await message.bot.send_photo(
             chat_id=message.chat.id,
@@ -137,11 +155,12 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
         )
 
     elif item["type"] == "tv-series":
-        if item["poster"]["previewUrl"] is not None and Validations.get_valid_url(item["poster"]["previewUrl"]):
+        if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
             url = item["poster"]["previewUrl"]
         else:
             url = FSInputFile(
-                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+            )
         if item["name"] == None:
             name = ""
         else:
@@ -180,7 +199,10 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
             description = item["shortDescription"]
 
         if await serial_exists(name):
-            await Validations.valid_user_and_serial_id_in_history(name, telegram_id=message.from_user.id)
+            await valid_user_and_serial_id_in_history.valid_user_and_serial_id_in_history(
+                name, 
+                telegram_id=message.from_user.id
+            )
 
         else:
             await add_serial(
@@ -197,13 +219,13 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
             )
 
         caption = f"{markdown.hbold(name)}\n"\
-            f"Жанры: {genres}\n"\
-            f"Рейтинг: {rating}\n"\
-            f"Релиз: {release_years}\n"\
-            f"Продолжительность серии: {series_length}\n"\
-            f"Страна: {countries}\n"\
-            f"Возрастной рейтинг: {age_rating}\n"\
-            f"Описание: {description}"\
+                  f"Жанры: {genres}\n"\
+                  f"Рейтинг: {rating}\n"\
+                  f"Релиз: {release_years}\n"\
+                  f"Продолжительность серии: {series_length}\n"\
+                  f"Страна: {countries}\n"\
+                  f"Возрастной рейтинг: {age_rating}\n"\
+                  f"Описание: {description}"\
 
         await message.bot.send_photo(
             chat_id=message.chat.id,
@@ -212,12 +234,14 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
             reply_markup=keyboards,
         )
 
-@router.message(RandomFilmSerial.country, F.text.cast(Validations.valid_country).as_("country"))
+
+@router.message(RandomFilmSerial.country, F.text.cast(valid_country.valid_country).as_("country"))
 async def random_film_serial_country(message: Message, state: FSMContext):
     await state.update_data(country=message.text)
 
     data = await state.get_data()
     random_data = []
+
     for _ in range(int(data["count"])):
         some_data = random_history_movie_serial_search(
             type_choice=data["type_choice"],
@@ -229,6 +253,7 @@ async def random_film_serial_country(message: Message, state: FSMContext):
             janr=data["janr"],
             country=data["country"]
         )
+
         if isinstance(some_data, dict):
             random_data.append(some_data)
         elif isinstance(some_data, str):
@@ -247,7 +272,7 @@ async def random_film_serial_country(message: Message, state: FSMContext):
     keyboards = create_random_pagination_kb(page, total_count)
 
     if item["type"] == "movie":
-        if item["poster"]["previewUrl"] is not None and Validations.get_valid_url(item["poster"]["previewUrl"]):
+        if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
             url = item["poster"]["previewUrl"]
         else:
             url = FSInputFile(
@@ -290,7 +315,10 @@ async def random_film_serial_country(message: Message, state: FSMContext):
             description = item["shortDescription"]
 
         if await film_exists(name):
-            await Validations.valid_user_and_film_id_in_history(name, telegram_id=message.from_user.id)
+            await valid_user_and_film_id_in_history.valid_user_and_film_id_in_history(
+                name, 
+                telegram_id=message.from_user.id
+            )
 
         else:
             await add_film(
@@ -308,13 +336,13 @@ async def random_film_serial_country(message: Message, state: FSMContext):
             )
 
         caption = f"{markdown.hbold(name)}\n"\
-            f"Жанры: {genres}\n"\
-            f"Рейтинг: {rating}\n"\
-            f"Год: {year}\n"\
-            f"Продолжительность фильма: {movie_length}\n"\
-            f"Страна: {countries}\n"\
-            f"Возрастной рейтинг: {age_rating}\n"\
-            f"Описание: {description}"\
+                  f"Жанры: {genres}\n"\
+                  f"Рейтинг: {rating}\n"\
+                  f"Год: {year}\n"\
+                  f"Продолжительность фильма: {movie_length}\n"\
+                  f"Страна: {countries}\n"\
+                  f"Возрастной рейтинг: {age_rating}\n"\
+                  f"Описание: {description}"\
 
         await message.bot.send_photo(
             chat_id=message.chat.id,
@@ -324,11 +352,12 @@ async def random_film_serial_country(message: Message, state: FSMContext):
         )
 
     elif item["type"] == "tv-series":
-        if item["poster"]["previewUrl"] is not None and Validations.get_valid_url(item["poster"]["previewUrl"]):
+        if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
             url = item["poster"]["previewUrl"]
         else:
             url = FSInputFile(
-                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+            )
         if item["name"] == None:
             name = ""
         else:
@@ -367,7 +396,10 @@ async def random_film_serial_country(message: Message, state: FSMContext):
             description = item["shortDescription"]
 
         if await serial_exists(name):
-            await Validations.valid_user_and_serial_id_in_history(name, telegram_id=message.from_user.id)
+            await valid_user_and_serial_id_in_history.valid_user_and_serial_id_in_history(
+                name, 
+                telegram_id=message.from_user.id
+            )
 
         else:
             await add_serial(
@@ -384,13 +416,13 @@ async def random_film_serial_country(message: Message, state: FSMContext):
             )
 
         caption = f"{markdown.hbold(name)}\n"\
-            f"Жанры: {genres}\n"\
-            f"Рейтинг: {rating}\n"\
-            f"Релиз: {release_years}\n"\
-            f"Продолжительность серии: {series_length}\n"\
-            f"Страна: {countries}\n"\
-            f"Возрастной рейтинг: {age_rating}\n"\
-            f"Описание: {description}"\
+                  f"Жанры: {genres}\n"\
+                  f"Рейтинг: {rating}\n"\
+                  f"Релиз: {release_years}\n"\
+                  f"Продолжительность серии: {series_length}\n"\
+                  f"Страна: {countries}\n"\
+                  f"Возрастной рейтинг: {age_rating}\n"\
+                  f"Описание: {description}"\
 
         await message.bot.send_photo(
             chat_id=message.chat.id,

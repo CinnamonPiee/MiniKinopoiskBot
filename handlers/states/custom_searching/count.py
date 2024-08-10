@@ -7,7 +7,7 @@ from keyboards.reply.back_kb import back_kb
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 from keyboards.reply.history_search_kb import history_search_kb
 
-from utils.validations import Validations
+from utils.validations import valid_num
 
 from states.custom_searching import CustomSearching
 
@@ -24,7 +24,7 @@ async def custom_searching_count_back(message: Message, state: FSMContext):
     )
 
 
-@router.message(CustomSearching.count, F.text.cast(Validations.valid_num).as_("count"))
+@router.message(CustomSearching.count, F.text.cast(valid_num.valid_num).as_("count"))
 async def custom_searching_count(message: Message, state: FSMContext):
     await state.update_data(count=message.text)
     await state.set_state(CustomSearching.janr)

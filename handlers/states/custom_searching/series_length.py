@@ -7,7 +7,7 @@ from states.custom_searching import CustomSearching
 
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 
-from utils.validations import Validations
+from utils.validations import valid_series_length
 
 
 router = Router(name=__name__)
@@ -31,7 +31,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
     # TODO  # Написать вывод на экран
 
 
-@router.message(CustomSearching.series_length, F.text.cast(Validations.valid_series_length).as_("series_length"))
+@router.message(CustomSearching.series_length, F.text.cast(valid_series_length.valid_series_length).as_("series_length"))
 async def custom_searching_series_length(message: Message, state: FSMContext):
     data = await state.update_data(series_length=message.text)
 

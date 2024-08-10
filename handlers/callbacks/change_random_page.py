@@ -10,7 +10,11 @@ from database.orm.serial import add_serial, serial_exists
 from keyboards.inline.create_random_pagination_kb import create_random_pagination_kb
 from keyboards.reply.main_kb import main_kb
 
-from utils.validations import Validations
+from utils.validations import (
+    valid_url, 
+    valid_user_and_film_id_in_history,
+    valid_user_and_serial_id_in_history
+)
 
 
 router = Router(name=__name__)
@@ -53,7 +57,7 @@ async def display_history(
     item = random_data[page]
 
     if item["type"] == "movie":
-        if item["poster"]["previewUrl"] is not None and Validations.get_valid_url(item["poster"]["previewUrl"]):
+        if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
             url = item["poster"]["previewUrl"]
         else:
             url = FSInputFile(
@@ -97,7 +101,10 @@ async def display_history(
             description = item["shortDescription"]
 
         if await film_exists(name):
-            await Validations.valid_user_and_film_id_in_history(name, telegram_id)
+            await valid_user_and_film_id_in_history.valid_user_and_film_id_in_history(
+                name, 
+                telegram_id
+            )
 
         else:
             if item["movieLength"] == None:
@@ -140,7 +147,7 @@ async def display_history(
         await callback_query.answer()
 
     elif item["type"] == "tv-series":
-        if item["poster"]["previewUrl"] is not None and Validations.get_valid_url(item["poster"]["previewUrl"]):
+        if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
             url = item["poster"]["previewUrl"]
         else:
             url = FSInputFile(
@@ -184,7 +191,10 @@ async def display_history(
             description = item["shortDescription"]
 
         if await serial_exists(name):
-            await Validations.valid_user_and_serial_id_in_history(name, telegram_id)
+            await valid_user_and_serial_id_in_history.valid_user_and_serial_id_in_history(
+                name, 
+                telegram_id
+            )
 
         else:
             await add_serial(

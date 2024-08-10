@@ -19,7 +19,7 @@ from database.orm.film import get_user_film_history
 from database.orm.serial import get_user_serial_history
 from database.models import HistoryFilm, HistorySerial
 
-from utils.validations import Validations
+from utils.validations import valid_url, valid_date
 
 
 router = Router(name=__name__)
@@ -50,7 +50,7 @@ async def first_date_skip(message: Message, state: FSMContext):
             if history:
                 film = history[0].film
 
-                if film.picture is not None and Validations.get_valid_url(film.picture):
+                if film.picture is not None and valid_url.valid_url(film.picture):
                     photo = film.picture
                 else:
                     photo = FSInputFile(
@@ -88,7 +88,7 @@ async def first_date_skip(message: Message, state: FSMContext):
             if history:
                 serial = history[0].serial
 
-                if serial.picture is not None and Validations.get_valid_url(serial.picture):
+                if serial.picture is not None and valid_url.valid_url(serial.picture):
                     photo = serial.picture
                 else:
                     photo = FSInputFile(
@@ -128,7 +128,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                     if isinstance(item, HistoryFilm):
                         film = item.film
 
-                        if film.picture is not None and Validations.get_valid_url(film.picture):
+                        if film.picture is not None and valid_url.valid_url(film.picture):
                             photo = film.picture
                         else:
                             photo = FSInputFile(
@@ -154,7 +154,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                     elif isinstance(item, HistorySerial):
                         serial = item.serial
 
-                        if serial.picture is not None and Validations.get_valid_url(serial.picture):
+                        if serial.picture is not None and valid_url.valid_url(serial.picture):
                             photo = serial.picture
                         else:
                             photo = FSInputFile(
@@ -186,7 +186,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                 await state.clear()
 
 
-@router.message(HistoryOfSearch.first_date, F.text.cast(Validations.date_valid).as_("first_date"))
+@router.message(HistoryOfSearch.first_date, F.text.cast(valid_date.valid_date).as_("first_date"))
 async def first_date(message: Message, state: FSMContext):
     await state.set_state(HistoryOfSearch.second_date)
     await state.update_data(first_date=message.text)

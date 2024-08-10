@@ -1,10 +1,13 @@
 from aiogram import Router, F
-from states.random_film_serial import RandomFilmSerial
+
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
-from keyboards.reply.back_or_skip_kb import back_or_skip_kb
-from utils.validations import Validations
 
+from states.random_film_serial import RandomFilmSerial
+
+from keyboards.reply.back_or_skip_kb import back_or_skip_kb
+
+from utils.validations import valid_age_rating
 
 router = Router(name=__name__)
 
@@ -54,9 +57,10 @@ async def random_film_serial_age_rating_skip(message: Message, state: FSMContext
         )
 
 
-@router.message(RandomFilmSerial.age_rating, F.text.cast(Validations.valid_age_rating).as_("age_rating"))
+@router.message(RandomFilmSerial.age_rating, F.text.cast(valid_age_rating.valid_age_rating).as_("age_rating"))
 async def random_film_serial_age_rating(message: Message, state: FSMContext):
     data = state.get_data()
+    
     if data["type_choice"] == "Сериалы":
         await state.set_state(RandomFilmSerial.series_length)
         await state.update_data(age_rating=message.text)

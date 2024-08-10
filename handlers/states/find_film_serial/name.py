@@ -15,7 +15,11 @@ from keyboards.reply.back_kb import back_kb
 from database.orm.film import add_film, film_exists
 from database.orm.serial import add_serial, serial_exists
 
-from utils.validations import Validations
+from utils.validations import (
+    valid_url,
+    valid_user_and_film_id_in_history,
+    valid_user_and_serial_id_in_history
+)
 
 from api.movie_serial_search import movie_serial_search
 
@@ -44,7 +48,7 @@ async def find_film_serial_name(message: Message, state: FSMContext):
 
     elif isinstance(data, dict):
         if data["type"] == "movie":
-            if data["poster"]["previewUrl"] is not None and Validations.get_valid_url(data["poster"]["previewUrl"]):
+            if data["poster"]["previewUrl"] is not None and valid_url.valid_url(data["poster"]["previewUrl"]):
                 url = data["poster"]["previewUrl"]
             else:
                 url = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
@@ -100,7 +104,7 @@ async def find_film_serial_name(message: Message, state: FSMContext):
             )
 
             if await film_exists(name):
-                await Validations.valid_user_and_film_id_in_history(
+                await valid_user_and_film_id_in_history.valid_user_and_film_id_in_history(
                     name, 
                     telegram_id=message.from_user.id
                 )
@@ -126,7 +130,7 @@ async def find_film_serial_name(message: Message, state: FSMContext):
                 await state.clear()
 
         elif data["type"] == "tv-series":
-            if data["poster"]["previewUrl"] is not None and Validations.get_valid_url(data["poster"]["previewUrl"]):
+            if data["poster"]["previewUrl"] is not None and valid_url.valid_url(data["poster"]["previewUrl"]):
                 url = data["poster"]["previewUrl"]
             else:
                 url = FSInputFile("/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
@@ -182,7 +186,7 @@ async def find_film_serial_name(message: Message, state: FSMContext):
             )
 
             if await serial_exists(name):
-                await Validations.valid_user_and_serial_id_in_history(
+                await valid_user_and_serial_id_in_history.valid_user_and_serial_id_in_history(
                     name, 
                     telegram_id=message.from_user.id
                 )

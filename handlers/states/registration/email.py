@@ -1,12 +1,17 @@
 from aiogram import Router, F
+
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
+
+from keyboards.reply.login_registration_kb import login_registration_kb
 from keyboards.reply.back_kb import back_kb
 from keyboards.reply.back_or_number_kb import back_or_number_kb
+
 from states.registration import Registration
-from utils.validations import Validations
+
+from utils.validations import valid_email
+
 from database.orm.user import email_exists
-from keyboards.reply.login_registration_kb import login_registration_kb
 
 
 router = Router(name=__name__)
@@ -15,6 +20,7 @@ router = Router(name=__name__)
 @router.message(Registration.email, F.text == "Назад")
 async def registration_email_handler_back(message: Message, state: FSMContext):
     data = await state.get_data()
+
     if data["login_registration"] == "Вход":
         await state.set_state(Registration.login_registration)
         await message.answer(
@@ -23,6 +29,7 @@ async def registration_email_handler_back(message: Message, state: FSMContext):
                  "Пароль, Почту и Номер телефона",
             reply_markup=login_registration_kb(),
             )
+        
     elif data["login_registration"] == "Регистрация":
         await state.set_state(Registration.password)
         await message.answer(
@@ -36,9 +43,10 @@ async def registration_email_handler_back(message: Message, state: FSMContext):
         )
 
 
-@router.message(Registration.email, F.text.cast(Validations.email_validation).as_("email"))
+@router.message(Registration.email, F.text.cast(valid_email.valid.email).as_("email"))
 async def registration_email_handler(message: Message, state: FSMContext):
     data = await state.get_data()
+
     if data["login_registration"] == "Вход":
         if await email_exists(message.text):
             await state.set_state(Registration.password)
@@ -47,7 +55,8 @@ async def registration_email_handler(message: Message, state: FSMContext):
                 text="Теперь введите пароль: ",
                 reply_markup=back_kb(),
                 parse_mode=None,
-                )
+            )
+            
         else:
             await message.answer(
                 text="Данная почта не найдена в базе данных, пожалуйста введите корректную почту"
@@ -62,6 +71,7 @@ async def registration_email_handler(message: Message, state: FSMContext):
                      "или попробуйте ввести другую почту.",
                 reply_markup=back_kb(),
             )
+
         else:
             await state.update_data(email=message.text)
             await state.set_state(Registration.phone_number)
@@ -69,7 +79,7 @@ async def registration_email_handler(message: Message, state: FSMContext):
                 text="Теперь мне надо узнать ваш номер телефона. Для этого нажмите на кнопку <Поделиться номером> снизу. ",
                 reply_markup=back_or_number_kb(),
                 parse_mode=None,
-                )
+            )
 
 
 @router.message(Registration.email)

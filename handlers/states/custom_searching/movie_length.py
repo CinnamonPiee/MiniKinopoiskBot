@@ -7,7 +7,7 @@ from states.custom_searching import CustomSearching
 
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 
-from utils.validations import Validations
+from utils.validations import valid_movie_length
 
 
 router = Router(name=__name__)
@@ -31,7 +31,7 @@ async def custom_searching_movie_length_skip(message: Message, state: FSMContext
     # TODO # Написать вывод на экран
 
 
-@router.message(CustomSearching.movie_length, F.text.cast(Validations.valid_movie_length).as_("movie_length"))
+@router.message(CustomSearching.movie_length, F.text.cast(valid_movie_length.valid_movie_length).as_("movie_length"))
 async def custom_searching_movie_length(message: Message, state: FSMContext):
     data = await state.update_data(movie_length=message.text)
 
