@@ -89,19 +89,35 @@ async def find_film_serial_name(message: Message, state: FSMContext):
             else:
                 description = data["shortDescription"]
 
-            await message.bot.send_photo(
-                chat_id=message.chat.id,
-                photo=url,
-                caption=f"{markdown.hbold(name)}\n"
-                        f"Жанры: {genres}\n"
-                        f"Рейтинг: {rating}\n"
-                        f"Год: {year}\n"
-                        f"Продолжительность фильма: {movie_length}\n"
-                        f"Страна: {countries}\n"
-                        f"Возрастной рейтинг: {age_rating}\n"
-                        f"Описание: {description}",
-                reply_markup=main_kb(),
-            )
+            try:
+                await message.bot.send_photo(
+                    chat_id=message.chat.id,
+                    photo=url,
+                    caption=f"{markdown.hbold(name)}\n"
+                            f"Жанры: {genres}\n"
+                            f"Рейтинг: {rating}\n"
+                            f"Год: {year}\n"
+                            f"Продолжительность фильма: {movie_length}\n"
+                            f"Страна: {countries}\n"
+                            f"Возрастной рейтинг: {age_rating}\n"
+                            f"Описание: {description}",
+                    reply_markup=main_kb(),
+                )
+                
+            except:
+                await message.bot.send_photo(
+                    chat_id=message.chat.id,
+                    photo=url,
+                    caption=f"{markdown.hbold(name)}\n"
+                    f"Жанры: {genres}\n"
+                    f"Рейтинг: {rating}\n"
+                    f"Год: {year}\n"
+                    f"Продолжительность фильма: {movie_length}\n"
+                    f"Страна: {countries}\n"
+                    f"Возрастной рейтинг: {age_rating}\n"
+                    f"Описание: None",
+                    reply_markup=main_kb(),
+                )
 
             if await film_exists(name):
                 await valid_user_and_film_id_in_history.valid_user_and_film_id_in_history(
@@ -171,19 +187,35 @@ async def find_film_serial_name(message: Message, state: FSMContext):
             else:
                 description = data["shortDescription"]
 
-            await message.bot.send_photo(
-                chat_id=message.chat.id,
-                photo=url,
-                caption=f"{markdown.hbold(name)}\n"
-                        f"Жанры: {genres}\n"
-                        f"Рейтинг: {rating}\n"
-                        f"Релиз: {release_years}\n"
-                        f"Продолжительность серии: {series_length}\n"
-                        f"Страна: {countries}\n"
-                        f"Возрастной рейтинг: {age_rating}\n"
-                        f"Описание: {description}",
-                reply_markup=main_kb(),
-            )
+            try:
+                await message.bot.send_photo(
+                    chat_id=message.chat.id,
+                    photo=url,
+                    caption=f"{markdown.hbold(name)}\n"
+                            f"Жанры: {genres}\n"
+                            f"Рейтинг: {rating}\n"
+                            f"Релиз: {release_years}\n"
+                            f"Продолжительность серии: {series_length}\n"
+                            f"Страна: {countries}\n"
+                            f"Возрастной рейтинг: {age_rating}\n"
+                            f"Описание: {description}",
+                    reply_markup=main_kb(),
+                )
+
+            except:
+                await message.bot.send_photo(
+                    chat_id=message.chat.id,
+                    photo=url,
+                    caption=f"{markdown.hbold(name)}\n"
+                            f"Жанры: {genres}\n"
+                            f"Рейтинг: {rating}\n"
+                            f"Релиз: {release_years}\n"
+                            f"Продолжительность серии: {series_length}\n"
+                            f"Страна: {countries}\n"
+                            f"Возрастной рейтинг: {age_rating}\n"
+                            f"Описание: None",
+                    reply_markup=main_kb(),
+                )
 
             if await serial_exists(name):
                 await valid_user_and_serial_id_in_history.valid_user_and_serial_id_in_history(

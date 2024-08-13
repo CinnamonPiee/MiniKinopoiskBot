@@ -29,11 +29,24 @@ async def custom_searching_type_choice_back(message: Message, state: FSMContext)
 @router.message(CustomSearching.type_choice, F.text.cast(valid_choose_in_type.valid_choose_in_type).as_("type_choice"))
 async def custom_searching_type_choice(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.count)
-    await state.update_data(type_choice=message.text)
-    await message.answer(
-        text="Укажите количество которое хотите получить: ",
-        reply_markup=back_kb(),
-    )
+    if message.text == "Фильмы":
+        await state.update_data(type_choice="movie")
+        await message.answer(
+            text="Укажите количество которое хотите получить: ",
+            reply_markup=back_kb(),
+        )
+    elif message.text == "Сериалы":
+        await state.update_data(type_choice="tv-series")
+        await message.answer(
+            text="Укажите количество которое хотите получить: ",
+            reply_markup=back_kb(),
+        )
+    elif message.text == "Фильмы и сериалы":
+        await state.update_data(type_choice=None)
+        await message.answer(
+            text="Укажите количество которое хотите получить: ",
+            reply_markup=back_kb(),
+        )
 
 
 @router.message(CustomSearching.type_choice)

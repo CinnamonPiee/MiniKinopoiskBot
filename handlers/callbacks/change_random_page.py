@@ -136,15 +136,36 @@ async def display_history(
                   
         keyboards = create_random_pagination_kb(page, total_count)
 
-        await callback_query.message.edit_media(
-            media=types.InputMediaPhoto(
-                media=url,
-                caption=caption,
-            ),
-            reply_markup=keyboards,
-        )
+        try:
+            await callback_query.message.edit_media(
+                media=types.InputMediaPhoto(
+                    media=url,
+                    caption=caption,
+                ),
+                reply_markup=keyboards,
+            )
 
-        await callback_query.answer()
+            await callback_query.answer()
+
+        except:
+            caption = f"{markdown.hbold(name)}\n"\
+                      f"Жанры: {genres}\n"\
+                      f"Рейтинг: {rating}\n"\
+                      f"Год: {year}\n"\
+                      f"Продолжительность фильма: {movie_length}\n"\
+                      f"Страна: {countries}\n"\
+                      f"Возрастной рейтинг: {age_rating}\n"\
+                      f"Описание: None"\
+
+            await callback_query.message.edit_media(
+                media=types.InputMediaPhoto(
+                    media=url,
+                    caption=caption,
+                ),
+                reply_markup=keyboards,
+            )
+
+            await callback_query.answer()
 
     elif item["type"] == "tv-series":
         if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
@@ -221,14 +242,36 @@ async def display_history(
 
         keyboards = create_random_pagination_kb(page, total_count)
 
-        await callback_query.message.edit_media(
-            media=types.InputMediaPhoto(
-                media=url,
-                caption=caption,
-            ),
-            reply_markup=keyboards,
-        )
-        await callback_query.answer()
+        try:
+            await callback_query.message.edit_media(
+                media=types.InputMediaPhoto(
+                    media=url,
+                    caption=caption,
+                ),
+                reply_markup=keyboards,
+            )
+
+            await callback_query.answer()
+
+        except:
+            caption = f"{markdown.hbold(name)}\n"\
+                      f"Жанры: {genres}\n"\
+                      f"Рейтинг: {rating}\n"\
+                      f"Релиз: {release_years}\n"\
+                      f"Продолжительность серии: {series_length}\n"\
+                      f"Страна: {countries}\n"\
+                      f"Возрастной рейтинг: {age_rating}\n"\
+                      f"Описание: None"\
+                      
+            await callback_query.message.edit_media(
+                media=types.InputMediaPhoto(
+                    media=url,
+                    caption=caption,
+                ),
+                reply_markup=keyboards,
+            )
+            
+            await callback_query.answer()
 
 
 @router.callback_query(lambda c: c.data == "rand_noop")

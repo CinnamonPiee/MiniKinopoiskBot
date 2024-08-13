@@ -15,7 +15,7 @@ from keyboards.inline.create_random_pagination_kb import create_random_paginatio
 from database.orm.film import add_film, film_exists
 from database.orm.serial import add_serial, serial_exists
 
-from api.random_history_movie_serial_search import random_history_movie_serial_search
+from api.random_custom_movie_serial_search import random_custom_movie_serial_search
 
 from utils.validations import (
     valid_url,
@@ -44,7 +44,7 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
     random_data = []
 
     for _ in range(int(data["count"])):
-        some_data = random_history_movie_serial_search(type_choice=data["type_choice"])
+        some_data = random_custom_movie_serial_search(type_choice=data["type_choice"])
         if isinstance(some_data, dict):
             random_data.append(some_data)
         elif isinstance(some_data, str):
@@ -127,21 +127,39 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
                 picture=url
             )
 
-        caption=f"{markdown.hbold(name)}\n"\
-                f"Жанры: {genres}\n"\
-                f"Рейтинг: {rating}\n"\
-                f"Год: {year}\n"\
-                f"Продолжительность фильма: {movie_length}\n"\
-                f"Страна: {countries}\n"\
-                f"Возрастной рейтинг: {age_rating}\n"\
-                f"Описание: {description}"\
-
-        await message.bot.send_photo(
-            chat_id=message.chat.id,
-            photo=url,
-            caption=caption,
-            reply_markup=keyboards,
-        )
+        caption = f"{markdown.hbold(name)}\n"\
+                  f"Жанры: {genres}\n"\
+                  f"Рейтинг: {rating}\n"\
+                  f"Год: {year}\n"\
+                  f"Продолжительность фильма: {movie_length}\n"\
+                  f"Страна: {countries}\n"\
+                  f"Возрастной рейтинг: {age_rating}\n"\
+                  f"Описание: {description}"\
+        
+        try:
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=caption,
+                reply_markup=keyboards,
+            )
+            
+        except:
+            caption = f"{markdown.hbold(name)}\n"\
+                      f"Жанры: {genres}\n"\
+                      f"Рейтинг: {rating}\n"\
+                      f"Год: {year}\n"\
+                      f"Продолжительность фильма: {movie_length}\n"\
+                      f"Страна: {countries}\n"\
+                      f"Возрастной рейтинг: {age_rating}\n"\
+                      f"Описание: None"
+                      
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=caption,
+                reply_markup=keyboards,
+            )
 
     elif item["type"] == "tv-series":
         if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
@@ -215,13 +233,31 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
                 f"Страна: {countries}\n"\
                 f"Возрастной рейтинг: {age_rating}\n"\
                 f"Описание: {description}"\
-                
-        await message.bot.send_photo(
-            chat_id=message.chat.id,
-            photo=url,
-            caption=caption,
-            reply_markup=keyboards,
-        )
+
+        try:        
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=caption,
+                reply_markup=keyboards,
+            )
+
+        except:
+            caption = f"{markdown.hbold(name)}\n"\
+                      f"Жанры: {genres}\n"\
+                      f"Рейтинг: {rating}\n"\
+                      f"Релиз: {release_years}\n"\
+                      f"Продолжительность серии: {series_length}\n"\
+                      f"Страна: {countries}\n"\
+                      f"Возрастной рейтинг: {age_rating}\n"\
+                      f"Описание: {description}"\
+                      
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=caption,
+                reply_markup=keyboards,
+            )
 
 
 @router.message(RandomFilmSerial.criteries_yes_or_no, F.text == "Да")

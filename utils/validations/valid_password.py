@@ -3,8 +3,8 @@ def valid_password(password: str) -> str | None:
         for i in password:
             if i.isdigit():
                 second_str = password
-                if not second_str.lower() == password:
+                if second_str.lower() != password:
                     return password
                 return None
-            return None
+        return None
     return None

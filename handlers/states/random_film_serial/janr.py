@@ -17,7 +17,7 @@ router = Router(name=__name__)
 async def random_film_serial_janr_back(message: Message, state: FSMContext):
     data = state.get_data()
 
-    if data["type_choice"] == "Фильмы":
+    if data["type_choice"] == "movie":
         await state.set_state(RandomFilmSerial.movie_length)
         await message.answer(
             text="Напишите пожалуйста продолжительность фильма или отрывок за который хотите осуществить поиск, например (120, 100-160)."
@@ -26,7 +26,7 @@ async def random_film_serial_janr_back(message: Message, state: FSMContext):
             reply_markup=back_or_skip_kb(),
         )
 
-    elif data["type_choice"] == "Сериалы":
+    elif data["type_choice"] == "tv-series":
         await state.set_state(RandomFilmSerial.series_length)
         await message.answer(
             text="Напишите пожалуйста продолжительность серии или отрывок за который хотите осуществить поиск, например (40, 30-60)."
@@ -35,7 +35,7 @@ async def random_film_serial_janr_back(message: Message, state: FSMContext):
             reply_markup=back_or_skip_kb(),
         )
 
-    elif data["type_choice"] == "Фильмы и сериалы":
+    elif data["type_choice"] == None:
         await state.set_state(RandomFilmSerial.age_rating)
         await message.answer(
             text="Напишите пожалуйста возрастной рейтинг или промежуток за который хотите осуществить поиск, например (6, "

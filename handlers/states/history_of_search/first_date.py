@@ -59,19 +59,34 @@ async def first_date_skip(message: Message, state: FSMContext):
             
                 keyboards = create_history_pagination_kb(page, total_count)
 
-                await message.bot.send_photo(
-                    chat_id=message.chat.id,
-                    photo=photo,
-                    caption=f"{film.name}\n"
-                            f"Жанры: {film.janr}\n"
-                            f"Рейтинг: {film.rating}\n"
-                            f"Год: {film.year}\n"
-                            f"Продолжительность фильма: {film.movie_length}\n"
-                            f"Страна: {film.country}\n"
-                            f"Возрастной рейтинг: {film.age_rating}\n"
-                            f"Описание: {film.description}",
-                    reply_markup=keyboards,
-                )
+                try:
+                    await message.bot.send_photo(
+                        chat_id=message.chat.id,
+                        photo=photo,
+                        caption=f"{film.name}\n"
+                                f"Жанры: {film.janr}\n"
+                                f"Рейтинг: {film.rating}\n"
+                                f"Год: {film.year}\n"
+                                f"Продолжительность фильма: {film.movie_length}\n"
+                                f"Страна: {film.country}\n"
+                                f"Возрастной рейтинг: {film.age_rating}\n"
+                                f"Описание: {film.description}",
+                        reply_markup=keyboards,
+                    )
+                except:
+                    await message.bot.send_photo(
+                        chat_id=message.chat.id,
+                        photo=photo,
+                        caption=f"{film.name}\n"
+                                f"Жанры: {film.janr}\n"
+                                f"Рейтинг: {film.rating}\n"
+                                f"Год: {film.year}\n"
+                                f"Продолжительность фильма: {film.movie_length}\n"
+                                f"Страна: {film.country}\n"
+                                f"Возрастной рейтинг: {film.age_rating}\n"
+                                f"Описание: None",
+                        reply_markup=keyboards,
+                    )
             else:
                 await message.bot.send_message(
                     message.chat.id,
@@ -97,19 +112,34 @@ async def first_date_skip(message: Message, state: FSMContext):
                     
                 keyboards = create_history_pagination_kb(page, total_count)
 
-                await message.bot.send_photo(
-                    chat_id=message.chat.id,
-                    photo=photo,
-                    caption=f"{serial.name}\n"
-                            f"Жанры: {serial.janr}\n"
-                            f"Рейтинг: {serial.rating}\n"
-                            f"Релиз: {serial.release_year}\n"
-                            f"Продолжительность серии: {serial.series_length}\n"
-                            f"Страна: {serial.country}\n"
-                            f"Возрастной рейтинг: {serial.age_rating}\n"
-                            f"Описание: {serial.description}",
-                    reply_markup=keyboards
-                )
+                try:
+                    await message.bot.send_photo(
+                        chat_id=message.chat.id,
+                        photo=photo,
+                        caption=f"{serial.name}\n"
+                                f"Жанры: {serial.janr}\n"
+                                f"Рейтинг: {serial.rating}\n"
+                                f"Релиз: {serial.release_year}\n"
+                                f"Продолжительность серии: {serial.series_length}\n"
+                                f"Страна: {serial.country}\n"
+                                f"Возрастной рейтинг: {serial.age_rating}\n"
+                                f"Описание: {serial.description}",
+                        reply_markup=keyboards
+                    )
+                except:
+                    await message.bot.send_photo(
+                        chat_id=message.chat.id,
+                        photo=photo,
+                        caption=f"{serial.name}\n"
+                                f"Жанры: {serial.janr}\n"
+                                f"Рейтинг: {serial.rating}\n"
+                                f"Релиз: {serial.release_year}\n"
+                                f"Продолжительность серии: {serial.series_length}\n"
+                                f"Страна: {serial.country}\n"
+                                f"Возрастной рейтинг: {serial.age_rating}\n"
+                                f"Описание: None",
+                        reply_markup=keyboards
+                    )
             else:
                 await message.bot.send_message(
                     message.chat.id,
@@ -137,19 +167,34 @@ async def first_date_skip(message: Message, state: FSMContext):
                     
                         keyboards = create_history_pagination_kb(page, total_count)
 
-                        await message.bot.send_photo(
-                            chat_id=message.chat.id,
-                            photo=photo,
-                            caption=f"{film.name}\n"
-                                    f"Жанры: {film.janr}\n"
-                                    f"Рейтинг: {film.rating}\n"
-                                    f"Год: {film.year}\n"
-                                    f"Продолжительность фильма: {film.movie_length}\n"
-                                    f"Страна: {film.country}\n"
-                                    f"Возрастной рейтинг: {film.age_rating}\n"
-                                    f"Описание: {film.description}",
-                            reply_markup=keyboards,
-                        )
+                        try:
+                            await message.bot.send_photo(
+                                chat_id=message.chat.id,
+                                photo=photo,
+                                caption=f"{film.name}\n"
+                                        f"Жанры: {film.janr}\n"
+                                        f"Рейтинг: {film.rating}\n"
+                                        f"Год: {film.year}\n"
+                                        f"Продолжительность фильма: {film.movie_length}\n"
+                                        f"Страна: {film.country}\n"
+                                        f"Возрастной рейтинг: {film.age_rating}\n"
+                                        f"Описание: {film.description}",
+                                reply_markup=keyboards,
+                            )
+                        except:
+                            await message.bot.send_photo(
+                                chat_id=message.chat.id,
+                                photo=photo,
+                                caption=f"{film.name}\n"
+                                        f"Жанры: {film.janr}\n"
+                                        f"Рейтинг: {film.rating}\n"
+                                        f"Год: {film.year}\n"
+                                        f"Продолжительность фильма: {film.movie_length}\n"
+                                        f"Страна: {film.country}\n"
+                                        f"Возрастной рейтинг: {film.age_rating}\n"
+                                        f"Описание: None",
+                                reply_markup=keyboards,
+                            )
 
                     elif isinstance(item, HistorySerial):
                         serial = item.serial
@@ -163,19 +208,34 @@ async def first_date_skip(message: Message, state: FSMContext):
                             
                         keyboards = create_history_pagination_kb(page, total_count)
 
-                        await message.bot.send_photo(
-                            chat_id=message.chat.id,
-                            photo=photo,
-                            caption=f"{serial.name}\n"
-                                    f"Жанры: {serial.janr}\n"
-                                    f"Рейтинг: {serial.rating}\n"
-                                    f"Релиз: {serial.release_year}\n"
-                                    f"Продолжительность серии: {serial.series_length}\n"
-                                    f"Страна: {serial.country}\n"
-                                    f"Возрастной рейтинг: {serial.age_rating}\n"
-                                    f"Описание: {serial.description}",
-                            reply_markup=keyboards
-                        )
+                        try:
+                            await message.bot.send_photo(
+                                chat_id=message.chat.id,
+                                photo=photo,
+                                caption=f"{serial.name}\n"
+                                        f"Жанры: {serial.janr}\n"
+                                        f"Рейтинг: {serial.rating}\n"
+                                        f"Релиз: {serial.release_year}\n"
+                                        f"Продолжительность серии: {serial.series_length}\n"
+                                        f"Страна: {serial.country}\n"
+                                        f"Возрастной рейтинг: {serial.age_rating}\n"
+                                        f"Описание: {serial.description}",
+                                reply_markup=keyboards
+                            )
+                        except:
+                            await message.bot.send_photo(
+                                chat_id=message.chat.id,
+                                photo=photo,
+                                caption=f"{serial.name}\n"
+                                        f"Жанры: {serial.janr}\n"
+                                        f"Рейтинг: {serial.rating}\n"
+                                        f"Релиз: {serial.release_year}\n"
+                                        f"Продолжительность серии: {serial.series_length}\n"
+                                        f"Страна: {serial.country}\n"
+                                        f"Возрастной рейтинг: {serial.age_rating}\n"
+                                        f"Описание: None",
+                                reply_markup=keyboards
+                            )
             else:
                 await message.bot.send_message(
                     message.chat.id,

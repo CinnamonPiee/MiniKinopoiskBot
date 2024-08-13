@@ -23,7 +23,6 @@ router = Router(name=__name__)
 
 @router.callback_query(lambda c: c.data and (c.data.startswith('page_') or c.data == 'main_menu'))
 async def change_history_page(callback_query: types.CallbackQuery, state: FSMContext):
-    await callback_query.answer()
     data = await state.get_data()
 
     page = int(callback_query.data.split('_')[1]) if callback_query.data.startswith('page_') else 0
@@ -156,11 +155,16 @@ async def display_history(callback_query, history, total_count, page):
             ),
             reply_markup=keyboards
         )
+
+        await callback_query.answer()
+
     else:
         await callback_query.message.answer(
             text="История поиска пуста.",
             reply_markup=main_kb(),
         )
+
+        await callback_query.answer()
 
 
 @router.callback_query(lambda c: c.data == "noop")

@@ -17,7 +17,7 @@ from utils.validations import (
     valid_country
 )
 
-from api.random_history_movie_serial_search import random_history_movie_serial_search
+from api.random_custom_movie_serial_search import random_custom_movie_serial_search
 
 from database.orm.film import add_film, film_exists
 from database.orm.serial import add_serial, serial_exists
@@ -45,7 +45,7 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
     random_data = []
 
     for _ in range(int(data["count"])):
-        some_data = random_history_movie_serial_search(
+        some_data = random_custom_movie_serial_search(
             type_choice=data["type_choice"],
             year=data["year"],
             rating=data["rating"],
@@ -146,13 +146,31 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
                   f"Страна: {countries}\n"\
                   f"Возрастной рейтинг: {age_rating}\n"\
                   f"Описание: {description}"\
+                      
+        try:
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=caption,
+                reply_markup=keyboards,
+            )
 
-        await message.bot.send_photo(
-            chat_id=message.chat.id,
-            photo=url,
-            caption=caption,
-            reply_markup=keyboards,
-        )
+        except:
+            caption = f"{markdown.hbold(name)}\n"\
+                      f"Жанры: {genres}\n"\
+                      f"Рейтинг: {rating}\n"\
+                      f"Год: {year}\n"\
+                      f"Продолжительность фильма: {movie_length}\n"\
+                      f"Страна: {countries}\n"\
+                      f"Возрастной рейтинг: {age_rating}\n"\
+                      f"Описание: None"
+
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=caption,
+                reply_markup=keyboards,
+            )
 
     elif item["type"] == "tv-series":
         if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
@@ -226,13 +244,31 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
                   f"Страна: {countries}\n"\
                   f"Возрастной рейтинг: {age_rating}\n"\
                   f"Описание: {description}"\
+                      
+        try:
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=caption,
+                reply_markup=keyboards,
+            )
 
-        await message.bot.send_photo(
-            chat_id=message.chat.id,
-            photo=url,
-            caption=caption,
-            reply_markup=keyboards,
-        )
+        except:
+            caption = f"{markdown.hbold(name)}\n"\
+                      f"Жанры: {genres}\n"\
+                      f"Рейтинг: {rating}\n"\
+                      f"Релиз: {release_years}\n"\
+                      f"Продолжительность серии: {series_length}\n"\
+                      f"Страна: {countries}\n"\
+                      f"Возрастной рейтинг: {age_rating}\n"\
+                      f"Описание: {description}"\
+
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=caption,
+                reply_markup=keyboards,
+            )
 
 
 @router.message(RandomFilmSerial.country, F.text.cast(valid_country.valid_country).as_("country"))
@@ -243,7 +279,7 @@ async def random_film_serial_country(message: Message, state: FSMContext):
     random_data = []
 
     for _ in range(int(data["count"])):
-        some_data = random_history_movie_serial_search(
+        some_data = random_custom_movie_serial_search(
             type_choice=data["type_choice"],
             year=data["year"],
             rating=data["rating"],
@@ -276,7 +312,8 @@ async def random_film_serial_country(message: Message, state: FSMContext):
             url = item["poster"]["previewUrl"]
         else:
             url = FSInputFile(
-                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg")
+                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+            )  
         if item["name"] == None:
             name = ""
         else:
@@ -344,12 +381,30 @@ async def random_film_serial_country(message: Message, state: FSMContext):
                   f"Возрастной рейтинг: {age_rating}\n"\
                   f"Описание: {description}"\
 
-        await message.bot.send_photo(
-            chat_id=message.chat.id,
-            photo=url,
-            caption=caption,
-            reply_markup=keyboards,
-        )
+        try:
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=caption,
+                reply_markup=keyboards,
+            )
+
+        except:
+            caption = f"{markdown.hbold(name)}\n"\
+                      f"Жанры: {genres}\n"\
+                      f"Рейтинг: {rating}\n"\
+                      f"Год: {year}\n"\
+                      f"Продолжительность фильма: {movie_length}\n"\
+                      f"Страна: {countries}\n"\
+                      f"Возрастной рейтинг: {age_rating}\n"\
+                      f"Описание: None"
+
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=caption,
+                reply_markup=keyboards,
+            )
 
     elif item["type"] == "tv-series":
         if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
@@ -424,13 +479,30 @@ async def random_film_serial_country(message: Message, state: FSMContext):
                   f"Возрастной рейтинг: {age_rating}\n"\
                   f"Описание: {description}"\
 
-        await message.bot.send_photo(
-            chat_id=message.chat.id,
-            photo=url,
-            caption=caption,
-            reply_markup=keyboards,
-        )
+        try:
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=caption,
+                reply_markup=keyboards,
+            )
 
+        except:
+            caption = f"{markdown.hbold(name)}\n"\
+                      f"Жанры: {genres}\n"\
+                      f"Рейтинг: {rating}\n"\
+                      f"Релиз: {release_years}\n"\
+                      f"Продолжительность серии: {series_length}\n"\
+                      f"Страна: {countries}\n"\
+                      f"Возрастной рейтинг: {age_rating}\n"\
+                      f"Описание: {description}"\
+
+            await message.bot.send_photo(
+                chat_id=message.chat.id,
+                photo=url,
+                caption=caption,
+                reply_markup=keyboards,
+            )
 
 @router.message(RandomFilmSerial.country)
 async def random_film_serial_country_none(message: Message):

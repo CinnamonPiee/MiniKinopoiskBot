@@ -10,7 +10,7 @@ from config_data.config import settings
 from typing import Optional
 
 
-def random_history_movie_serial_search(
+def random_custom_movie_serial_search(
         type_choice: Optional[str] = None,
         year: Optional[str] = None,
         rating: Optional[str] = None,

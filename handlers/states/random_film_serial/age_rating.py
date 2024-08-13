@@ -26,7 +26,7 @@ async def random_film_serial_age_rating_back(message: Message, state: FSMContext
 @router.message(RandomFilmSerial.age_rating, F.text == "Пропустить")
 async def random_film_serial_age_rating_skip(message: Message, state: FSMContext):
     data = state.get_data()
-    if data["type_choice"] == "Сериалы":
+    if data["type_choice"] == "tv-series":
         await state.set_state(RandomFilmSerial.series_length)
         await state.update_data(age_rating=None)
         await message.answer(
@@ -36,7 +36,7 @@ async def random_film_serial_age_rating_skip(message: Message, state: FSMContext
             reply_markup=back_or_skip_kb(),
         )
 
-    elif data["type_choice"] == "Фильмы":
+    elif data["type_choice"] == "movie":
         await state.set_state(RandomFilmSerial.movie_length)
         await state.update_data(age_rating=None)
         await message.answer(
@@ -46,7 +46,7 @@ async def random_film_serial_age_rating_skip(message: Message, state: FSMContext
             reply_markup=back_or_skip_kb(),
         )
 
-    elif data["type_choice"] == "Фильмы и сериалы":
+    elif data["type_choice"] == None:
         await state.set_state(RandomFilmSerial.janr)
         await state.update_data(age_rating=None)
         await message.answer(
@@ -61,7 +61,7 @@ async def random_film_serial_age_rating_skip(message: Message, state: FSMContext
 async def random_film_serial_age_rating(message: Message, state: FSMContext):
     data = state.get_data()
     
-    if data["type_choice"] == "Сериалы":
+    if data["type_choice"] == "tv-series":
         await state.set_state(RandomFilmSerial.series_length)
         await state.update_data(age_rating=message.text)
         await message.answer(
@@ -71,7 +71,7 @@ async def random_film_serial_age_rating(message: Message, state: FSMContext):
             reply_markup=back_or_skip_kb(),
         )
 
-    elif data["type_choice"] == "Фильмы":
+    elif data["type_choice"] == "movie":
         await state.set_state(RandomFilmSerial.movie_length)
         await state.update_data(age_rating=message.text)
         await message.answer(
@@ -81,7 +81,7 @@ async def random_film_serial_age_rating(message: Message, state: FSMContext):
             reply_markup=back_or_skip_kb(),
         )
 
-    elif data["type_choice"] == "Фильмы и сериалы":
+    elif data["type_choice"] == None:
         await state.set_state(RandomFilmSerial.janr)
         await state.update_data(age_rating=message.text)
         await message.answer(

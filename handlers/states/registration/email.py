@@ -43,7 +43,7 @@ async def registration_email_handler_back(message: Message, state: FSMContext):
         )
 
 
-@router.message(Registration.email, F.text.cast(valid_email.valid.email).as_("email"))
+@router.message(Registration.email, F.text.cast(valid_email.valid_email).as_("email"))
 async def registration_email_handler(message: Message, state: FSMContext):
     data = await state.get_data()
 
