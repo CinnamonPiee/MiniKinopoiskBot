@@ -9,11 +9,9 @@ from states.custom_searching import CustomSearching
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 from keyboards.inline.create_custom_pagination_kb import create_custom_pagination_kb
 
-from utils.validations import (
-    valid_movie_length,
-    valid_url,
-    valid_user_and_film_id_in_history
-)
+from utils.validations.valid_movie_length import valid_movie_length
+from utils.validations.valid_url import valid_url
+from utils.validations.valid_user_and_film_id_in_history import valid_user_and_film_id_in_history
 
 from api.random_custom_movie_serial_search import random_custom_movie_serial_search
 
@@ -76,8 +74,11 @@ async def custom_searching_movie_length_skip(message: Message, state: FSMContext
         total_count = len(random_data)
         keyboards = create_custom_pagination_kb(page, total_count)
 
+        # TODO доделать присвоение через функцию
+        url, name, genres
 
-        if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
+
+        if item["poster"]["previewUrl"] is not None and valid_url(item["poster"]["previewUrl"]):
             url = item["poster"]["previewUrl"]
         else:
             url = FSInputFile(
@@ -121,10 +122,7 @@ async def custom_searching_movie_length_skip(message: Message, state: FSMContext
             description = item["shortDescription"]
 
         if await film_exists(name):
-            await valid_user_and_film_id_in_history.valid_user_and_film_id_in_history(
-                name,
-                telegram_id=message.from_user.id
-            )
+            await valid_user_and_film_id_in_history(name, telegram_id=message.from_user.id)
 
         else:
             await add_film(
@@ -185,7 +183,7 @@ async def custom_searching_movie_length_skip(message: Message, state: FSMContext
         )
 
 
-@router.message(CustomSearching.movie_length, F.text.cast(valid_movie_length.valid_movie_length).as_("movie_length"))
+@router.message(CustomSearching.movie_length, F.text.cast(valid_movie_length).as_("movie_length"))
 async def custom_searching_movie_length(message: Message, state: FSMContext):
     await state.update_data(movie_length=message.text)
     data = await state.get_data()
@@ -228,7 +226,7 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
         keyboards = create_custom_pagination_kb(page, total_count)
 
 
-        if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
+        if item["poster"]["previewUrl"] is not None and valid_url(item["poster"]["previewUrl"]):
             url = item["poster"]["previewUrl"]
         else:
             url = FSInputFile(
@@ -272,10 +270,7 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
             description = item["shortDescription"]
 
         if await film_exists(name):
-            await valid_user_and_film_id_in_history.valid_user_and_film_id_in_history(
-                name,
-                telegram_id=message.from_user.id
-            )
+            await valid_user_and_film_id_in_history(name, telegram_id=message.from_user.id)
 
         else:
             await add_film(

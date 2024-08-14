@@ -7,7 +7,7 @@ from states.custom_searching import CustomSearching
 
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 
-from utils.validations import valid_age_rating
+from utils.validations.valid_age_rating import valid_age_rating
 
 
 router = Router(name=__name__)
@@ -36,7 +36,7 @@ async def custom_searching_age_rating_skip(message: Message, state: FSMContext):
     )
 
 
-@router.message(CustomSearching.age_rating, F.text.cast(valid_age_rating.valid_age_rating).as_("age_rating"))
+@router.message(CustomSearching.age_rating, F.text.cast(valid_age_rating).as_("age_rating"))
 async def custom_searching_age_rating(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.country)
     await state.update_data(age_rating=message.text)

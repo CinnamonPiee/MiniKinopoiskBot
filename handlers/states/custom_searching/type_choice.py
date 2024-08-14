@@ -10,8 +10,7 @@ from keyboards.reply.history_search_kb import history_search_kb
 from keyboards.reply.back_kb import back_kb
 from keyboards.reply.choose_criteries_kb import choose_criteries_kb
 
-from utils.validations import valid_choose_in_type
-
+from utils.validations.valid_choose_in_type import valid_choose_in_type
 
 
 router = Router(name=__name__)
@@ -26,27 +25,21 @@ async def custom_searching_type_choice_back(message: Message, state: FSMContext)
     )
 
 
-@router.message(CustomSearching.type_choice, F.text.cast(valid_choose_in_type.valid_choose_in_type).as_("type_choice"))
+@router.message(CustomSearching.type_choice, F.text.cast(valid_choose_in_type).as_("type_choice"))
 async def custom_searching_type_choice(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.count)
+
     if message.text == "Фильмы":
         await state.update_data(type_choice="movie")
-        await message.answer(
-            text="Укажите количество которое хотите получить: ",
-            reply_markup=back_kb(),
-        )
     elif message.text == "Сериалы":
         await state.update_data(type_choice="tv-series")
-        await message.answer(
-            text="Укажите количество которое хотите получить: ",
-            reply_markup=back_kb(),
-        )
     elif message.text == "Фильмы и сериалы":
         await state.update_data(type_choice=None)
-        await message.answer(
-            text="Укажите количество которое хотите получить: ",
-            reply_markup=back_kb(),
-        )
+
+    await message.answer(
+        text="Укажите количество которое хотите получить: ",
+        reply_markup=back_kb(),
+    )
 
 
 @router.message(CustomSearching.type_choice)

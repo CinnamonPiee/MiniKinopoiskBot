@@ -7,7 +7,7 @@ from states.custom_searching import CustomSearching
 
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 
-from utils.validations import (valid_country)
+from utils.validations.valid_country import valid_country
 
 
 router = Router(name=__name__)
@@ -30,7 +30,7 @@ async def custom_searching_country_skip(message: Message, state: FSMContext):
     await state.update_data(country=None)
     data = state.get_data()
 
-    if data["type_choice"] == "movie":
+    if data["type_choice"] == "movie" or data["type_choice"] == None:
         await state.set_state(CustomSearching.movie_length)
         await message.answer(
             text="Напишите пожалуйста продолжительность фильма или отрывок за который хотите осуществить поиск, например (120, 100-160)."
@@ -48,22 +48,13 @@ async def custom_searching_country_skip(message: Message, state: FSMContext):
             reply_markup=back_or_skip_kb(),
         )
 
-    elif data["type_choice"] == None:
-        await state.set_state(CustomSearching.movie_length)
-        await message.answer(
-            text="Напишите пожалуйста продолжительность фильма или отрывок за который хотите осуществить поиск, например (120, 100-160)."
-            "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
-            "учитываться.",
-            reply_markup=back_or_skip_kb(),
-        )
 
-
-@router.message(CustomSearching.country, F.text.cast(valid_country.valid_country).as_("country"))
+@router.message(CustomSearching.country, F.text.cast(valid_country).as_("country"))
 async def custom_searching_country(message: Message, state: FSMContext):
     await state.update_data(country=message.text)
     data = state.get_data()
 
-    if data["type_choice"] == "movie":
+    if data["type_choice"] == "movie" or data["type_choice"] == None:
         await state.set_state(CustomSearching.movie_length)
         await message.answer(
             text="Напишите пожалуйста продолжительность фильма или отрывок за который хотите осуществить поиск, например (120, 100-160)."
@@ -76,15 +67,6 @@ async def custom_searching_country(message: Message, state: FSMContext):
         await state.set_state(CustomSearching.series_length)
         await message.answer(
             text="Напишите пожалуйста продолжительность серии или отрывок за который хотите осуществить поиск, например (40, 30-60)."
-            "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
-            "учитываться.",
-            reply_markup=back_or_skip_kb(),
-        )
-
-    elif data["type_choice"] == None:
-        await state.set_state(CustomSearching.movie_length)
-        await message.answer(
-            text="Напишите пожалуйста продолжительность фильма или отрывок за который хотите осуществить поиск, например (120, 100-160)."
             "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
             "учитываться.",
             reply_markup=back_or_skip_kb(),
