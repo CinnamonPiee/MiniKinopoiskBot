@@ -24,22 +24,14 @@ async def custom_searching_rating_back(message: Message, state: FSMContext):
     )
 
 
-@router.message(CustomSearching.rating, F.text == "Пропустить")
+@router.message(CustomSearching.rating, 
+    F.text == "Пропустить" or F.text.cast(valid_rating).as_("rating"))
 async def custom_searching_rating_skip(message: Message, state: FSMContext):
-    await state.update_data(rating=None)
-    await state.set_state(CustomSearching.age_rating)
-    await message.answer(
-        text="Напишите пожалуйста возрастной рейтинг или промежуток за который хотите осуществить поиск, например (6, "
-             "12-18)."
-             "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
-             "учитываться.",
-        reply_markup=back_or_skip_kb(),
-    )
+    if message.text == "Пропустить":
+        await state.update_data(rating=None)
+    else:
+        await state.update_data(rating=message.text)
 
-
-@router.message(CustomSearching.rating, F.text.cast(valid_rating).as_("rating"))
-async def custom_searching_rating(message: Message, state: FSMContext):
-    await state.update_data(rating=message.text)
     await state.set_state(CustomSearching.age_rating)
     await message.answer(
         text="Напишите пожалуйста возрастной рейтинг или промежуток за который хотите осуществить поиск, например (6, "

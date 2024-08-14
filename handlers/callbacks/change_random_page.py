@@ -55,7 +55,7 @@ async def display_history(
         return
     
     item = random_data[page]
-
+# TODO # Остановился тут, надо изменить переменные
     if item["type"] == "movie":
         if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
             url = item["poster"]["previewUrl"]

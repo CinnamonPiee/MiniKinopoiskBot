@@ -24,22 +24,15 @@ async def custom_searching_age_rating_back(message: Message, state: FSMContext):
     )
 
 
-@router.message(CustomSearching.age_rating, F.text == "Пропустить")
+@router.message(CustomSearching.age_rating, 
+    F.text == "Пропустить" or F.text.cast(valid_age_rating).as_("age_rating"))
 async def custom_searching_age_rating_skip(message: Message, state: FSMContext):
+    if message.text == "Пропустить":
+        await state.update_data(age_rating=None)
+    else:
+        await state.update_data(age_rating=message.text)
+    
     await state.set_state(CustomSearching.country)
-    await state.update_data(age_rating=None)
-    await message.answer(
-        text="Напишите пожалуйста страну(ы), если хотите несколько старн, то напишите их через пробел, например(США, Индия Канада)."
-             "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
-             "учитываться.",
-        reply_markup=back_or_skip_kb(),
-    )
-
-
-@router.message(CustomSearching.age_rating, F.text.cast(valid_age_rating).as_("age_rating"))
-async def custom_searching_age_rating(message: Message, state: FSMContext):
-    await state.set_state(CustomSearching.country)
-    await state.update_data(age_rating=message.text)
     await message.answer(
         text="Напишите пожалуйста страну(ы), если хотите несколько старн, то напишите их через пробел, например(США, Индия Канада)."
              "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"

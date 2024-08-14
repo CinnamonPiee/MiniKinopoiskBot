@@ -1,4 +1,9 @@
-def get_film_data(item):
+from utils.validations.valid_url import valid_url
+
+from aiogram.types import FSInputFile
+
+
+def get_film_data(item: dict):
     if item["poster"]["previewUrl"] is not None and valid_url(item["poster"]["previewUrl"]):
         url = item["poster"]["previewUrl"]
     else:
@@ -41,3 +46,5 @@ def get_film_data(item):
             description = item["description"]
     else:
         description = item["shortDescription"]
+
+    return url, name, genres, rating, year, movie_length, countries, age_rating, description
