@@ -15,7 +15,7 @@ from utils.validations.valid_choose_in_type import valid_choose_in_type
 router = Router(name=__name__)
 
 
-@router.message(F.text == "История поиска")
+@router.message(F.text == "🕰 История поиска 🗒")
 async def choose_film_serial_all_start(message: Message, state: FSMContext):
     await state.set_state(HistoryOfSearch.choose_film_serial_all)
     await message.answer(

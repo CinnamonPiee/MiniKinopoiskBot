@@ -2,6 +2,7 @@ from aiogram import Router, F
 
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
+from aiogram.utils import markdown
 
 from keyboards.reply.back_kb import back_kb
 from keyboards.reply.main_kb import main_kb
@@ -21,7 +22,7 @@ router = Router(name=__name__)
 async def registration_phone_number_handler_back(message: Message, state: FSMContext):
     await state.set_state(Registration.email)
     await message.answer(
-        text="Напишите пожалуйста вашу почту: ",
+        text="Напишите вашу почту.",
         reply_markup=back_kb(),
     )
 
@@ -31,7 +32,8 @@ async def registration_phone_number_handler_back(message: Message, state: FSMCon
 async def registration_phone_number_handler(message: Message, state: FSMContext):
     if await phone_number_exists(message.text):
         await message.answer(
-            text="Этот номер телефона уже зарегистрирован. Пожалуйста, используйте другой номер телефона.",
+            text="Этот номер телефона уже используется.\n"
+                 "Используйте другой номер телефона.",
             reply_markup=back_or_number_kb(),
             parse_mode=None,
         )
@@ -52,7 +54,9 @@ async def registration_phone_number_handler(message: Message, state: FSMContext)
     )
     
     await message.answer(
-        text="Спасибо за регистрацию в боте. Теперь вы можете пользоваться всем функционалом бота.",
+        text=f"Вы успешно зарегистрированы!\n"
+             f"Для знакомства с ботом рекомендуется использовать\n"
+             f"команду {markdown.hbold("/help")}.",
         reply_markup=main_kb(),
         parse_mode=None,
     )
@@ -63,7 +67,10 @@ async def registration_phone_number_handler(message: Message, state: FSMContext)
 @router.message(Registration.phone_number)
 async def registration_phone_number_handler_none(message: Message):
     await message.answer(
-        text="Простите я не понимаю. Нажмите на кнопку <Поделиться номером> для отправки вашего номера телефона.",
+        text="Простите я не понимаю.\n"
+             "Нажмите на кнопку <Поделиться номером>\n"
+             "для отправки вашего номера телефона.\n"
+             "⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️",
         reply_markup=back_or_number_kb(),
         parse_mode=None,
     )

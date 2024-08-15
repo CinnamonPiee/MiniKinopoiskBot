@@ -4,7 +4,7 @@ import datetime
 
 def back_or_today_kb() -> ReplyKeyboardMarkup:
     button1 = KeyboardButton(text=f"{datetime.date.today()}")
-    button2 = KeyboardButton(text="Назад")
+    button2 = KeyboardButton(text="🚫 Назад 🚫")
 
     keyboard = ReplyKeyboardMarkup(
         keyboard=[[button1], [button2]],

@@ -24,14 +24,14 @@ async def registration_password_back(message: Message, state: FSMContext):
     if data["login_registration"] == "Вход":
         await state.set_state(Registration.email)
         await message.answer(
-            text="Введите вашу поту: ",
+            text="Введите вашу поту. ",
             reply_markup=back_kb(),
         )
 
     elif data["login_registration"] == "Регистрация":
         await state.set_state(Registration.name)
         await message.answer(
-            text="Напишите пожалуйста ваш Никнейм: ",
+            text="Напишите ваш Никнейм. ",
             reply_markup=back_kb(),
         )
 
@@ -60,7 +60,7 @@ async def registration_password(message: Message, state: FSMContext):
         await state.set_state(Registration.email)
         await state.update_data(password=message.text)
         await message.answer(
-            text="Введите вашу почту: ",
+            text="Введите вашу почту. ",
             reply_markup=back_kb(),
         )
 
@@ -68,11 +68,10 @@ async def registration_password(message: Message, state: FSMContext):
 @router.message(Registration.password)
 async def registration_password_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понял. Введите пожалуйста корректный пароль: "
-             "1. Содержит только латинские буквы"
-             "2. Не менее 8 символов"
-             "3. Имеет хотя бы одну заглавную букву и одну цифру"
-             "Вы так же можете сгенерировать безопасный пароль нажав "
-             "на кнопку 'Сгенерировать пароль' ниже.",
+        text="Простите, я вас не понял.\n"
+             "Введите пожалуйста корректный пароль:\n"
+             "1. Содержит только латинские буквы\n"
+             "2. Не менее 8 символов\n"
+             "3. Имеет хотя бы одну заглавную букву и одну цифру",
         reply_markup=back_kb(),
     )

@@ -5,7 +5,7 @@ def history_search_kb() -> ReplyKeyboardMarkup:
     button1 = KeyboardButton(text="Фильмы и сериалы")
     button2 = KeyboardButton(text="Сериалы")
     button3 = KeyboardButton(text="Фильмы")
-    button4 = KeyboardButton(text="Назад")
+    button4 = KeyboardButton(text="🚫 Назад 🚫")
 
     keyboard = ReplyKeyboardMarkup(
         keyboard=[[button1],

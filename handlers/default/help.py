@@ -11,5 +11,5 @@ router = Router(name=__name__)
 @router.message(Command("help"))
 async def help_command(message: Message):
     await message.answer(
-        text="Info about bot!"
+        text="Информация о боте!"
     )

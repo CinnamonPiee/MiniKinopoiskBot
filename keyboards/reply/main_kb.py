@@ -2,8 +2,8 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
 def main_kb() -> ReplyKeyboardMarkup:
-    button1 = KeyboardButton(text="Фильмы / Сериалы")
-    button2 = KeyboardButton(text="История поиска")
+    button1 = KeyboardButton(text="🎬 Фильмы / Сериалы 🎥")
+    button2 = KeyboardButton(text="🕰 История поиска 🗒")
     button3 = KeyboardButton(text="Поддержка ⚙️")
     button4 = KeyboardButton(text="Помощь ❓")
     button5 = KeyboardButton(text="О боте ❗️")
