@@ -24,22 +24,14 @@ async def random_film_serial_rating_back(message: Message, state: FSMContext):
     )
 
 
-@router.message(RandomFilmSerial.rating, F.text == "Пропустить")
+@router.message(RandomFilmSerial.rating, 
+    F.text == "Пропустить" or F.text.cast(valid_rating.valid_rating).as_("rating"))
 async def random_film_serial_rating_skip(message: Message, state: FSMContext):
-    await state.update_data(rating=None)
-    await state.set_state(RandomFilmSerial.age_rating)
-    await message.answer(
-        text="Напишите пожалуйста возрастной рейтинг или промежуток за который хотите осуществить поиск, например (6, "
-             "12-18)."
-             "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
-             "учитываться.",
-        reply_markup=back_or_skip_kb(),
-    )
+    if message.text == "Пропустить":
+        await state.update_data(rating=None)
+    else:
+        await state.update_data(rating=message.text)
 
-
-@router.message(RandomFilmSerial.rating, F.text.cast(valid_rating.valid_rating).as_("rating"))
-async def random_film_serial_rating(message: Message, state: FSMContext):
-    await state.update_data(rating=message.text)
     await state.set_state(RandomFilmSerial.age_rating)
     await message.answer(
         text="Напишите пожалуйста возрастной рейтинг или промежуток за который хотите осуществить поиск, например (6, "

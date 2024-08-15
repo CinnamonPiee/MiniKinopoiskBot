@@ -10,7 +10,7 @@ from keyboards.reply.history_search_kb import history_search_kb
 from keyboards.reply.back_kb import back_kb
 from keyboards.reply.choose_criteries_kb import choose_criteries_kb
 
-from utils.validations import valid_choose_in_type
+from utils.validations.valid_choose_in_type import valid_choose_in_type
 
 
 router = Router(name=__name__)
@@ -25,7 +25,8 @@ async def random_film_serial_type_choice_back(message: Message, state: FSMContex
     )
 
 
-@router.message(RandomFilmSerial.type_choice, F.text.cast(valid_choose_in_type.valid_choose_in_type).as_("type_choice"))
+@router.message(RandomFilmSerial.type_choice, 
+    F.text.cast(valid_choose_in_type).as_("type_choice"))
 async def random_film_serial_type_choice(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.count)
     if message.text == "Фильмы":

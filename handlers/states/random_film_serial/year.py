@@ -23,21 +23,14 @@ async def random_film_serial_year_back(message: Message, state: FSMContext):
     )
 
 
-@router.message(RandomFilmSerial.year, F.text == "Пропустить")
+@router.message(RandomFilmSerial.year, 
+    F.text == "Пропустить" or F.text.cast(valid_years.valid_years).as_("year"))
 async def random_film_serial_year_skip(message: Message, state: FSMContext):
-    await state.update_data(year=None)
-    await state.set_state(RandomFilmSerial.rating)
-    await message.answer(
-        text="Напишите пожалуйста рейтинг или отрывок за который хотите осуществить поиск, например (7, 7.1, 8-9.4)."
-             "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
-             "учитываться.",
-        reply_markup=back_or_skip_kb(),
-    )
+    if message.text == "Пропустить":
+        await state.update_data(year=None)
+    else:
+        await state.update_data(year=message.text)
 
-
-@router.message(RandomFilmSerial.year, F.text.cast(valid_years.valid_years).as_("year"))
-async def random_film_serial_year(message: Message, state: FSMContext):
-    await state.update_data(year=message.text)
     await state.set_state(RandomFilmSerial.rating)
     await message.answer(
         text="Напишите пожалуйста рейтинг или отрывок за который хотите осуществить поиск, например (7, 7.1, 8-9.4)."

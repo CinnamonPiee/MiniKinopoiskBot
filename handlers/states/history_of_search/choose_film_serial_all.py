@@ -9,7 +9,7 @@ from keyboards.reply.history_search_kb import history_search_kb
 from keyboards.reply.main_kb import main_kb
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 
-from utils.validations import valid_choose_in_type
+from utils.validations.valid_choose_in_type import valid_choose_in_type
 
 
 router = Router(name=__name__)
@@ -34,7 +34,8 @@ async def choose_film_serial_all_start_back(message: Message, state: FSMContext)
     await state.clear()
 
 
-@router.message(HistoryOfSearch.choose_film_serial_all, F.text.cast(valid_choose_in_type.valid_choose_in_type).as_("choice"))
+@router.message(HistoryOfSearch.choose_film_serial_all, 
+    F.text.cast(valid_choose_in_type).as_("choice"))
 async def process_choose_film_serial_all(message: Message, state: FSMContext):
     if message.text == "Фильмы":
         await state.update_data(choice="movie")

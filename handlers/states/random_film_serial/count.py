@@ -8,7 +8,7 @@ from states.random_film_serial import RandomFilmSerial
 from keyboards.reply.history_search_kb import history_search_kb
 from keyboards.reply.yes_no_back import yes_no_back
 
-from utils.validations import valid_num
+from utils.validations.valid_num import valid_num
 
 from keyboards.reply.back_kb import back_kb
 
@@ -25,7 +25,7 @@ async def random_film_serial_count_back(message: Message, state: FSMContext):
     )
 
 
-@router.message(RandomFilmSerial.count, F.text.cast(valid_num.valid_num).as_("count"))
+@router.message(RandomFilmSerial.count, F.text.cast(valid_num).as_("count"))
 async def random_film_serial_count(message: Message, state: FSMContext):
     await state.update_data(count=message.text)
     await state.set_state(RandomFilmSerial.criteries_yes_or_no)

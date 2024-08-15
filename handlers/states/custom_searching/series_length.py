@@ -155,9 +155,6 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
             )
 
     elif data["type_choice"] == None:
-        await state.set_data(movie_length=None)
-        await state.set_data(series_length=None)
-
         custom_data = []
 
         for _ in range(int(data["count"])):

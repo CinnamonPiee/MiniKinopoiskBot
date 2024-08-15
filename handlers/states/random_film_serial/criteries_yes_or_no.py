@@ -3,7 +3,6 @@ from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.utils import markdown
 from aiogram.fsm.context import FSMContext
-from aiogram.types import FSInputFile
 
 from states.random_film_serial import RandomFilmSerial
 
@@ -18,10 +17,11 @@ from database.orm.serial import add_serial, serial_exists
 from api.random_custom_movie_serial_search import random_custom_movie_serial_search
 
 from utils.validations import (
-    valid_url,
     valid_user_and_film_id_in_history,
     valid_user_and_serial_id_in_history
 )
+from utils.get_film_data import get_film_data
+from utils.get_serial_data import get_serial_data
 
 
 
@@ -64,51 +64,18 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
     keyboards = create_random_pagination_kb(page, total_count)
 
     if item["type"] == "movie":
-        if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
-            url = item["poster"]["previewUrl"]
-        else:
-            url = FSInputFile(
-                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
-            )
-        if item["name"] == None:
-            name = ""
-        else:
-            name = item["name"]
-        if item["genres"] == None:
-            genres = ""
-        else:
-            genres = ', '.join([i["name"] for i in item["genres"]])
-        if item["rating"]["imdb"] == None:
-            rating = ""
-        else:
-            rating = item["rating"]["imdb"]
-        if item["year"] == None:
-            year = 0
-        else:
-            year = item["year"]
-        if item["movieLength"] == None:
-            movie_length = 0
-        else:
-            movie_length = str(int(item["movieLength"]) // 60) + ":" + str(
-                int(item["movieLength"]) % 60)
-        if item["countries"] == None:
-            countries = ""
-        else:
-            countries = ', '.join([i["name"] for i in item["countries"]])
-        if item["ageRating"] == None:
-            age_rating = 0
-        else:
-            age_rating = item["ageRating"]
-        if item["shortDescription"] == None or item["shortDescription"] == "":
-            if item["description"] == None:
-                description = ""
-            else:
-                description = item["description"]
-        else:
-            description = item["shortDescription"]
+        (url,
+         name,
+         genres,
+         rating,
+         year,
+         movie_length,
+         countries,
+         age_rating,
+         description) = get_film_data(item)
     
         if await film_exists(name):
-            await valid_user_and_film_id_in_history.valid_user_and_film_id_in_history(
+            await valid_user_and_film_id_in_history(
                 name, 
                 telegram_id=message.from_user.id
             )
@@ -162,51 +129,18 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
             )
 
     elif item["type"] == "tv-series":
-        if item["poster"]["previewUrl"] is not None and valid_url.valid_url(item["poster"]["previewUrl"]):
-            url = item["poster"]["previewUrl"]
-        else:
-            url = FSInputFile(
-                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
-            )
-        if item["name"] == None:
-            name = ""
-        else:
-            name = item["name"]
-        if item["genres"] == None:
-            genres = ""
-        else:
-            genres = ', '.join([i["name"] for i in item["genres"]])
-        if item["rating"]["imdb"] == None:
-            rating = ""
-        else:
-            rating = item["rating"]["imdb"]
-        if item["releaseYears"] == None:
-            release_years = ""
-        else:
-            release_years = str(
-                item["releaseYears"][0]["start"]) + " - " + str(item["releaseYears"][0]["end"])
-        if item["seriesLength"] == None:
-            series_length = ""
-        else:
-            series_length = str(item["seriesLength"]) + " минут"
-        if item["countries"] == None:
-            countries = ""
-        else:
-            countries = ', '.join([i["name"] for i in item["countries"]])
-        if item["ageRating"] == None:
-            age_rating = 0
-        else:
-            age_rating = item["ageRating"]
-        if item["shortDescription"] == None or item["shortDescription"] == "":
-            if item["description"] == None:
-                description = ""
-            else:
-                description = item["description"]
-        else:
-            description = item["shortDescription"]
+        (url,
+         name,
+         genres,
+         rating,
+         release_years,
+         series_length,
+         countries,
+         age_rating,
+         description) = get_serial_data(item)
 
         if await serial_exists(name):
-            await valid_user_and_serial_id_in_history.valid_user_and_serial_id_in_history(
+            await valid_user_and_serial_id_in_history(
                 name, 
                 telegram_id=message.from_user.id
             )
