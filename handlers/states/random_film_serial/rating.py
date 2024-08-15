@@ -7,7 +7,7 @@ from states.random_film_serial import RandomFilmSerial
 
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 
-from utils.validations import valid_rating
+from utils.validations.valid_rating import valid_rating
 
 
 router = Router(name=__name__)
@@ -25,7 +25,7 @@ async def random_film_serial_rating_back(message: Message, state: FSMContext):
 
 
 @router.message(RandomFilmSerial.rating, 
-    F.text == "Пропустить" or F.text.cast(valid_rating.valid_rating).as_("rating"))
+    F.text == "Пропустить" or F.text.cast(valid_rating).as_("rating"))
 async def random_film_serial_rating_skip(message: Message, state: FSMContext):
     if message.text == "Пропустить":
         await state.update_data(rating=None)

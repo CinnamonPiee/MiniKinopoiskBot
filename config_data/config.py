@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     bot_token: str
     kinopoisk_dev_token: str
     admin_id: int
+    img_path: str
 
     @property
     def DATABASE_URL_asyncpg(self) -> str:

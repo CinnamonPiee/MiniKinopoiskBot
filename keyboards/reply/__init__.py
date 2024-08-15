@@ -6,6 +6,4 @@ from . import back_or_skip_kb
 from . import back_or_today_kb
 from . import history_search_kb
 from . import yes_no_back
-from . import generation_password_back_kb
 from . import login_registration_kb
-from . import registration_kb

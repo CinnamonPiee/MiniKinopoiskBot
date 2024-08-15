@@ -9,7 +9,7 @@ from keyboards.reply.back_or_number_kb import back_or_number_kb
 
 from states.registration import Registration
 
-from utils.validations import valid_email
+from utils.validations.valid_email import valid_email
 
 from database.orm.user import email_exists
 
@@ -43,7 +43,7 @@ async def registration_email_handler_back(message: Message, state: FSMContext):
         )
 
 
-@router.message(Registration.email, F.text.cast(valid_email.valid_email).as_("email"))
+@router.message(Registration.email, F.text.cast(valid_email).as_("email"))
 async def registration_email_handler(message: Message, state: FSMContext):
     data = await state.get_data()
 

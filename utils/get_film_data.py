@@ -1,5 +1,7 @@
 from utils.validations.valid_url import valid_url
 
+from config_data.config import settings
+
 from aiogram.types import FSInputFile
 
 
@@ -7,9 +9,7 @@ def get_film_data(item: dict):
     if item["poster"]["previewUrl"] is not None and valid_url(item["poster"]["previewUrl"]):
         url = item["poster"]["previewUrl"]
     else:
-        url = FSInputFile(
-            "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
-        )
+        url = FSInputFile(settings.img_path)
     if item["name"] == None:
         name = ""
     else:

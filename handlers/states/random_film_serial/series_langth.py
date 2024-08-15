@@ -7,7 +7,7 @@ from states.random_film_serial import RandomFilmSerial
 
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 
-from utils.validations import valid_series_length
+from utils.validations.valid_series_length import valid_series_length
 
 
 router = Router(name=__name__)
@@ -25,22 +25,16 @@ async def random_film_serial_series_length_back(message: Message, state: FSMCont
     )
 
 
-@router.message(RandomFilmSerial.series_length, F.text == "Пропустить")
+@router.message(RandomFilmSerial.series_length, 
+    F.text == "Пропустить" or F.text.cast(valid_series_length).as_("series_length"))
 async def random_film_serial_series_length_skip(message: Message, state: FSMContext):
-    await state.update_data(series_length=None)
-    await state.set_state(RandomFilmSerial.janr)
-    await message.answer(
-        text="Напишите пожалуйста жанр(ы), если хотите несколько жанров, то напишите их через пробел, например(боевик, драма комедия)."
-             "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
-             "учитываться.",
-        reply_markup=back_or_skip_kb(),
-    )
+    if message.text == "Пропустить":
+        await state.update_data(series_length=None)
+        await state.update_data(movie_length=None)
+    else:
+        await state.update_data(series_length=message.text)
+        await state.update_data(movie_length=None)
 
-
-@router.message(RandomFilmSerial.series_length, F.text.cast(valid_series_length.valid_series_length).as_("series_length"))
-async def random_film_serial_series_length(message: Message, state: FSMContext):
-    await state.update_data(movie_length=None)
-    await state.update_data(series_length=message.text)
     await state.set_state(RandomFilmSerial.janr)
     await message.answer(
         text="Напишите пожалуйста жанр(ы), если хотите несколько жанров, то напишите их через пробел, например(боевик, драма комедия)."

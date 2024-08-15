@@ -7,7 +7,7 @@ from states.random_film_serial import RandomFilmSerial
 
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 
-from utils.validations import valid_janr
+from utils.validations.valid_janr import valid_janr
 
 
 router = Router(name=__name__)
@@ -46,24 +46,15 @@ async def random_film_serial_janr_back(message: Message, state: FSMContext):
         )
 
 
-@router.message(RandomFilmSerial.janr, F.text == "Пропустить")
+@router.message(RandomFilmSerial.janr, 
+    F.text == "Пропустить" or F.text.cast(valid_janr).as_("janr"))
 async def random_film_serial_janr_skip(message: Message, state: FSMContext):
-    await state.set_state(RandomFilmSerial.country)
-    await state.update_data(janr=None)
-
-    await message.answer(
-        text="Напишите пожалуйста страну(ы), если хотите несколько старн, то напишите их через пробел, например(США, Индия Канада)."
-             "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
-             "учитываться.",
-        reply_markup=back_or_skip_kb(),
-    )
-
-
-@router.message(RandomFilmSerial.janr, F.text.cast(valid_janr.valid_janr).as_("janr"))
-async def random_film_serial_janr(message: Message, state: FSMContext):
-    await state.set_state(RandomFilmSerial.country)
-    await state.update_data(janr=message.text)
+    if message.text == "Пропустить":
+        await state.update_data(janr=None)
+    else:
+        await state.update_data(janr=message.text)
     
+    await state.set_state(RandomFilmSerial.country)
     await message.answer(
         text="Напишите пожалуйста страну(ы), если хотите несколько старн, то напишите их через пробел, например(США, Индия Канада)."
              "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"

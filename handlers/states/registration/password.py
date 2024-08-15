@@ -8,7 +8,7 @@ from keyboards.reply.main_kb import main_kb
 
 from states.registration import Registration
 
-from utils.validations import valid_password
+from utils.validations.valid_password import valid_password
 
 from database.orm.user import verify_user_password, update_telegram_id_by_email
 
@@ -36,7 +36,7 @@ async def registration_password_back(message: Message, state: FSMContext):
         )
 
 
-@router.message(Registration.password, F.text.cast(valid_password.valid_password).as_("password"))
+@router.message(Registration.password, F.text.cast(valid_password).as_("password"))
 async def registration_password(message: Message, state: FSMContext):
     data = await state.get_data()
     if data["login_registration"] == "Вход":
