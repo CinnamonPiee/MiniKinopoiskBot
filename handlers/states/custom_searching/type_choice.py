@@ -16,11 +16,11 @@ from utils.validations.valid_choose_in_type import valid_choose_in_type
 router = Router(name=__name__)
 
 
-@router.message(CustomSearching.type_choice, F.text == "Назад")
+@router.message(CustomSearching.type_choice, F.text == "🚫 Назад 🚫")
 async def custom_searching_type_choice_back(message: Message, state: FSMContext):
     await state.set_state(MainMenu.criteries)
     await message.answer(
-        text="Пожалуйста, выберите что вы хотите найти: ",
+        text="Выберите что вы хотите найти. ",
         reply_markup=choose_criteries_kb(),
     )
 
@@ -37,7 +37,7 @@ async def custom_searching_type_choice(message: Message, state: FSMContext):
         await state.update_data(type_choice=None)
 
     await message.answer(
-        text="Укажите количество которое хотите получить: ",
+        text="Укажите количество которое хотите получить. ",
         reply_markup=back_kb(),
     )
 
@@ -45,6 +45,7 @@ async def custom_searching_type_choice(message: Message, state: FSMContext):
 @router.message(CustomSearching.type_choice)
 async def custom_searching_type_choice_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понимаю, выберите пожалуйста что вы хотите найти, фильм, сериал или все вместе!",
+        text="Я вас не понимаю 😔, выберите что вы"
+             "хотите найти: фильм, сериал или все вместе!",
         reply_markup=history_search_kb(),
     )

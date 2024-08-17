@@ -16,11 +16,11 @@ from keyboards.reply.back_kb import back_kb
 router = Router(name=__name__)
 
 
-@router.message(RandomFilmSerial.count, F.text == "Назад")
+@router.message(RandomFilmSerial.count, F.text == "🚫 Назад 🚫")
 async def random_film_serial_count_back(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.type_choice)
     await message.answer(
-        text="Пожалуйста, выберите что вы хотите получить рандомно: ",
+        text="Выберите что вы хотите получить рандомно. ",
         reply_markup=history_search_kb(),
     )
 
@@ -30,7 +30,7 @@ async def random_film_serial_count(message: Message, state: FSMContext):
     await state.update_data(count=message.text)
     await state.set_state(RandomFilmSerial.criteries_yes_or_no)
     await message.answer(
-        text="Хотите ли вы настроить рандомный поиск более подробно?",
+        text="Хотите настроить рандомный поиск более подробно?",
         reply_markup=yes_no_back(),
     )
 
@@ -38,6 +38,7 @@ async def random_film_serial_count(message: Message, state: FSMContext):
 @router.message(RandomFilmSerial.count)
 async def random_film_serial_count_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понял. Необходимо написать количество которое вы хотите видеть!",
+        text="Простите, я вас не понял 😔. Необходимо написать"
+             "количество которое вы хотите видеть!",
         reply_markup=back_kb(),
     )

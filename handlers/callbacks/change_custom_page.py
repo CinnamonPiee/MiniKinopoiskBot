@@ -34,7 +34,7 @@ async def change_random_page(callback_query: types.CallbackQuery, state: FSMCont
             message_id=callback_query.message.message_id
         )
         await callback_query.message.answer(
-            text="Вы вернулись в главное меню.",
+            text="Вы вернулись в главное меню 😎.",
             reply_markup=main_kb(),
         )
         await state.clear()

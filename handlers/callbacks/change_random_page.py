@@ -27,13 +27,13 @@ async def change_random_page(callback_query: types.CallbackQuery, state: FSMCont
     random_data = data.get("random_data", [])
     total_count = len(random_data)
 
-    if callback_query.data == 'rand_main_menu':
+    if callback_query.data == "rand_main_menu":
         await callback_query.message.bot.delete_message(
             chat_id=callback_query.message.chat.id,
             message_id=callback_query.message.message_id
         )
         await callback_query.message.answer(
-            text="Вы вернулись в главное меню.",
+            text="Вы вернулись в главное меню 😎.",
             reply_markup=main_kb(),
         )
         await state.clear()

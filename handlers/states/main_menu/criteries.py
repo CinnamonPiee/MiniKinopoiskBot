@@ -26,7 +26,7 @@ router = Router(name=__name__)
 async def main_choose_start(message: Message, state: FSMContext):
     await state.set_state(main_menu.MainMenu.criteries)
     await message.answer(
-        text="Выберите что вы хотите найти.",
+        text="Выберите что вы хотите найти. ⬇️",
         reply_markup=choose_criteries_kb.choose_criteries_kb(),
     )
 
@@ -45,7 +45,7 @@ async def main_choose_find_film_serial(message: Message, state: FSMContext):
 async def main_choose_random_film_serial(message: Message, state: FSMContext):
     await state.set_state(random_film_serial.RandomFilmSerial.type_choice)
     await message.answer(
-        text="Выберите что вы хотите получить рандомно.",
+        text="Выберите что вы хотите получить рандомно (фильм, сериал или все вместе).",
         reply_markup=history_search_kb.history_search_kb(),
         parse_mode=None,
     )
@@ -74,6 +74,6 @@ async def main_choose_back(message: Message, state: FSMContext):
 @router.message(main_menu.MainMenu.criteries)
 async def main_choose_none(message: Message):
     await message.answer(
-        text="Простите, я не понимаю.\n"
+        text="Я не понимаю.😔\n"
              "Выберите что вы хотите найти ⬇️!",
         reply_markup=choose_criteries_kb.choose_criteries_kb())

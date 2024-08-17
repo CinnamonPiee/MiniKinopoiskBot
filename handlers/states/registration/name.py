@@ -14,7 +14,7 @@ from utils.validations.valid_name import valid_name
 router = Router(name=__name__)
 
 
-@router.message(Registration.name, F.text == "Назад")
+@router.message(Registration.name, F.text == "🚫 Назад 🚫")
 async def registration_name_handler_back(message: Message, state: FSMContext):
     await state.set_state(Registration.login_registration)
     
@@ -42,7 +42,7 @@ async def registration_name_handler(message: Message, state: FSMContext):
 @router.message(Registration.name)
 async def registration_name_handler_none(message: Message):
     await message.answer(
-        text="Простите, я не понимаю. \n"
+        text="Простите, я не понимаю. 😔\n"
              "Напишите пожалуйста ваш Никнейм!",
         reply_markup=back_kb(),
         )

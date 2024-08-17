@@ -25,11 +25,11 @@ from api.movie_serial_search import movie_serial_search
 router = Router(name=__name__)
 
 
-@router.message(FindFilmSerial.name, F.text == "Назад")
+@router.message(FindFilmSerial.name, F.text == "🚫 Назад 🚫")
 async def find_film_serial_name_none(message: Message, state: FSMContext):
     await state.set_state(MainMenu.criteries)
     await message.answer(
-        text="Пожалуйста, выберите что вы хотите найти: ",
+        text="Выберите что вы хотите найти. ⬇️",
         reply_markup=choose_criteries_kb(),
     )
 
@@ -173,6 +173,6 @@ async def find_film_serial_name(message: Message, state: FSMContext):
 @router.message(FindFilmSerial.name)
 async def find_film_serial_name_none(message: Message):
     await message.answer(
-        text="Простите, я не понимаю. Напишите пожалуйста корректное название фильма!",
+        text="Я не понимаю 😔. Напишите корректное название фильма!",
         reply_markup=back_kb(),
     )

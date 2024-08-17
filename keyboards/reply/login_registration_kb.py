@@ -2,8 +2,8 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
 def login_registration_kb() -> ReplyKeyboardMarkup:
-    button1 = KeyboardButton(text="Вход")
-    button2 = KeyboardButton(text="Регистрация")
+    button1 = KeyboardButton(text="Вход 🔑")
+    button2 = KeyboardButton(text="Регистрация 💯")
     button3 = KeyboardButton(text="🚫 Назад 🚫")
 
     keyboard = ReplyKeyboardMarkup(

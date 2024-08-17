@@ -29,27 +29,28 @@ router = Router(name=__name__)
 PER_PAGE = 1
 
 
-@router.message(RandomFilmSerial.criteries_yes_or_no, F.text == "Назад")
+@router.message(RandomFilmSerial.criteries_yes_or_no, F.text == "🚫 Назад 🚫")
 async def random_film_serial_criteries_yes_or_no_back(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.count)
     await message.answer(
-        text="Укажите количество которое вы хотите получить: ",
+        text="Укажите количество которое вы хотите получить. ",
         reply_markup=back_kb(),
     )
 
 
-@router.message(RandomFilmSerial.criteries_yes_or_no, F.text == "Нет")
+@router.message(RandomFilmSerial.criteries_yes_or_no, F.text == "❎ Нет ❎")
 async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMContext):
     data = await state.get_data()
     random_data = []
 
     for _ in range(int(data["count"])):
         some_data = random_custom_movie_serial_search(type_choice=data["type_choice"])
+        
         if isinstance(some_data, dict):
             random_data.append(some_data)
         elif isinstance(some_data, str):
             await message.answer(
-                text="Сервис временно не доступен, попробуйте позже!"
+                text=some_data
             )
 
             await state.clear()
@@ -194,13 +195,12 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
             )
 
 
-@router.message(RandomFilmSerial.criteries_yes_or_no, F.text == "Да")
+@router.message(RandomFilmSerial.criteries_yes_or_no, F.text == "✅ Да ✅")
 async def random_film_serial_criteries_yes_or_no(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.year)
     await message.answer(
-        text="Напишите пожалуйста год или отрывок за который хотите осуществить поиск, например (2016, 2008-2010)."
-             "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
-             "учитываться.",
+        text="Напишите пожалуйста год или отрывок за который хотите "
+             "осуществить поиск, например (2016, 2008-2010).",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -208,6 +208,7 @@ async def random_film_serial_criteries_yes_or_no(message: Message, state: FSMCon
 @router.message(RandomFilmSerial.criteries_yes_or_no)
 async def random_film_serial_criteries_yes_or_no_none(message: Message):
     await message.answer(
-        text="Я вас не понял, выберите пожалуйста хотите ли вы сделать рандомный поиск более подробным?",
+        text="Я вас не понял 😔, выберите пожалуйста "
+             "хотите ли вы сделать рандомный поиск более подробным?",
         reply_markup=yes_no_back(),
     )

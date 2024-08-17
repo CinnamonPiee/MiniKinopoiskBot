@@ -22,21 +22,23 @@ from database.models import HistoryFilm, HistorySerial
 from utils.validations.valid_url import valid_url
 from utils.validations.valid_date import valid_date
 
+from config_data.config import settings
+
 
 router = Router(name=__name__)
 PER_PAGE = 1
 
 
-@router.message(HistoryOfSearch.first_date, F.text == "Назад")
+@router.message(HistoryOfSearch.first_date, F.text == "🚫 Назад 🚫")
 async def first_date_back(message: Message, state: FSMContext):
     await state.set_state(HistoryOfSearch.choose_film_serial_all)
     await message.answer(
-        text="Пожалуйста, выберите что вы хотите найти: ",
+        text="Выберите что вы хотите найти. ",
         reply_markup=history_search_kb.history_search_kb(),
     )
 
 
-@router.message(HistoryOfSearch.first_date, F.text == "Пропустить")
+@router.message(HistoryOfSearch.first_date, F.text == "⏩ Пропустить ⏩")
 async def first_date_skip(message: Message, state: FSMContext):
     await state.update_data(first_date=None)
     await state.update_data(second_date=None)
@@ -55,7 +57,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                     photo = film.picture
                 else:
                     photo = FSInputFile(
-                        "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                        settings.img_path
                     )
             
                 keyboards = create_history_pagination_kb(page, total_count)
@@ -108,7 +110,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                     photo = serial.picture
                 else:
                     photo = FSInputFile(
-                        "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                        settings.img_path
                     )
                     
                 keyboards = create_history_pagination_kb(page, total_count)
@@ -163,7 +165,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                             photo = film.picture
                         else:
                             photo = FSInputFile(
-                                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                                settings.img_path
                             )
                     
                         keyboards = create_history_pagination_kb(page, total_count)
@@ -204,7 +206,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                             photo = serial.picture
                         else:
                             photo = FSInputFile(
-                                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                                settings.img_path
                             )
                             
                         keyboards = create_history_pagination_kb(page, total_count)
@@ -252,7 +254,7 @@ async def first_date(message: Message, state: FSMContext):
     await state.set_state(HistoryOfSearch.second_date)
     await state.update_data(first_date=message.text)
     await message.answer(
-        text="Пожалуйста, введите конечную дату поиска (в формате ГГГГ-ММ-ДД)"
+        text="Введите конечную дату поиска (в формате ГГГГ-ММ-ДД)"
              " или нажмите на кнопку внизу для выбора сегодняшней даты.",
         reply_markup=back_or_today_kb.back_or_today_kb(),
     )
@@ -261,7 +263,9 @@ async def first_date(message: Message, state: FSMContext):
 @router.message(HistoryOfSearch.first_date)
 async def first_date_skip_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понимаю. Пожалуйста, введите начальную дату поиска (в формате ГГГГ-ММ-ДД) "
-             "или нажмите на кнопку 'Пропустить' внизу чтобы просмотреть всю историю поиска.",
+        text="Я вас не понимаю 😔. Введите"
+             "начальную дату поиска (в формате ГГГГ-ММ-ДД) "
+             "или нажмите на кнопку 'Пропустить' внизу чтобы"
+             "просмотреть всю историю поиска.",
         reply_markup=back_or_skip_kb.back_or_skip_kb(),
     )

@@ -19,15 +19,15 @@ router = Router(name=__name__)
 async def choose_film_serial_all_start(message: Message, state: FSMContext):
     await state.set_state(HistoryOfSearch.choose_film_serial_all)
     await message.answer(
-        text="Пожалуйста, выберите что вы хотите найти: ",
+        text="Выберите что вы хотите найти. ⬇️",
         reply_markup=history_search_kb(),
     )
 
 
-@router.message(HistoryOfSearch.choose_film_serial_all, F.text == "Назад")
+@router.message(HistoryOfSearch.choose_film_serial_all, F.text == "🚫 Назад 🚫")
 async def choose_film_serial_all_start_back(message: Message, state: FSMContext):
     await message.answer(
-        text="Может быть в другой раз...",
+        text="Может быть в другой раз... 🤷",
         reply_markup=main_kb(),
     )
 
@@ -46,7 +46,7 @@ async def process_choose_film_serial_all(message: Message, state: FSMContext):
         
     await state.set_state(HistoryOfSearch.first_date)
     await message.answer(
-        text="Пожалуйста, введите начальную дату поиска (в формате ГГГГ-ММ-ДД) "
+        text="Введите начальную дату поиска (в формате ГГГГ-ММ-ДД) "
         "или нажмите на кнопку 'Пропустить' внизу чтобы просмотреть всю историю поиска.",
         reply_markup=back_or_skip_kb(),
         parse_mode=None,
@@ -56,6 +56,7 @@ async def process_choose_film_serial_all(message: Message, state: FSMContext):
 @router.message(HistoryOfSearch.choose_film_serial_all)
 async def process_choose_film_serial_all_none(message: Message):
     await message.answer(
-        text="Пожалуйста, выберите что вы хотите найти: ",
+        text="Я не понимаю 😔. "
+             "Выберите что вы хотите найти. ",
         reply_markup=history_search_kb(),
     )

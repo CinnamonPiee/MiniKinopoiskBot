@@ -2,8 +2,8 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
 def yes_no_back() -> ReplyKeyboardMarkup:
-    button1 = KeyboardButton(text="Да")
-    button2 = KeyboardButton(text="Нет")
+    button1 = KeyboardButton(text="✅ Да ✅")
+    button2 = KeyboardButton(text="❎ Нет ❎")
     button3 = KeyboardButton(text="🚫 Назад 🚫")
 
     keyboard = ReplyKeyboardMarkup(

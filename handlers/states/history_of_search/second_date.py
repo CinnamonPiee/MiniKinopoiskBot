@@ -19,16 +19,18 @@ from database.models import HistoryFilm, HistorySerial
 from database.orm.film import get_user_film_history_per_date
 from database.orm.serial import get_user_serial_history_per_date
 
+from config_data.config import settings
+
 
 router = Router(name=__name__)
 PER_PAGE = 1
 
 
-@router.message(HistoryOfSearch.second_date, F.text == "Назад")
+@router.message(HistoryOfSearch.second_date, F.text == "🚫 Назад 🚫")
 async def second_date_back(message: Message, state: FSMContext):
     await state.set_state(HistoryOfSearch.first_date)
     await message.answer(
-        text="Пожалуйста, введите начальную дату поиска (в формате ГГГГ-ММ-ДД) "
+        text="Введите начальную дату поиска (в формате ГГГГ-ММ-ДД) "
         "или нажмите на кнопку 'Пропустить' внизу чтобы просмотреть всю историю поиска.",
         reply_markup=back_or_skip_kb(),
     )
@@ -58,7 +60,7 @@ async def second_date(message: Message, state: FSMContext):
                     photo = film.picture
                 else:
                     photo = FSInputFile(
-                        "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                        settings.img_path
                     )
 
                 keyboards = create_history_pagination_kb(page, total_count)
@@ -100,7 +102,6 @@ async def second_date(message: Message, state: FSMContext):
                 )
 
                 await state.clear()
-        await state.clear()
 
     elif data["choice"] == "tv-series":
         if user_id:
@@ -119,7 +120,7 @@ async def second_date(message: Message, state: FSMContext):
                     photo = serial.picture
                 else:
                     photo = FSInputFile(
-                        "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                        settings.img_path
                     )
 
                 keyboards = create_history_pagination_kb(page, total_count)
@@ -161,7 +162,6 @@ async def second_date(message: Message, state: FSMContext):
                 )
 
                 await state.clear()
-        await state.clear()
 
     elif data["choice"] == None:
         if user_id:
@@ -182,7 +182,7 @@ async def second_date(message: Message, state: FSMContext):
                             photo = film.picture
                         else:
                             photo = FSInputFile(
-                                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                                settings.img_path
                             )
                     
                         keyboards = create_history_pagination_kb(page, total_count)
@@ -223,7 +223,7 @@ async def second_date(message: Message, state: FSMContext):
                             photo = serial.picture
                         else:
                             photo = FSInputFile(
-                                "/media/simon/MY FILES/Python/Bots/MiniKinopoiskBot/img/not-found-image-15383864787lu.jpg"
+                                settings.img_path
                             )
                     
                         keyboards = create_history_pagination_kb(page, total_count)
@@ -265,12 +265,12 @@ async def second_date(message: Message, state: FSMContext):
                 )
                 
                 await state.clear()
-        await state.clear()
 
 
 @router.message(HistoryOfSearch.second_date)
 async def second_date_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понимаю. Пожалуйста, введите конечную дату поиска (в формате ГГГГ-ММ-ДД)",
+        text="Я вас не понимаю 😔. Введите конечную дату поиска"
+             "(в формате ГГГГ-ММ-ДД)",
         reply_markup=back_kb(),
     )

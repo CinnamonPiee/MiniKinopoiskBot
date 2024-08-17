@@ -14,28 +14,35 @@ from states.custom_searching import CustomSearching
 router = Router(name=__name__)
 
 
-@router.message(CustomSearching.janr, F.text == "Назад")
+@router.message(CustomSearching.janr, F.text == "🚫 Назад 🚫")
 async def custom_searching_janr_back(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.count)
     await message.answer(
-        text="Укажите количество которое хотите получить: ",
+        text="Укажите количество которое хотите получить. ",
         reply_markup=back_kb(),
     )
 
 
-@router.message(CustomSearching.janr, 
-    F.text == "Пропустить" or F.text.cast(valid_janr).as_("janr"))
+@router.message(CustomSearching.janr, F.text == "⏩ Пропустить ⏩")
 async def custom_searching_janr_skip(message: Message, state: FSMContext):
-    if message.text == "Пропустить":
-        await state.update_data(janr=None)
-    else:
-        await state.update_data(janr=message.text)
+    await state.update_data(janr=None)
     
     await state.set_state(CustomSearching.year)
     await message.answer(
-        text="Напишите пожалуйста год или отрывок за который хотите осуществить поиск, например (2016, 2008-2010)."
-             "Вы так же можете пропустить этот этап нажав на кнопку 'Пропустить' ниже и тогда этот критерий не будет"
-             "учитываться.",
+        text="Напишите год или отрывок за который"
+             "хотите осуществить поиск, например (2016, 2008-2010).",
+        reply_markup=back_or_skip_kb(),
+    )
+
+
+@router.message(CustomSearching.janr, F.text.cast(valid_janr).as_("janr"))
+async def custom_searching_janr_skip(message: Message, state: FSMContext):
+    await state.update_data(janr=message.text)
+
+    await state.set_state(CustomSearching.year)
+    await message.answer(
+        text="Напишите год или отрывок за который"
+             "хотите осуществить поиск, например (2016, 2008-2010).",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -43,5 +50,6 @@ async def custom_searching_janr_skip(message: Message, state: FSMContext):
 @router.message(CustomSearching.janr)
 async def custom_searching_janr_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понял. Необходимо что бы вы написали жанр(ы) которые хотите включить в рандомный поиск."
+        text="Я вас не понял 😔. Необходимо что бы вы написали"
+             "жанр(ы) которые хотите включить в рандомный поиск."
     )

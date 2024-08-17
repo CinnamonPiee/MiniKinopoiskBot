@@ -17,18 +17,18 @@ from database.orm.user import email_exists
 router = Router(name=__name__)
 
 
-@router.message(Registration.email, F.text == "Назад")
+@router.message(Registration.email, F.text == "🚫 Назад 🚫")
 async def registration_email_handler_back(message: Message, state: FSMContext):
     data = await state.get_data()
 
-    if data["login_registration"] == "Вход":
+    if data["login_registration"] == "Вход 🔑":
         await state.set_state(Registration.login_registration)
         await message.answer(
             text="Войдите или зарегистрируйтесь в боте.",
             reply_markup=login_registration_kb(),
             )
         
-    elif data["login_registration"] == "Регистрация":
+    elif data["login_registration"] == "Регистрация 💯":
         await state.set_state(Registration.password)
         await message.answer(
             text="Придумайте пароль:\n"
@@ -43,7 +43,7 @@ async def registration_email_handler_back(message: Message, state: FSMContext):
 async def registration_email_handler(message: Message, state: FSMContext):
     data = await state.get_data()
 
-    if data["login_registration"] == "Вход":
+    if data["login_registration"] == "Вход 🔑":
         if await email_exists(message.text):
             await state.set_state(Registration.password)
             await state.update_data(email=message.text)
@@ -61,7 +61,7 @@ async def registration_email_handler(message: Message, state: FSMContext):
                 reply_markup=back_kb(),
             )
 
-    elif data["login_registration"] == "Регистрация":
+    elif data["login_registration"] == "Регистрация 💯":
         if await email_exists(message.text):
             await message.answer(
                 text="Данная почта уже используется!\n"
@@ -84,7 +84,7 @@ async def registration_email_handler(message: Message, state: FSMContext):
 @router.message(Registration.email)
 async def registration_email_handler_none(message: Message):
     await message.answer(
-        text="Простите, я не понимаю.\n"
+        text="Простите, я не понимаю.😔\n"
              "Напишите корректную почту!",
         reply_markup=back_kb(),
     )

@@ -2,7 +2,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
 def back_or_skip_kb() -> ReplyKeyboardMarkup:
-    button2 = KeyboardButton(text="Пропустить")
+    button2 = KeyboardButton(text="⏩ Пропустить ⏩")
     button1 = KeyboardButton(text="🚫 Назад 🚫")
 
     keyboard = ReplyKeyboardMarkup(

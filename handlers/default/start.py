@@ -26,7 +26,7 @@ async def start_command(message: Message, state: FSMContext):
     else:
         await state.set_state(Registration.login_registration)
         await message.answer(
-            text=f"Добро пожаловать, {message.from_user.username}!"
+            text=f"Добро пожаловать, {message.from_user.username}!\n"
                   "Войдите или зарегистрируйтесь в боте.",
             reply_markup=login_registration_kb(),
         )    
