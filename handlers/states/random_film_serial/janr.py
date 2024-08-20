@@ -49,7 +49,7 @@ async def random_film_serial_janr_skip(message: Message, state: FSMContext):
     
     await state.set_state(RandomFilmSerial.country)
     await message.answer(
-        text="Напишите страну(ы), если хотите несколько старн,"
+        text="Напишите страну(ы), если хотите несколько стран,"
              "то напишите их через пробел, например(США, Индия Канада).",
         reply_markup=back_or_skip_kb(),
     )
@@ -57,11 +57,11 @@ async def random_film_serial_janr_skip(message: Message, state: FSMContext):
 
 @router.message(RandomFilmSerial.janr, F.text.cast(valid_janr).as_("janr"))
 async def random_film_serial_janr_skip(message: Message, state: FSMContext):
-    await state.update_data(janr=message.text)
+    await state.update_data(janr=message.text.split(" "))
 
     await state.set_state(RandomFilmSerial.country)
     await message.answer(
-        text="Напишите страну(ы), если хотите несколько старн,"
+        text="Напишите страну(ы), если хотите несколько стран,"
              "то напишите их через пробел, например(США, Индия Канада).",
         reply_markup=back_or_skip_kb(),
     )

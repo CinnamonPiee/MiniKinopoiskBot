@@ -7,3 +7,4 @@ def valid_movie_length(movie_length: str) -> str | None:
         if (50 <= int(movie_length.split("-")[0]) <= 300) and (50 <= int(movie_length.split("-")[1]) <= 300) and (int(movie_length.split("-")[0]) < int(movie_length.split("-")[1])):
             return movie_length
         return None
+    return None

@@ -44,7 +44,7 @@ def random_custom_movie_serial_search(
                 url = url + f"&genres.name=%2B{i}"
     if country:
         if len(country) == 1:
-            url = url + f"&countries.name={country}"
+            url = url + f"&countries.name={country[0]}"
         else:
             url = url + f"&countries.name=%2B{country[0]}"
             for j in country[1:]:

@@ -29,6 +29,7 @@ def get_film_data(item: dict):
     if item["movieLength"] == None:
         movie_length = 0
     else:
+        # TODO # Неправильный вывод если например ввести ровно 2 часа
         movie_length = str(int(item["movieLength"]) // 60) + ":" + str(
             int(item["movieLength"]) % 60)
     if item["countries"] == None:

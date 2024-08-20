@@ -1,4 +1,4 @@
-async def valid_country(country: str | list) -> str | list | None:
+def valid_country(country: str) -> str | None:
     countries = ['Австралия', 'Австрия', 'Азербайджан', 'Албания', 'Алжир',
                  'Американские Виргинские острова', 'Американское Самоа', 'Ангола', 'Андорра',
                  'Антарктида', 'Антигуа и Барбуда', 'Антильские Острова', 'Аргентина',
@@ -44,13 +44,13 @@ async def valid_country(country: str | list) -> str | list | None:
                  'Экваториальная Гвинея', 'Эритрея', 'Эстония', 'Эфиопия', 'ЮАР', 'Югославия',
                  'Югославия (ФР)', 'Ямайка', 'Япония']
 
-    if type(country) == str:
+    if len(country.split(" ")) == 1:
         if country in countries:
             return country
         return None
-    
-    if type(country) == list:
-        for i in country:
-            if not i in countries:
+    if len(country.split(" ")) >= 2:
+        for i in country.split(" "):
+            if i not in countries:
                 return None
         return country
+    return None

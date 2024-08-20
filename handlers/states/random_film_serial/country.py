@@ -9,11 +9,10 @@ from states.random_film_serial import RandomFilmSerial
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 from keyboards.inline.create_random_pagination_kb import create_random_pagination_kb
 
-from utils.validations import (
-    valid_user_and_film_id_in_history,
-    valid_user_and_serial_id_in_history,
-    valid_country
-)
+from utils.validations.valid_user_and_film_id_in_history import valid_user_and_film_id_in_history
+from utils.validations.valid_user_and_serial_id_in_history import valid_user_and_serial_id_in_history
+from utils.validations.valid_country import valid_country
+
 from utils.get_film_data import get_film_data
 from utils.get_serial_data import get_serial_data
 
@@ -56,7 +55,7 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
         )
 
         if isinstance(some_data, dict):
-            random_data.append(some_data)
+            random_data.append(dict(some_data))
         elif isinstance(some_data, str):
             await message.answer(
                 text=some_data
@@ -84,7 +83,7 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
          description) = get_film_data(item)
 
         if await film_exists(name):
-            await valid_user_and_film_id_in_history.valid_user_and_film_id_in_history(
+            await valid_user_and_film_id_in_history(
                 name, 
                 telegram_id=message.from_user.id
             )
@@ -150,7 +149,7 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
          description) = get_serial_data(item)
 
         if await serial_exists(name):
-            await valid_user_and_serial_id_in_history.valid_user_and_serial_id_in_history(
+            await valid_user_and_serial_id_in_history(
                 name, 
                 telegram_id=message.from_user.id
             )
@@ -204,9 +203,9 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
             )
 
 
-@router.message(RandomFilmSerial.country, F.text.cast(valid_country.valid_country).as_("country"))
+@router.message(RandomFilmSerial.country, F.text.cast(valid_country).as_("country"))
 async def random_film_serial_country_skip(message: Message, state: FSMContext):
-    await state.update_data(country=message.text)
+    await state.update_data(country=message.text.split(" "))
 
     data = await state.get_data()
     random_data = []
@@ -252,7 +251,7 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
          description) = get_film_data(item)
 
         if await film_exists(name):
-            await valid_user_and_film_id_in_history.valid_user_and_film_id_in_history(
+            await valid_user_and_film_id_in_history(
                 name,
                 telegram_id=message.from_user.id
             )
@@ -318,7 +317,7 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
          description) = get_serial_data(item)
 
         if await serial_exists(name):
-            await valid_user_and_serial_id_in_history.valid_user_and_serial_id_in_history(
+            await valid_user_and_serial_id_in_history(
                 name,
                 telegram_id=message.from_user.id
             )
