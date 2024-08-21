@@ -47,7 +47,7 @@ async def process_choose_film_serial_all(message: Message, state: FSMContext):
     await state.set_state(HistoryOfSearch.first_date)
     await message.answer(
         text="Введите начальную дату поиска (в формате ГГГГ-ММ-ДД) "
-        "или нажмите на кнопку 'Пропустить' внизу чтобы просмотреть всю историю поиска.",
+        "или нажмите на кнопку ⏩ Пропустить ⏩ внизу чтобы просмотреть всю историю поиска.",
         reply_markup=back_or_skip_kb(),
         parse_mode=None,
     )

@@ -8,6 +8,7 @@ from states.random_film_serial import RandomFilmSerial
 
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 from keyboards.inline.create_random_pagination_kb import create_random_pagination_kb
+from keyboards.reply.main_kb import main_kb
 
 from utils.validations.valid_user_and_film_id_in_history import valid_user_and_film_id_in_history
 from utils.validations.valid_user_and_serial_id_in_history import valid_user_and_serial_id_in_history
@@ -29,8 +30,9 @@ router = Router(name=__name__)
 async def random_film_serial_country_back(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.janr)
     await message.answer(
-        text="Напишите пожалуйста жанр(ы), если хотите несколько жанров,"
-             "то напишите их через пробел, например(боевик, драма комедия).",
+        text="Напишите жанр(ы), если хотите несколько жанров,\n"
+             "то напишите их через пробел, например\n"
+             "(боевик, драма комедия).",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -58,7 +60,8 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
             random_data.append(dict(some_data))
         elif isinstance(some_data, str):
             await message.answer(
-                text=some_data
+                text=some_data,
+                reply_markup=main_kb(),
             )
             await state.clear()
             break
@@ -226,7 +229,8 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
             random_data.append(some_data)
         elif isinstance(some_data, str):
             await message.answer(
-                text=some_data
+                text=some_data,
+                reply_markup=main_kb(),
             )
             await state.clear()
             break
@@ -374,6 +378,6 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
 @router.message(RandomFilmSerial.country)
 async def random_film_serial_country_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понял 😔. Необходимо что бы вы"
+        text="Я вас не понял 😔. Необходимо что бы вы\n"
              "написали страну(ы) которые хотите включить в рандомный поиск."
     )

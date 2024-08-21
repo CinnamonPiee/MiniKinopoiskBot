@@ -18,7 +18,7 @@ router = Router(name=__name__)
 async def custom_searching_janr_back(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.count)
     await message.answer(
-        text="Укажите количество которое хотите получить. ",
+        text="Укажите количество которое хотите получить.",
         reply_markup=back_kb(),
     )
 
@@ -29,8 +29,10 @@ async def custom_searching_janr_skip(message: Message, state: FSMContext):
     
     await state.set_state(CustomSearching.year)
     await message.answer(
-        text="Напишите год или отрывок за который"
-             "хотите осуществить поиск, например (2016, 2008-2010).",
+        text="Напишите год или отрывок за который\n"
+             "хотите осуществить поиск, например\n"
+             "(2016, 2008-2010).\n"
+             "Максимальный - 2024",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -42,7 +44,9 @@ async def custom_searching_janr_skip(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.year)
     await message.answer(
         text="Напишите год или отрывок за который"
-             "хотите осуществить поиск, например (2016, 2008-2010).",
+             "хотите осуществить поиск, например\n"
+             "(2016, 2008-2010).\n"
+             "Максимальный - 2024",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -50,6 +54,6 @@ async def custom_searching_janr_skip(message: Message, state: FSMContext):
 @router.message(CustomSearching.janr)
 async def custom_searching_janr_none(message: Message):
     await message.answer(
-        text="Я вас не понял 😔. Необходимо что бы вы написали"
+        text="Я вас не понял 😔. Необходимо что бы вы написали\n"
              "жанр(ы) которые хотите включить в рандомный поиск."
     )

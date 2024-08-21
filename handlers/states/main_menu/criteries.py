@@ -45,7 +45,7 @@ async def main_choose_find_film_serial(message: Message, state: FSMContext):
 async def main_choose_random_film_serial(message: Message, state: FSMContext):
     await state.set_state(random_film_serial.RandomFilmSerial.type_choice)
     await message.answer(
-        text="Выберите что вы хотите получить рандомно (фильм, сериал или все вместе).",
+        text="Выберите что вы хотите получить рандомно (фильм, сериал или всё вместе).",
         reply_markup=history_search_kb.history_search_kb(),
         parse_mode=None,
     )
@@ -55,7 +55,7 @@ async def main_choose_random_film_serial(message: Message, state: FSMContext):
 async def main_choose_custom_searching(message: Message, state: FSMContext):
     await state.set_state(custom_searching.CustomSearching.type_choice)
     await message.answer(
-        text="Выберите что вы хотите найти (фильм, сериал или все вместе).",
+        text="Выберите что вы хотите найти (фильм, сериал или всё вместе).",
         reply_markup=history_search_kb.history_search_kb(),
         parse_mode=None,
     )

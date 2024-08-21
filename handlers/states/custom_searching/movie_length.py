@@ -8,6 +8,7 @@ from states.custom_searching import CustomSearching
 
 from keyboards.reply.back_or_skip_kb import back_or_skip_kb
 from keyboards.inline.create_custom_pagination_kb import create_custom_pagination_kb
+from keyboards.reply.main_kb import main_kb
 
 from utils.validations.valid_movie_length import valid_movie_length
 from utils.validations.valid_user_and_film_id_in_history import valid_user_and_film_id_in_history
@@ -25,8 +26,9 @@ router = Router(name=__name__)
 async def custom_searching_movie_length_back(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.country)
     await message.answer(
-        text="Напишите страну(ы), если хотите несколько старн, то"
-             "напишите их через пробел, например(США, Индия Канада).",
+        text="Напишите страну(ы), если хотите несколько старн, то\n"
+             "напишите их через пробел, например\n"
+             "(США, Индия Канада).",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -38,7 +40,7 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
     data = await state.get_data()
 
     if data["type_choice"] == "movie":
-        await state.update_data(series_length=None)
+
         random_data = []
 
         for _ in range(int(data["count"])):
@@ -48,16 +50,16 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
                 rating=data["rating"],
                 age_rating=data["age_rating"],
                 movie_length=data["movie_length"],
-                series_length=data["series_length"],
                 janr=data["janr"],
                 country=data["country"]
             )
 
             if isinstance(some_data, dict):
-                random_data.append(some_data)
+                random_data.append(dict(some_data))
             elif isinstance(some_data, str):
                 await message.answer(
-                    text=some_data
+                    text=some_data,
+                    reply_markup=main_kb(),
                 )
                 await state.clear()
                 break
@@ -138,8 +140,11 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
     elif data["type_choice"] == None:
         await state.set_state(CustomSearching.series_length)
         await message.answer(
-            text="Напишите продолжительность серии или отрывок за который"
-                 "хотите осуществить поиск, например (40, 30-60).",
+            text="Напишите продолжительность серии или отрывок за который\n"
+                 "хотите осуществить поиск, например\n"
+                 "(40, 30-60).\n"
+                 "Минимальная - 5\n"
+                 "Максимальная - 200",
             reply_markup=back_or_skip_kb(),
         )
 
@@ -151,7 +156,6 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
     data = await state.get_data()
 
     if data["type_choice"] == "movie":
-        await state.update_data(series_length=None)
         random_data = []
 
         for _ in range(int(data["count"])):
@@ -161,16 +165,16 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
                 rating=data["rating"],
                 age_rating=data["age_rating"],
                 movie_length=data["movie_length"],
-                series_length=data["series_length"],
                 janr=data["janr"],
                 country=data["country"]
             )
 
             if isinstance(some_data, dict):
-                random_data.append(some_data)
+                random_data.append(dict(some_data))
             elif isinstance(some_data, str):
                 await message.answer(
-                    text=some_data
+                    text=some_data,
+                    reply_markup=main_kb(),
                 )
                 await state.clear()
                 break
@@ -252,8 +256,11 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
     elif data["type_choice"] == None:
         await state.set_state(CustomSearching.series_length)
         await message.answer(
-            text="Напишите продолжительность серии или отрывок за который"
-                 "хотите осуществить поиск, например (40, 30-60).",
+            text="Напишите продолжительность серии или отрывок за который\n"
+                 "хотите осуществить поиск, например\n"
+                 "(40, 30-60).\n"
+                 "Минимальная - 5\n"
+                 "Максимальная - 200",
             reply_markup=back_or_skip_kb(),
         )
 
@@ -261,7 +268,7 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
 @router.message(CustomSearching.movie_length)
 async def custom_searching_movie_length_none(message: Message):
     await message.answer(
-        text="Я вас не понял 😔. Необходимо что бы вы написали"
+        text="Я вас не понял 😔. Необходимо что бы вы написали\n"
              "продолжительность фильма который хотите включить в рандомный поиск",
         reply_markup=back_or_skip_kb(),
     )

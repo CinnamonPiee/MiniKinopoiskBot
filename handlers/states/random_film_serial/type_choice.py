@@ -20,7 +20,7 @@ router = Router(name=__name__)
 async def random_film_serial_type_choice_back(message: Message, state: FSMContext):
     await state.set_state(MainMenu.criteries)
     await message.answer(
-        text="Выберите что вы хотите найти: ",
+        text="Выберите что вы хотите найти:",
         reply_markup=choose_criteries_kb(),
     )
 
@@ -32,19 +32,19 @@ async def random_film_serial_type_choice(message: Message, state: FSMContext):
     if message.text == "Фильмы":
         await state.update_data(type_choice="movie")
         await message.answer(
-            text="Укажите количество фильмов которое хотите получить. ",
+            text="Укажите количество фильмов которое хотите получить.",
             reply_markup=back_kb(),
         )
     elif message.text == "Сериалы":
         await state.update_data(type_choice="tv-series")
         await message.answer(
-            text="Укажите количество сериалов которое хотите получить. ",
+            text="Укажите количество сериалов которое хотите получить.",
             reply_markup=back_kb(),
         )
     elif message.text == "Фильмы и сериалы":
         await state.update_data(type_choice=None)
         await message.answer(
-            text="Укажите количество фильмов и сериалов которое хотите получить. ",
+            text="Укажите количество фильмов и сериалов которое хотите получить.",
             reply_markup=back_kb(),
         )
     
@@ -53,7 +53,7 @@ async def random_film_serial_type_choice(message: Message, state: FSMContext):
 @router.message(RandomFilmSerial.type_choice)
 async def random_film_serial_type_choice_none(message: Message):
     await message.answer(
-        text="Я вас не понимаю 😔. "
+        text="Я вас не понимаю 😔.\n"
              "Выберите что вы хотите найти: фильм, сериал или все вместе!",
         reply_markup=history_search_kb(),
     )

@@ -19,7 +19,7 @@ router = Router(name=__name__)
 async def custom_searching_count_back(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.type_choice)
     await message.answer(
-        text="Выберите что вы хотите получить рандомно. ",
+        text="Выберите что вы хотите получить рандомно.",
         reply_markup=history_search_kb(),
     )
 
@@ -29,8 +29,9 @@ async def custom_searching_count(message: Message, state: FSMContext):
     await state.update_data(count=message.text)
     await state.set_state(CustomSearching.janr)
     await message.answer(
-        text="Напишите жанр(ы), если хотите несколько жанров, то"
-             "напишите их через пробел, например(боевик, драма комедия).",
+        text="Напишите жанр(ы), если хотите несколько жанров, то\n"
+             "напишите их через пробел, например\n"
+             "(боевик, драма комедия).",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -38,7 +39,7 @@ async def custom_searching_count(message: Message, state: FSMContext):
 @router.message(CustomSearching.count)
 async def custom_searching_count_none(message: Message):
     await message.answer(
-        text="Я вас не понял 😔. Необходимо написать"
+        text="Я вас не понял 😔. Необходимо написать\n"
              "количество которое вы хотите видеть!",
         reply_markup=back_kb(),
     )

@@ -17,8 +17,11 @@ router = Router(name=__name__)
 async def custom_searching_age_rating_back(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.rating)
     await message.answer(
-        text="Напишите рейтинг или отрывок за который"
-             "хотите осуществить поиск, например (7, 7.1, 8-9.4).",
+        text="Напишите рейтинг или отрывок за который\n"
+             "хотите осуществить поиск, например\n"
+             "(7, 7.1, 8-9.4).\n"
+             "Минимальный - 1\n"
+             "Максимальный - 10",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -29,8 +32,9 @@ async def custom_searching_age_rating_skip(message: Message, state: FSMContext):
     
     await state.set_state(CustomSearching.country)
     await message.answer(
-        text="Напишите страну(ы), если хотите несколько старн, то"
-             "напишите их через пробел, например(США, Индия Канада).",
+        text="Напишите страну(ы), если хотите несколько старн, то\n"
+             "напишите их через пробел, например\n"
+             "(США, Индия Канада).",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -41,8 +45,9 @@ async def custom_searching_age_rating_skip(message: Message, state: FSMContext):
 
     await state.set_state(CustomSearching.country)
     await message.answer(
-        text="Напишите страну(ы), если хотите несколько старн, то"
-             "напишите их через пробел, например(США, Индия Канада).",
+        text="Напишите страну(ы), если хотите несколько старн, то\n"
+             "напишите их через пробел, например\n"
+             "(США, Индия Канада).",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -50,7 +55,7 @@ async def custom_searching_age_rating_skip(message: Message, state: FSMContext):
 @router.message(CustomSearching.age_rating)
 async def custom_searching_age_rating_none(message: Message):
     await message.answer(
-        text="Я вас не понял 😔. Необходимо что бы вы написали"
+        text="Я вас не понял 😔. Необходимо что бы вы написали\n"
              "возрастной рейтинг который хотите включить в рандомный поиск",
         reply_markup=back_or_skip_kb(),
     )

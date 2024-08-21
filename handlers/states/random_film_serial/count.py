@@ -20,7 +20,7 @@ router = Router(name=__name__)
 async def random_film_serial_count_back(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.type_choice)
     await message.answer(
-        text="Выберите что вы хотите получить рандомно. ",
+        text="Выберите что вы хотите получить рандомно.",
         reply_markup=history_search_kb(),
     )
 
@@ -38,7 +38,7 @@ async def random_film_serial_count(message: Message, state: FSMContext):
 @router.message(RandomFilmSerial.count)
 async def random_film_serial_count_none(message: Message):
     await message.answer(
-        text="Простите, я вас не понял 😔. Необходимо написать"
+        text="Я вас не понял 😔. Необходимо написать\n"
              "количество которое вы хотите видеть!",
         reply_markup=back_kb(),
     )

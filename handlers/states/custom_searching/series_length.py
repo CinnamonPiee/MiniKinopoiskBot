@@ -26,21 +26,25 @@ router = Router(name=__name__)
 
 @router.message(CustomSearching.series_length, F.text == "🚫 Назад 🚫")
 async def custom_searching_series_length_back(message: Message, state: FSMContext):
-    data = state.get_data()
+    data = await state.get_data()
 
     if data["type_choice"] == "tv-series":
         await state.set_state(CustomSearching.country)
         await message.answer(
-            text="Напишите страну(ы), если хотите несколько старн, то"
-                 "напишите их через пробел, например(США, Индия Канада).",
+            text="Напишите страну(ы), если хотите несколько старн, то\n"
+                 "напишите их через пробел, например\n"
+                 "(США, Индия Канада).",
             reply_markup=back_or_skip_kb(),
         )
 
     elif data["type_choice"] == None:
         await state.set_data(CustomSearching.movie_length)
         await message.answer(
-            text="Напишите продолжительность фильма или отрывок за"
-                 "который хотите осуществить поиск, например (120, 100-160).",
+            text="Напишите продолжительность фильма или отрывок за\n"
+                 "который хотите осуществить поиск, например\n"
+                 "(120, 100-160).\n"
+                 "Минимальная - 15\n"
+                 "Максимальная - 350",
             reply_markup=back_or_skip_kb(),
         )
 
@@ -49,7 +53,7 @@ async def custom_searching_series_length_back(message: Message, state: FSMContex
 async def custom_searching_series_length_skip(message: Message, state: FSMContext):
     await state.update_data(series_length=None)
 
-    data = state.get_data()
+    data = await state.get_data()
 
     if data["type_choice"] == "tv-series":
         custom_data = []
@@ -578,7 +582,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
 @router.message(CustomSearching.series_length)
 async def custom_searching_series_length_none(message: Message):
     await message.answer(
-        text="Я вас не понял 😔. Необходимо что бы вы написали"
+        text="Я вас не понял 😔. Необходимо что бы вы написали\n"
              "продолжительность серии которую хотите включить в рандомный поиск",
         reply_markup=back_or_skip_kb(),
     )

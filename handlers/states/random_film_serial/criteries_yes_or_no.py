@@ -33,7 +33,7 @@ PER_PAGE = 1
 async def random_film_serial_criteries_yes_or_no_back(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.count)
     await message.answer(
-        text="Укажите количество которое вы хотите получить. ",
+        text="Укажите количество которое вы хотите получить.",
         reply_markup=back_kb(),
     )
 
@@ -199,8 +199,9 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
 async def random_film_serial_criteries_yes_or_no(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.year)
     await message.answer(
-        text="Напишите пожалуйста год или отрывок за который хотите "
-             "осуществить поиск, например (2016, 2008-2010).",
+        text="Напишите год или отрывок за который хотите\n"
+             "осуществить поиск, например (2016, 2008-2010).\n"
+             "Максимальный - 2024.",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -208,7 +209,7 @@ async def random_film_serial_criteries_yes_or_no(message: Message, state: FSMCon
 @router.message(RandomFilmSerial.criteries_yes_or_no)
 async def random_film_serial_criteries_yes_or_no_none(message: Message):
     await message.answer(
-        text="Я вас не понял 😔, выберите пожалуйста "
+        text="Я вас не понял 😔, выберите ,пожалуйста,\n"
              "хотите ли вы сделать рандомный поиск более подробным?",
         reply_markup=yes_no_back(),
     )

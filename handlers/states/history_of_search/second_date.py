@@ -73,7 +73,7 @@ async def second_date(message: Message, state: FSMContext):
                                 f"Жанры: {film.janr}\n"
                                 f"Рейтинг: {film.rating}\n"
                                 f"Год: {film.year}\n"
-                                f"Продолжительность фильма: {film.movie_length}\n"
+                                f"Продолжительность фильма: {film.movie_length} минут\n"
                                 f"Страна: {film.country}\n"
                                 f"Возрастной рейтинг: {film.age_rating}\n"
                                 f"Описание: {film.description}",
@@ -87,7 +87,7 @@ async def second_date(message: Message, state: FSMContext):
                                 f"Жанры: {film.janr}\n"
                                 f"Рейтинг: {film.rating}\n"
                                 f"Год: {film.year}\n"
-                                f"Продолжительность фильма: {film.movie_length}\n"
+                                f"Продолжительность фильма: {film.movie_length} минут\n"
                                 f"Страна: {film.country}\n"
                                 f"Возрастной рейтинг: {film.age_rating}\n"
                                 f"Описание: None",
@@ -133,7 +133,7 @@ async def second_date(message: Message, state: FSMContext):
                                 f"Жанры: {serial.janr}\n"
                                 f"Рейтинг: {serial.rating}\n"
                                 f"Релиз: {serial.release_year}\n"
-                                f"Продолжительность серии: {serial.series_length}\n"
+                                f"Продолжительность серии: {serial.series_length} минут\n"
                                 f"Страна: {serial.country}\n"
                                 f"Возрастной рейтинг: {serial.age_rating}\n"
                                 f"Описание: {serial.description}",
@@ -147,7 +147,7 @@ async def second_date(message: Message, state: FSMContext):
                                 f"Жанры: {serial.janr}\n"
                                 f"Рейтинг: {serial.rating}\n"
                                 f"Релиз: {serial.release_year}\n"
-                                f"Продолжительность серии: {serial.series_length}\n"
+                                f"Продолжительность серии: {serial.series_length} минут\n"
                                 f"Страна: {serial.country}\n"
                                 f"Возрастной рейтинг: {serial.age_rating}\n"
                                 f"Описание: None",
@@ -195,7 +195,7 @@ async def second_date(message: Message, state: FSMContext):
                                         f"Жанры: {film.janr}\n"
                                         f"Рейтинг: {film.rating}\n"
                                         f"Год: {film.year}\n"
-                                        f"Продолжительность фильма: {film.movie_length}\n"
+                                        f"Продолжительность фильма: {film.movie_length} минут\n"
                                         f"Страна: {film.country}\n"
                                         f"Возрастной рейтинг: {film.age_rating}\n"
                                         f"Описание: {film.description}",
@@ -209,7 +209,7 @@ async def second_date(message: Message, state: FSMContext):
                                         f"Жанры: {film.janr}\n"
                                         f"Рейтинг: {film.rating}\n"
                                         f"Год: {film.year}\n"
-                                        f"Продолжительность фильма: {film.movie_length}\n"
+                                        f"Продолжительность фильма: {film.movie_length} минут\n"
                                         f"Страна: {film.country}\n"
                                         f"Возрастной рейтинг: {film.age_rating}\n"
                                         f"Описание: None",
@@ -236,7 +236,7 @@ async def second_date(message: Message, state: FSMContext):
                                         f"Жанры: {serial.janr}\n"
                                         f"Рейтинг: {serial.rating}\n"
                                         f"Релиз: {serial.release_year}\n"
-                                        f"Продолжительность серии: {serial.series_length}\n"
+                                        f"Продолжительность серии: {serial.series_length} минут\n"
                                         f"Страна: {serial.country}\n"
                                         f"Возрастной рейтинг: {serial.age_rating}\n"
                                         f"Описание: {serial.description}",
@@ -250,7 +250,7 @@ async def second_date(message: Message, state: FSMContext):
                                         f"Жанры: {serial.janr}\n"
                                         f"Рейтинг: {serial.rating}\n"
                                         f"Релиз: {serial.release_year}\n"
-                                        f"Продолжительность серии: {serial.series_length}\n"
+                                        f"Продолжительность серии: {serial.series_length} минут\n"
                                         f"Страна: {serial.country}\n"
                                         f"Возрастной рейтинг: {serial.age_rating}\n"
                                         f"Описание: None",
@@ -270,7 +270,7 @@ async def second_date(message: Message, state: FSMContext):
 @router.message(HistoryOfSearch.second_date)
 async def second_date_none(message: Message):
     await message.answer(
-        text="Я вас не понимаю 😔. Введите конечную дату поиска"
+        text="Я вас не понимаю 😔. Введите конечную дату поиска "
              "(в формате ГГГГ-ММ-ДД)",
         reply_markup=back_kb(),
     )

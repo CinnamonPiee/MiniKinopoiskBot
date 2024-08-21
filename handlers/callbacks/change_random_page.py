@@ -96,7 +96,7 @@ async def display_history(
                   f"Жанры: {genres}\n"\
                   f"Рейтинг: {rating}\n"\
                   f"Год: {year}\n"\
-                  f"Продолжительность фильма: {movie_length}\n"\
+                  f"Продолжительность фильма: {0 if not movie_length else str(movie_length) + " минут"}\n"\
                   f"Страна: {countries}\n"\
                   f"Возрастной рейтинг: {age_rating}\n"\
                   f"Описание: {description}"\
@@ -119,7 +119,7 @@ async def display_history(
                       f"Жанры: {genres}\n"\
                       f"Рейтинг: {rating}\n"\
                       f"Год: {year}\n"\
-                      f"Продолжительность фильма: {movie_length}\n"\
+                      f"Продолжительность фильма: {0 if not movie_length else str(movie_length) + " минут"}\n"\
                       f"Страна: {countries}\n"\
                       f"Возрастной рейтинг: {age_rating}\n"\
                       f"Описание: None"\
@@ -169,7 +169,7 @@ async def display_history(
                   f"Жанры: {genres}\n"\
                   f"Рейтинг: {rating}\n"\
                   f"Релиз: {release_years}\n"\
-                  f"Продолжительность серии: {series_length}\n"\
+                  f"Продолжительность серии: {series_length} минут\n"\
                   f"Страна: {countries}\n"\
                   f"Возрастной рейтинг: {age_rating}\n"\
                   f"Описание: {description}"\
@@ -192,7 +192,7 @@ async def display_history(
                       f"Жанры: {genres}\n"\
                       f"Рейтинг: {rating}\n"\
                       f"Релиз: {release_years}\n"\
-                      f"Продолжительность серии: {series_length}\n"\
+                      f"Продолжительность серии: {series_length} минут\n"\
                       f"Страна: {countries}\n"\
                       f"Возрастной рейтинг: {age_rating}\n"\
                       f"Описание: None"\

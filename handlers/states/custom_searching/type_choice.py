@@ -45,7 +45,7 @@ async def custom_searching_type_choice(message: Message, state: FSMContext):
 @router.message(CustomSearching.type_choice)
 async def custom_searching_type_choice_none(message: Message):
     await message.answer(
-        text="Я вас не понимаю 😔, выберите что вы"
+        text="Я вас не понимаю 😔, выберите что вы\n"
              "хотите найти: фильм, сериал или все вместе!",
         reply_markup=history_search_kb(),
     )

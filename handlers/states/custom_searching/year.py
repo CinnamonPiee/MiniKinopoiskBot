@@ -17,8 +17,9 @@ router = Router(name=__name__)
 async def custom_searching_year_back(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.janr)
     await message.answer(
-        text="Напишите жанр(ы), если хотите несколько жанров, то"
-             "напишите их через пробел, например(боевик, драма комедия).",
+        text="Напишите жанр(ы), если хотите несколько жанров, то\n"
+             "напишите их через пробел, например\n"
+             "(боевик, драма комедия).",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -29,8 +30,10 @@ async def custom_searching_year_skip(message: Message, state: FSMContext):
 
     await state.set_state(CustomSearching.rating)
     await message.answer(
-        text="Напишите рейтинг или отрывок за который хотите"
-             "осуществить поиск, например (7, 7.1, 8-9.4).",
+        text="Напишите рейтинг или отрывок за который хотите\n"
+             "осуществить поиск, например (7, 7.1, 8-9.4).\n"
+             "Минимальный - 1\n"
+             "Максимальный - 10",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -41,8 +44,10 @@ async def custom_searching_year_skip(message: Message, state: FSMContext):
 
     await state.set_state(CustomSearching.rating)
     await message.answer(
-        text="Напишите рейтинг или отрывок за который хотите"
-             "осуществить поиск, например (7, 7.1, 8-9.4).",
+        text="Напишите рейтинг или отрывок за который хотите\n"
+             "осуществить поиск, например (7, 7.1, 8-9.4).\n"
+             "Минимальный - 1\n"
+             "Максимальный - 10",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -50,7 +55,7 @@ async def custom_searching_year_skip(message: Message, state: FSMContext):
 @router.message(CustomSearching.year)
 async def custom_searching_year_none(message: Message):
     await message.answer(
-        text="Я вас не понял 😔. Необходимо что бы вы написали"
+        text="Я вас не понял 😔. Необходимо что бы вы написали\n"
              "год который хотите включить в рандомный поиск",
         reply_markup=back_or_skip_kb(),
     )

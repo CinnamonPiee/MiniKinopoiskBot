@@ -70,7 +70,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                                 f"Жанры: {film.janr}\n"
                                 f"Рейтинг: {film.rating}\n"
                                 f"Год: {film.year}\n"
-                                f"Продолжительность фильма: {film.movie_length}\n"
+                                f"Продолжительность фильма: {film.movie_length} минут\n"
                                 f"Страна: {film.country}\n"
                                 f"Возрастной рейтинг: {film.age_rating}\n"
                                 f"Описание: {film.description}",
@@ -84,7 +84,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                                 f"Жанры: {film.janr}\n"
                                 f"Рейтинг: {film.rating}\n"
                                 f"Год: {film.year}\n"
-                                f"Продолжительность фильма: {film.movie_length}\n"
+                                f"Продолжительность фильма: {film.movie_length} минут\n"
                                 f"Страна: {film.country}\n"
                                 f"Возрастной рейтинг: {film.age_rating}\n"
                                 f"Описание: None",
@@ -123,7 +123,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                                 f"Жанры: {serial.janr}\n"
                                 f"Рейтинг: {serial.rating}\n"
                                 f"Релиз: {serial.release_year}\n"
-                                f"Продолжительность серии: {serial.series_length}\n"
+                                f"Продолжительность серии: {serial.series_length} минут\n"
                                 f"Страна: {serial.country}\n"
                                 f"Возрастной рейтинг: {serial.age_rating}\n"
                                 f"Описание: {serial.description}",
@@ -137,7 +137,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                                 f"Жанры: {serial.janr}\n"
                                 f"Рейтинг: {serial.rating}\n"
                                 f"Релиз: {serial.release_year}\n"
-                                f"Продолжительность серии: {serial.series_length}\n"
+                                f"Продолжительность серии: {serial.series_length} минут\n"
                                 f"Страна: {serial.country}\n"
                                 f"Возрастной рейтинг: {serial.age_rating}\n"
                                 f"Описание: None",
@@ -178,7 +178,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                                         f"Жанры: {film.janr}\n"
                                         f"Рейтинг: {film.rating}\n"
                                         f"Год: {film.year}\n"
-                                        f"Продолжительность фильма: {film.movie_length}\n"
+                                        f"Продолжительность фильма: {film.movie_length} минут\n"
                                         f"Страна: {film.country}\n"
                                         f"Возрастной рейтинг: {film.age_rating}\n"
                                         f"Описание: {film.description}",
@@ -192,7 +192,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                                         f"Жанры: {film.janr}\n"
                                         f"Рейтинг: {film.rating}\n"
                                         f"Год: {film.year}\n"
-                                        f"Продолжительность фильма: {film.movie_length}\n"
+                                        f"Продолжительность фильма: {film.movie_length} минут\n"
                                         f"Страна: {film.country}\n"
                                         f"Возрастной рейтинг: {film.age_rating}\n"
                                         f"Описание: None",
@@ -219,7 +219,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                                         f"Жанры: {serial.janr}\n"
                                         f"Рейтинг: {serial.rating}\n"
                                         f"Релиз: {serial.release_year}\n"
-                                        f"Продолжительность серии: {serial.series_length}\n"
+                                        f"Продолжительность серии: {serial.series_length} минут\n"
                                         f"Страна: {serial.country}\n"
                                         f"Возрастной рейтинг: {serial.age_rating}\n"
                                         f"Описание: {serial.description}",
@@ -233,7 +233,7 @@ async def first_date_skip(message: Message, state: FSMContext):
                                         f"Жанры: {serial.janr}\n"
                                         f"Рейтинг: {serial.rating}\n"
                                         f"Релиз: {serial.release_year}\n"
-                                        f"Продолжительность серии: {serial.series_length}\n"
+                                        f"Продолжительность серии: {serial.series_length} минут\n"
                                         f"Страна: {serial.country}\n"
                                         f"Возрастной рейтинг: {serial.age_rating}\n"
                                         f"Описание: None",
@@ -254,7 +254,7 @@ async def first_date(message: Message, state: FSMContext):
     await state.set_state(HistoryOfSearch.second_date)
     await state.update_data(first_date=message.text)
     await message.answer(
-        text="Введите конечную дату поиска (в формате ГГГГ-ММ-ДД)"
+        text="Введите конечную дату поиска (в формате ГГГГ-ММ-ДД) "
              " или нажмите на кнопку внизу для выбора сегодняшней даты.",
         reply_markup=back_or_today_kb.back_or_today_kb(),
     )

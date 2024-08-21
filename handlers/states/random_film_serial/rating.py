@@ -17,8 +17,9 @@ router = Router(name=__name__)
 async def random_film_serial_rating_back(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.year)
     await message.answer(
-        text="Напишите год или отрывок за который"
-             "хотите осуществить поиск, например (2016, 2008-2010).",
+        text="Напишите год или отрывок за который\n"
+             "хотите осуществить поиск, например (2016, 2008-2010).\n"
+             "Максимальный - 2024",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -29,9 +30,11 @@ async def random_film_serial_rating_skip(message: Message, state: FSMContext):
 
     await state.set_state(RandomFilmSerial.age_rating)
     await message.answer(
-        text="Напишите возрастной рейтинг или промежуток"
-             "за который хотите осуществить поиск, например"
-             "(6, 12-18).",
+        text="Напишите возрастной рейтинг или промежуток\n"
+             "за который хотите осуществить поиск, например\n"
+             "(6, 12-18).\n"
+             "Минимальный - 0\n"
+             "Максимальный - 18",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -42,9 +45,11 @@ async def random_film_serial_rating_skip(message: Message, state: FSMContext):
 
     await state.set_state(RandomFilmSerial.age_rating)
     await message.answer(
-        text="Напишите возрастной рейтинг или промежуток"
-             "за который хотите осуществить поиск, например"
-             "(6, 12-18).",
+        text="Напишите возрастной рейтинг или промежуток\n"
+             "за который хотите осуществить поиск, например\n"
+             "(6, 12-18).\n"
+             "Минимальный - 0\n"
+             "Максимальный - 18",
         reply_markup=back_or_skip_kb(),
     )
 
@@ -52,7 +57,7 @@ async def random_film_serial_rating_skip(message: Message, state: FSMContext):
 @router.message(RandomFilmSerial.rating)
 async def random_film_serial_rating_none(message: Message):
     await message.answer(
-        text="Я вас не понял 😔. Необходимо что бы вы"
+        text="Я вас не понял 😔. Необходимо что бы вы\n"
              "написали рейтинг который хотите включить в рандомный поиск",
         reply_markup=back_or_skip_kb(),
     )
