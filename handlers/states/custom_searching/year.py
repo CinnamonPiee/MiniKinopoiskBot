@@ -25,8 +25,8 @@ async def custom_searching_year_back(message: Message, state: FSMContext):
 
 
 @router.message(CustomSearching.year, F.text.cast(valid_years).as_("year"))
-async def custom_searching_year_skip(message: Message, state: FSMContext):
-    await state.update_data(year=None)
+async def custom_searching_year(message: Message, state: FSMContext):
+    await state.update_data(year=message.text)
 
     await state.set_state(CustomSearching.rating)
     await message.answer(
@@ -40,7 +40,7 @@ async def custom_searching_year_skip(message: Message, state: FSMContext):
 
 @router.message(CustomSearching.year, F.text == "⏩ Пропустить ⏩")
 async def custom_searching_year_skip(message: Message, state: FSMContext):
-    await state.update_data(year=message.text)
+    await state.update_data(year=None)
 
     await state.set_state(CustomSearching.rating)
     await message.answer(

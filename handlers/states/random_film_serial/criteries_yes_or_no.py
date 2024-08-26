@@ -33,7 +33,8 @@ PER_PAGE = 1
 async def random_film_serial_criteries_yes_or_no_back(message: Message, state: FSMContext):
     await state.set_state(RandomFilmSerial.count)
     await message.answer(
-        text="Укажите количество которое вы хотите получить.",
+        text="Укажите количество которое вы хотите получить.\n"
+             "Максимум - 5",
         reply_markup=back_kb(),
     )
 
@@ -56,8 +57,7 @@ async def random_film_serial_criteries_yer_or_no(message: Message, state: FSMCon
             await state.clear()
             break
 
-    if random_data:
-        await state.update_data(random_data=random_data, page=0, telegram_id=message.from_user.id)
+    await state.update_data(random_data=random_data, page=0, telegram_id=message.from_user.id)
 
     item = random_data[0]
     page = 0

@@ -57,7 +57,7 @@ async def custom_searching_country_skip(message: Message, state: FSMContext):
 
 @router.message(CustomSearching.country, F.text.cast(valid_country).as_("country"))
 async def custom_searching_country_skip(message: Message, state: FSMContext):
-    await state.update_data(country=message.text)
+    await state.update_data(country=valid_country(message.text))
 
     data = await state.get_data()
 

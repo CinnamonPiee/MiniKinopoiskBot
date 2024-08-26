@@ -22,8 +22,7 @@ router = Router(name=__name__)
 
 @router.callback_query(lambda c: c.data and c.data.startswith("custom_page_") or c.data == "custom_main_menu")
 async def change_random_page(callback_query: types.CallbackQuery, state: FSMContext):
-    page = int(callback_query.data.split("_")[
-               2]) if "custom_page_" in callback_query.data else 0
+    page = int(callback_query.data.split("_")[2]) if "custom_page_" in callback_query.data else 0
     data = await state.get_data()
     custom_data = data.get("custom_data", [])
     total_count = len(custom_data)
@@ -97,7 +96,7 @@ async def display_history(
             f"Жанры: {genres}\n"\
             f"Рейтинг: {rating}\n"\
             f"Год: {year}\n"\
-            f"Продолжительность фильма: {movie_length}\n"\
+            f"Продолжительность фильма: {movie_length} минут\n"\
             f"Страна: {countries}\n"\
             f"Возрастной рейтинг: {age_rating}\n"\
             f"Описание: {description}"\

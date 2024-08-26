@@ -41,7 +41,7 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
 
     if data["type_choice"] == "movie":
 
-        random_data = []
+        custom_data = []
 
         for _ in range(int(data["count"])):
             some_data = random_custom_movie_serial_search(
@@ -50,41 +50,30 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
                 rating=data["rating"],
                 age_rating=data["age_rating"],
                 movie_length=data["movie_length"],
+                series_length=None,
                 janr=data["janr"],
                 country=data["country"]
             )
 
             if isinstance(some_data, dict):
-                random_data.append(dict(some_data))
+                custom_data.append(some_data)
             elif isinstance(some_data, str):
                 await message.answer(
                     text=some_data,
                     reply_markup=main_kb(),
                 )
+
                 await state.clear()
                 break
 
-        if random_data:
-            await state.update_data(
-                random_data=random_data, 
-                page=0, 
-                telegram_id=message.from_user.id
-            )
+        await state.update_data(custom_data=custom_data, page=0, telegram_id=message.from_user.id)
 
-        item = random_data[0]
+        item = custom_data[0]
         page = 0
-        total_count = len(random_data)
+        total_count = len(custom_data)
         keyboards = create_custom_pagination_kb(page, total_count)
 
-        (url,
-         name,
-         genres,
-         rating,
-         year,
-         movie_length,
-         countries,
-         age_rating,
-         description) = get_film_data(item)
+        url, name, genres, rating, year, movie_length, countries, age_rating, description = get_film_data(item)
 
         if await film_exists(name):
             await valid_user_and_film_id_in_history(name, telegram_id=message.from_user.id)
@@ -156,7 +145,8 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
     data = await state.get_data()
 
     if data["type_choice"] == "movie":
-        random_data = []
+
+        custom_data = []
 
         for _ in range(int(data["count"])):
             some_data = random_custom_movie_serial_search(
@@ -170,7 +160,7 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
             )
 
             if isinstance(some_data, dict):
-                random_data.append(dict(some_data))
+                custom_data.append(some_data)
             elif isinstance(some_data, str):
                 await message.answer(
                     text=some_data,
@@ -179,27 +169,14 @@ async def custom_searching_movie_length(message: Message, state: FSMContext):
                 await state.clear()
                 break
 
-        if random_data:
-            await state.update_data(
-                random_data=random_data,
-                page=0,
-                telegram_id=message.from_user.id
-            )
+        await state.update_data(custom_data=custom_data, page=0, telegram_id=message.from_user.id)
 
-        item = random_data[0]
+        item = custom_data[0]
         page = 0
-        total_count = len(random_data)
+        total_count = len(custom_data)
         keyboards = create_custom_pagination_kb(page, total_count)
 
-        (url,
-         name,
-         genres,
-         rating,
-         year,
-         movie_length,
-         countries,
-         age_rating,
-         description) = get_film_data(item)
+        url, name, genres, rating, year, movie_length, countries, age_rating, description = get_film_data(item)
 
         if await film_exists(name):
             await valid_user_and_film_id_in_history(name, telegram_id=message.from_user.id)

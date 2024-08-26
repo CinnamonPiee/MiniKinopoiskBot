@@ -37,7 +37,8 @@ async def custom_searching_type_choice(message: Message, state: FSMContext):
         await state.update_data(type_choice=None)
 
     await message.answer(
-        text="Укажите количество которое хотите получить. ",
+        text="Укажите количество которое хотите получить.\n"
+             "Максимум - 5",
         reply_markup=back_kb(),
     )
 

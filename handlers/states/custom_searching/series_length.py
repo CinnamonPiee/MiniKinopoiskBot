@@ -56,6 +56,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
     data = await state.get_data()
 
     if data["type_choice"] == "tv-series":
+
         custom_data = []
 
         for _ in range(int(data["count"])):
@@ -64,7 +65,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                 year=data["year"],
                 rating=data["rating"],
                 age_rating=data["age_rating"],
-                movie_length=data["movie_length"],
+                movie_length=None,
                 series_length=data["series_length"],
                 janr=data["janr"],
                 country=data["country"]
@@ -76,30 +77,18 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                 await message.answer(
                     text=some_data
                 )
+
                 await state.clear()
                 break
 
-        if custom_data:
-            await state.update_data(
-                custom_data=custom_data,
-                page=0, 
-                telegram_id=message.from_user.id
-            )
+        await state.update_data(custom_data=custom_data, page=0, telegram_id=message.from_user.id)
 
         item = custom_data[0]
         page = 0
         total_count = len(custom_data)
         keyboards = create_custom_pagination_kb(page, total_count)
 
-        (url, 
-         name,
-         genres, 
-         rating, 
-         release_years, 
-         series_length, 
-         countries, 
-         age_rating, 
-         description) = get_serial_data(item)
+        url, name, genres, rating, release_years, series_length, countries, age_rating, description = get_serial_data(item)
 
         if await serial_exists(name):
             await valid_user_and_serial_id_in_history(name, telegram_id=message.from_user.id)
@@ -111,7 +100,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                 janr=genres,
                 rating=rating,
                 release_year=release_years,
-                series_length=series_length,
+                series_length="0" if item["seriesLength"] == None else str(item["seriesLength"]),
                 country=countries,
                 age_rating=age_rating,
                 description=description,
@@ -153,6 +142,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
             )
 
     elif data["type_choice"] == None:
+
         custom_data = []
 
         for _ in range(int(data["count"])):
@@ -176,12 +166,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                 await state.clear()
                 break
 
-        if custom_data:
-            await state.update_data(
-                random_data=custom_data,
-                page=0,
-                telegram_id=message.from_user.id
-            )
+        await state.update_data(random_data=custom_data, page=0, telegram_id=message.from_user.id)
 
         item = custom_data[0]
         page = 0
@@ -189,15 +174,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
         keyboards = create_custom_pagination_kb(page, total_count)
 
         if item["type"] == "movie":
-            (url,
-             name,
-             genres,
-             rating,
-             year,
-             movie_length,
-             countries,
-             age_rating,
-             description) = get_film_data(item)
+            url, name, genres, rating, year, movie_length, countries, age_rating, description = get_film_data(item)
 
             if await film_exists(name):
                 await valid_user_and_film_id_in_history(name, telegram_id=message.from_user.id)
@@ -209,8 +186,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                     janr=genres,
                     year=int(year),
                     country=countries,
-                    movie_length=0 if item["movieLength"] == None else int(
-                        item["movieLength"]),
+                    movie_length=0 if item["movieLength"] == None else int(item["movieLength"]),
                     description=description,
                     rating=rating,
                     age_rating=age_rating,
@@ -252,15 +228,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                 )
 
         elif item["type"] == "tv-series":
-            (url,
-             name,
-             genres,
-             rating,
-             release_years,
-             series_length,
-             countries,
-             age_rating,
-             description) = get_serial_data(item)
+            url, name, genres, rating, release_years, series_length, countries, age_rating, description = get_serial_data(item)
 
             if await serial_exists(name):
                 await valid_user_and_serial_id_in_history(name, telegram_id=message.from_user.id)
@@ -272,7 +240,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                     janr=genres,
                     rating=rating,
                     release_year=release_years,
-                    series_length=series_length,
+                    series_length="0" if item["seriesLength"] == None else str(item["seriesLength"]),
                     country=countries,
                     age_rating=age_rating,
                     description=description,
@@ -315,12 +283,13 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
 
 
 @router.message(CustomSearching.series_length, F.text.cast(valid_series_length).as_("series_length"))
-async def custom_searching_series_length_skip(message: Message, state: FSMContext):
+async def custom_searching_series_length(message: Message, state: FSMContext):
     await state.update_data(series_length=message.text)
 
     data = await state.get_data()
 
     if data["type_choice"] == "tv-series":
+
         custom_data = []
 
         for _ in range(int(data["count"])):
@@ -329,7 +298,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                 year=data["year"],
                 rating=data["rating"],
                 age_rating=data["age_rating"],
-                movie_length=data["movie_length"],
+                movie_length=None,
                 series_length=data["series_length"],
                 janr=data["janr"],
                 country=data["country"]
@@ -344,27 +313,14 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                 await state.clear()
                 break
 
-        if custom_data:
-            await state.update_data(
-                custom_data=custom_data,
-                page=0,
-                telegram_id=message.from_user.id
-            )
+        await state.update_data(custom_data=custom_data, page=0, telegram_id=message.from_user.id)
 
         item = custom_data[0]
         page = 0
         total_count = len(custom_data)
         keyboards = create_custom_pagination_kb(page, total_count)
 
-        (url,
-         name,
-         genres,
-         rating,
-         release_years,
-         series_length,
-         countries,
-         age_rating,
-         description) = get_serial_data(item)
+        url, name, genres, rating, release_years, series_length, countries, age_rating, description = get_serial_data(item)
 
         if await serial_exists(name):
             await valid_user_and_serial_id_in_history(name, telegram_id=message.from_user.id)
@@ -376,7 +332,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                 janr=genres,
                 rating=rating,
                 release_year=release_years,
-                series_length=series_length,
+                series_length="0" if item["seriesLength"] == None else str(item["seriesLength"]),
                 country=countries,
                 age_rating=age_rating,
                 description=description,
@@ -418,6 +374,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
             )
 
     elif data["type_choice"] == None:
+
         custom_data = []
 
         for _ in range(int(data["count"])):
@@ -454,15 +411,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
         keyboards = create_custom_pagination_kb(page, total_count)
 
         if item["type"] == "movie":
-            (url,
-             name,
-             genres,
-             rating,
-             year,
-             movie_length,
-             countries,
-             age_rating,
-             description) = get_film_data(item)
+            url, name, genres, rating, year, movie_length, countries, age_rating, description = get_film_data(item)
 
             if await film_exists(name):
                 await valid_user_and_film_id_in_history(name, telegram_id=message.from_user.id)
@@ -474,8 +423,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                     janr=genres,
                     year=int(year),
                     country=countries,
-                    movie_length=0 if item["movieLength"] == None else int(
-                        item["movieLength"]),
+                    movie_length=0 if item["movieLength"] == None else int(item["movieLength"]),
                     description=description,
                     rating=rating,
                     age_rating=age_rating,
@@ -517,15 +465,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                 )
 
         elif item["type"] == "tv-series":
-            (url,
-             name,
-             genres,
-             rating,
-             release_years,
-             series_length,
-             countries,
-             age_rating,
-             description) = get_serial_data(item)
+            url, name, genres, rating, release_years, series_length, countries, age_rating, description = get_serial_data(item)
 
             if await serial_exists(name):
                 await valid_user_and_serial_id_in_history(name, telegram_id=message.from_user.id)
@@ -537,7 +477,7 @@ async def custom_searching_series_length_skip(message: Message, state: FSMContex
                     janr=genres,
                     rating=rating,
                     release_year=release_years,
-                    series_length=series_length,
+                    series_length="0" if item["seriesLength"] == None else str(item["seriesLength"]),
                     country=countries,
                     age_rating=age_rating,
                     description=description,

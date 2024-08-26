@@ -66,8 +66,7 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
             await state.clear()
             break
 
-    if random_data:
-        await state.update_data(random_data=random_data, page=0, telegram_id=message.from_user.id)
+    await state.update_data(random_data=random_data, page=0, telegram_id=message.from_user.id)
 
     item = random_data[0]
     page = 0
@@ -98,8 +97,7 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
                 janr=genres,
                 year=int(year),
                 country=countries,
-                movie_length=0 if item["movieLength"] == None else int(
-                    item["movieLength"]),
+                movie_length=0 if item["movieLength"] == None else int(item["movieLength"]),
                 description=description,
                 rating=rating,
                 age_rating=age_rating,
@@ -208,9 +206,10 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
 
 @router.message(RandomFilmSerial.country, F.text.cast(valid_country).as_("country"))
 async def random_film_serial_country_skip(message: Message, state: FSMContext):
-    await state.update_data(country=message.text.split(" "))
+    await state.update_data(country=valid_country(message.text))
 
     data = await state.get_data()
+
     random_data = []
 
     for _ in range(int(data["count"])):
@@ -379,5 +378,5 @@ async def random_film_serial_country_skip(message: Message, state: FSMContext):
 async def random_film_serial_country_none(message: Message):
     await message.answer(
         text="Я вас не понял 😔. Необходимо что бы вы\n"
-             "написали страну(ы) которые хотите включить в рандомный поиск."
+             "написали страну(ы) которые хотите включить в рандомный поиск.\n"
     )

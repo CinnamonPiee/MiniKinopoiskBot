@@ -18,7 +18,8 @@ router = Router(name=__name__)
 async def custom_searching_janr_back(message: Message, state: FSMContext):
     await state.set_state(CustomSearching.count)
     await message.answer(
-        text="Укажите количество которое хотите получить.",
+        text="Укажите количество которое хотите получить.\n"
+             "Максимум - 5",
         reply_markup=back_kb(),
     )
 
@@ -39,7 +40,7 @@ async def custom_searching_janr_skip(message: Message, state: FSMContext):
 
 @router.message(CustomSearching.janr, F.text.cast(valid_janr).as_("janr"))
 async def custom_searching_janr_skip(message: Message, state: FSMContext):
-    await state.update_data(janr=message.text)
+    await state.update_data(janr=message.text.lower().split(" "))
 
     await state.set_state(CustomSearching.year)
     await message.answer(

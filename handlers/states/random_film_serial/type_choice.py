@@ -32,19 +32,22 @@ async def random_film_serial_type_choice(message: Message, state: FSMContext):
     if message.text == "Фильмы":
         await state.update_data(type_choice="movie")
         await message.answer(
-            text="Укажите количество фильмов которое хотите получить.",
+            text="Укажите количество фильмов которое хотите получить.\n"
+            "Максимум - 5",
             reply_markup=back_kb(),
         )
     elif message.text == "Сериалы":
         await state.update_data(type_choice="tv-series")
         await message.answer(
-            text="Укажите количество сериалов которое хотите получить.",
+            text="Укажите количество сериалов которое хотите получить.\n"
+            "Максимум - 5",
             reply_markup=back_kb(),
         )
     elif message.text == "Фильмы и сериалы":
         await state.update_data(type_choice=None)
         await message.answer(
-            text="Укажите количество фильмов и сериалов которое хотите получить.",
+            text="Укажите количество фильмов и сериалов которое хотите получить.\n"
+            "Максимум - 5",
             reply_markup=back_kb(),
         )
     

@@ -1,4 +1,4 @@
-def valid_janr(janrs: str | list) -> str | list | None:
+def valid_janr(janrs: str) -> str | None:
     genres = ['аниме', 'биография', 'боевик', 'вестерн', 'военный', 'детектив', 'детский',
               'для взрослых', 'документальный', 'драма', 'игра', 'история', 'комедия',
               'концерт', 'короткометражка', 'криминал', 'мелодрама', 'музыка', 'мультфильм',
@@ -6,12 +6,14 @@ def valid_janr(janrs: str | list) -> str | list | None:
               'ток-шоу', 'триллер', 'ужасы', 'фантастика', 'фильм-нуар', 'фэнтези', 'церемония']
 
     if len(janrs.split(" ")) == 1:
-        if janrs in genres:
+        if janrs.lower() in genres:
             return janrs
         return None
+    
     if len(janrs.split(" ")) >= 2:
         for i in janrs.split(" "):
-            if i not in genres:
+            if i.lower() not in genres:
                 return None
         return janrs
+    
     return None
