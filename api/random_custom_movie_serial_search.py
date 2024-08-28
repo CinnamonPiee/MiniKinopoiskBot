@@ -1,7 +1,6 @@
 import requests
 import sys
 import os
-import pprint
 
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -56,33 +55,16 @@ def random_custom_movie_serial_search(
         "X-API-KEY": settings.kinopoisk_dev_token
     }
 
-    response = requests.get(url=url, headers=headers)
-    
     try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-
-        try:
-            response = requests.get(url=url, headers=headers)
-            data = response.json()
-            if not data:
-                return "Ничего не найдено, пожалуйста попробуйте еще раз!"
-            return data
+        response = requests.get(url=url, headers=headers)
+        data = response.json()
+        if not data:
+            return "Ничего не найдено, пожалуйста попробуйте еще раз!"
+        return data
         
-        except KeyError:
-            return "Сервер временно не доступен, попробуйте позже!"
+    except KeyError:
+        return "Сервер временно не доступен, попробуйте позже!"
         
-        except ValueError:
-            print("Ошибка декодирования JSON. Сервер вернул невалидный JSON.")
-            return "Ошибка декодирования JSON. Сервер вернул невалидный JSON."
-        
-    except requests.exceptions.Timeout:
-        print("Сервер не ответил вовремя. Проверьте подключение или сервер может быть перегружен.")
-        return "Сервер не ответил вовремя. Проверьте подключение или сервер может быть перегружен."
-    
-    except requests.exceptions.RequestException as e:
-        print(f"Произошла ошибка при выполнении запроса: {e}")
-        return f"Произошла ошибка при выполнении запроса: {e}"
-        
-
-pprint.pprint(random_custom_movie_serial_search())
+    except ValueError:
+        print("Ошибка декодирования JSON. Сервер вернул невалидный JSON.")
+        return "Ошибка декодирования JSON. Сервер вернул невалидный JSON."
