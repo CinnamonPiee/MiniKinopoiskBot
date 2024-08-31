@@ -16,7 +16,6 @@ class Settings(BaseSettings):
     db_name: str
     bot_token: str
     kinopoisk_dev_token: str
-    admin_id: int
     img_path: str
 
     @property
